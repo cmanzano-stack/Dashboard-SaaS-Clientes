@@ -5,158 +5,91 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Salud del Cliente — Apprecio</title>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <style>
-/* ══════════════════════════════════════════════
-   VARIABLES Y RESET
-══════════════════════════════════════════════ */
 :root {
-  --red:        #FA345E;
-  --red-dark:   #D42A4E;
-  --red-light:  #FDE8ED;
-  --red-mid:    #f87096;
-  --green:      #065F46;
-  --green-light:#F0FFF4;
-  --amber:      #B45309;
-  --amber-light:#FFFBEB;
-  --gray-50:    #F9FAFB;
-  --gray-100:   #F3F4F6;
-  --gray-200:   #E5E7EB;
-  --gray-400:   #9CA3AF;
-  --gray-600:   #4B5563;
-  --gray-800:   #1F2937;
-  --white:      #FFFFFF;
-  --shadow-sm:  0 1px 3px rgba(0,0,0,0.08);
-  --shadow-md:  0 4px 16px rgba(0,0,0,0.10);
-  --shadow-lg:  0 8px 32px rgba(0,0,0,0.12);
-  --radius:     12px;
-  --radius-sm:  8px;
+  --red:#FA345E; --red-dark:#D42A4E; --red-light:#FDE8ED; --red-mid:#f87096;
+  --green:#065F46; --green-light:#F0FFF4;
+  --amber:#B45309; --amber-light:#FFFBEB;
+  --gray-50:#F9FAFB; --gray-100:#F3F4F6; --gray-200:#E5E7EB;
+  --gray-400:#9CA3AF; --gray-600:#4B5563; --gray-800:#1F2937;
+  --white:#FFFFFF;
+  --shadow-sm:0 1px 3px rgba(0,0,0,0.08);
+  --shadow-md:0 4px 16px rgba(0,0,0,0.10);
+  --shadow-lg:0 8px 32px rgba(0,0,0,0.14);
+  --radius:12px; --radius-sm:8px;
 }
 *{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:'Montserrat',sans-serif;background:var(--gray-50);color:var(--gray-800);font-size:14px;line-height:1.5;}
 button{cursor:pointer;font-family:inherit;}
 input,select,textarea{font-family:inherit;}
 
-/* ══════════════════════════════════════════════
-   LOGIN SCREEN
-══════════════════════════════════════════════ */
-#login-screen{display:none!important;
+/* ── LOGIN ── */
+#login-screen{
   display:flex;align-items:center;justify-content:center;
   min-height:100vh;padding:20px;
-  background:linear-gradient(135deg, #fff5f7 0%, #fff 50%, #f0fff4 100%);
+  background:linear-gradient(135deg,#fff5f7 0%,#fff 50%,#f0fff4 100%);
 }
 .login-card{
-  background:var(--white);border-radius:20px;
-  box-shadow:var(--shadow-lg);
-  padding:48px 40px 40px;
-  max-width:440px;width:100%;text-align:center;
+  background:var(--white);border-radius:20px;box-shadow:var(--shadow-lg);
+  padding:48px 40px 40px;max-width:440px;width:100%;text-align:center;
 }
-.login-logo{
-  height:52px;object-fit:contain;
-  margin-bottom:28px;
-  filter:drop-shadow(0 2px 8px rgba(250,52,94,0.15));
-}
-.login-title{
-  font-size:20px;font-weight:700;
-  color:var(--red);margin-bottom:8px;
-}
-.login-subtitle{
-  font-size:13px;color:var(--gray-600);
-  margin-bottom:32px;line-height:1.7;
-}
+.login-logo{height:52px;object-fit:contain;margin-bottom:28px;display:block;margin-left:auto;margin-right:auto;}
+.login-title{font-size:20px;font-weight:700;color:var(--red);margin-bottom:8px;}
+.login-subtitle{font-size:13px;color:var(--gray-600);margin-bottom:32px;line-height:1.7;}
 .google-btn-wrap{display:flex;justify-content:center;margin-bottom:8px;}
 .login-error{
-  display:none;
-  background:#fee2e2;color:#991b1b;
-  border:1px solid #fca5a5;
-  border-radius:var(--radius-sm);
-  padding:12px 16px;font-size:12px;margin-top:16px;
-  font-weight:500;
+  display:none;background:#fee2e2;color:#991b1b;
+  border:1px solid #fca5a5;border-radius:var(--radius-sm);
+  padding:12px 16px;font-size:12px;margin-top:16px;font-weight:500;
 }
 .login-footer{font-size:11px;color:var(--gray-400);margin-top:24px;}
-.login-divider{
-  border:none;border-top:1px solid var(--gray-200);
-  margin:24px 0;
-}
 .login-badge{
   display:inline-flex;align-items:center;gap:6px;
   background:var(--red-light);color:var(--red-dark);
-  border-radius:20px;padding:4px 14px;
-  font-size:11px;font-weight:600;margin-bottom:20px;
+  border-radius:20px;padding:4px 14px;font-size:11px;font-weight:600;margin-bottom:20px;
 }
 
-/* ══════════════════════════════════════════════
-   APP
-══════════════════════════════════════════════ */
-#app-screen{display:block;}
+/* ── APP ── */
+#app-screen{display:none;}
 
 /* Topbar */
 #topbar{
-  background:var(--white);
-  border-bottom:1px solid var(--gray-200);
-  padding:0 24px;
-  display:flex;align-items:center;
-  justify-content:space-between;
-  height:60px;position:sticky;top:0;z-index:200;
-  box-shadow:var(--shadow-sm);
+  background:var(--white);border-bottom:1px solid var(--gray-200);
+  padding:0 24px;display:flex;align-items:center;
+  justify-content:space-between;height:60px;
+  position:sticky;top:0;z-index:200;box-shadow:var(--shadow-sm);
 }
 .topbar-left{display:flex;align-items:center;gap:16px;}
 #topbar-logo{height:36px;object-fit:contain;}
 .topbar-divider{width:1px;height:28px;background:var(--gray-200);}
 .topbar-title{font-size:15px;font-weight:700;color:var(--gray-800);}
-.topbar-subtitle{font-size:11px;color:var(--gray-400);font-weight:400;}
+.topbar-subtitle{font-size:11px;color:var(--gray-400);}
 .topbar-right{display:flex;align-items:center;gap:12px;}
-#user-chip{
-  display:flex;align-items:center;gap:8px;
-  background:var(--gray-100);border-radius:30px;
-  padding:4px 12px 4px 4px;
-}
+#user-chip{display:flex;align-items:center;gap:8px;background:var(--gray-100);border-radius:30px;padding:4px 12px 4px 4px;}
 #user-avatar{width:28px;height:28px;border-radius:50%;border:2px solid var(--red);}
 #user-name{font-size:12px;font-weight:600;color:var(--gray-800);}
-#btn-logout{
-  background:none;border:1px solid var(--gray-200);
-  color:var(--gray-600);border-radius:8px;
-  padding:5px 12px;font-size:12px;font-weight:500;
-  transition:all .2s;
-}
+#btn-logout{background:none;border:1px solid var(--gray-200);color:var(--gray-600);border-radius:8px;padding:5px 12px;font-size:12px;font-weight:500;transition:all .2s;}
 #btn-logout:hover{background:var(--red-light);color:var(--red);border-color:var(--red-mid);}
 
-/* Nav tabs */
-#nav-tabs{
-  background:var(--white);border-bottom:1px solid var(--gray-200);
-  padding:0 24px;display:flex;gap:4px;overflow-x:auto;
-}
-.nav-tab{
-  padding:12px 18px;font-size:13px;font-weight:500;
-  color:var(--gray-400);border:none;background:none;
-  border-bottom:2px solid transparent;
-  transition:all .2s;white-space:nowrap;
-}
+/* Nav */
+#nav-tabs{background:var(--white);border-bottom:1px solid var(--gray-200);padding:0 24px;display:flex;gap:4px;overflow-x:auto;}
+.nav-tab{padding:12px 18px;font-size:13px;font-weight:500;color:var(--gray-400);border:none;background:none;border-bottom:2px solid transparent;transition:all .2s;white-space:nowrap;cursor:pointer;}
 .nav-tab:hover{color:var(--gray-800);}
 .nav-tab.active{color:var(--red);border-bottom-color:var(--red);font-weight:600;}
 
-/* Main content */
+/* Main */
 #main-content{padding:24px;max-width:1400px;margin:0 auto;}
 
-/* Section */
+/* Sections */
 .section{display:none;}
 .section.active{display:block;}
 
-/* KPIs */
-.kpi-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit, minmax(180px, 1fr));
-  gap:16px;margin-bottom:24px;
-}
-.kpi-card{
-  background:var(--white);border-radius:var(--radius);
-  padding:20px;box-shadow:var(--shadow-sm);
-  border:1px solid var(--gray-200);
-  transition:box-shadow .2s;
-}
+/* KPI grid */
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:16px;margin-bottom:24px;}
+.kpi-card{background:var(--white);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow-sm);border:1px solid var(--gray-200);transition:box-shadow .2s;}
 .kpi-card:hover{box-shadow:var(--shadow-md);}
-.kpi-label{font-size:11px;color:var(--gray-400);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;}
+.kpi-label{font-size:10px;color:var(--gray-400);font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;}
 .kpi-value{font-size:28px;font-weight:800;line-height:1;}
 .kpi-sub{font-size:11px;color:var(--gray-400);margin-top:6px;}
 .kpi-red .kpi-value{color:var(--red);}
@@ -164,435 +97,182 @@ input,select,textarea{font-family:inherit;}
 .kpi-amber .kpi-value{color:var(--amber);}
 .kpi-gray .kpi-value{color:var(--gray-600);}
 
-/* Charts row */
+/* Charts */
 .charts-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px;}
 .charts-row-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:24px;}
-.chart-card{
-  background:var(--white);border-radius:var(--radius);
-  padding:20px;box-shadow:var(--shadow-sm);
-  border:1px solid var(--gray-200);
-}
+.chart-card{background:var(--white);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow-sm);border:1px solid var(--gray-200);}
 .chart-title{font-size:13px;font-weight:700;color:var(--gray-800);margin-bottom:4px;}
 .chart-sub{font-size:11px;color:var(--gray-400);margin-bottom:16px;}
 .chart-wrap{position:relative;height:220px;}
 .chart-wrap-sm{position:relative;height:180px;}
 
 /* Filters */
-.filters-bar{
-  background:var(--white);border-radius:var(--radius);
-  padding:16px 20px;margin-bottom:20px;
-  box-shadow:var(--shadow-sm);border:1px solid var(--gray-200);
-  display:flex;gap:12px;align-items:center;flex-wrap:wrap;
-}
+.filters-bar{background:var(--white);border-radius:var(--radius);padding:16px 20px;margin-bottom:20px;box-shadow:var(--shadow-sm);border:1px solid var(--gray-200);display:flex;gap:12px;align-items:flex-end;flex-wrap:wrap;}
 .filter-group{display:flex;flex-direction:column;gap:4px;}
 .filter-label{font-size:10px;font-weight:700;color:var(--gray-400);text-transform:uppercase;letter-spacing:.5px;}
-.filter-select{
-  border:1px solid var(--gray-200);border-radius:var(--radius-sm);
-  padding:6px 10px;font-size:12px;font-family:inherit;
-  color:var(--gray-800);background:var(--white);
-  min-width:130px;
-}
-.filter-select:focus{outline:none;border-color:var(--red);}
-.filter-search{
-  border:1px solid var(--gray-200);border-radius:var(--radius-sm);
-  padding:6px 10px;font-size:12px;font-family:inherit;
-  color:var(--gray-800);flex:1;min-width:180px;
-}
-.filter-search:focus{outline:none;border-color:var(--red);}
-.btn-filter{
-  background:var(--red);color:var(--white);
-  border:none;border-radius:var(--radius-sm);
-  padding:7px 16px;font-size:12px;font-weight:600;
-  transition:background .2s;
-}
-.btn-filter:hover{background:var(--red-dark);}
-.btn-reset{
-  background:none;color:var(--gray-600);
-  border:1px solid var(--gray-200);border-radius:var(--radius-sm);
-  padding:7px 14px;font-size:12px;font-weight:500;
-  transition:all .2s;
-}
-.btn-reset:hover{background:var(--gray-100);}
+.filter-select,.filter-search{border:1px solid var(--gray-200);border-radius:var(--radius-sm);padding:7px 10px;font-size:12px;color:var(--gray-800);background:var(--white);}
+.filter-select{min-width:130px;}
+.filter-search{flex:1;min-width:200px;}
+.filter-select:focus,.filter-search:focus{outline:none;border-color:var(--red);}
 
 /* Table */
-.table-card{
-  background:var(--white);border-radius:var(--radius);
-  box-shadow:var(--shadow-sm);border:1px solid var(--gray-200);
-  overflow:hidden;
-}
-.table-header{
-  padding:16px 20px;display:flex;align-items:center;
-  justify-content:space-between;border-bottom:1px solid var(--gray-100);
-}
+.table-card{background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow-sm);border:1px solid var(--gray-200);overflow:hidden;}
+.table-header{padding:16px 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--gray-100);}
 .table-header-title{font-size:14px;font-weight:700;color:var(--gray-800);}
-.table-count{font-size:12px;color:var(--gray-400);font-weight:500;}
+.table-count{font-size:12px;color:var(--gray-400);}
 .table-scroll{overflow-x:auto;}
 table{width:100%;border-collapse:collapse;}
 thead tr{background:var(--gray-50);}
-th{
-  padding:10px 14px;text-align:left;
-  font-size:11px;font-weight:700;color:var(--gray-400);
-  text-transform:uppercase;letter-spacing:.5px;
-  border-bottom:1px solid var(--gray-200);
-  white-space:nowrap;
-}
-td{
-  padding:12px 14px;border-bottom:1px solid var(--gray-100);
-  font-size:13px;color:var(--gray-800);vertical-align:middle;
-}
+th{padding:10px 14px;text-align:left;font-size:11px;font-weight:700;color:var(--gray-400);text-transform:uppercase;letter-spacing:.5px;border-bottom:1px solid var(--gray-200);white-space:nowrap;}
+td{padding:12px 14px;border-bottom:1px solid var(--gray-100);font-size:13px;color:var(--gray-800);vertical-align:middle;}
 tr:last-child td{border-bottom:none;}
-tr:hover td{background:var(--gray-50);}
 
-/* Semaforo badges */
-.badge{display:inline-flex;align-items:center;gap:5px;border-radius:20px;padding:3px 10px;font-size:11px;font-weight:700;white-space:nowrap;}
+/* Expand rows */
+.tr-main{cursor:pointer;transition:background .15s;}
+.tr-main:hover td{background:var(--red-light)!important;}
+.tr-main.expanded td{background:var(--red-light)!important;border-bottom:none;}
+.tr-main td:first-child::before{content:'▶';font-size:9px;color:var(--gray-400);margin-right:8px;transition:transform .2s;display:inline-block;vertical-align:middle;}
+.tr-main.expanded td:first-child::before{transform:rotate(90deg);color:var(--red);}
+.tr-expand{display:none;}
+.tr-expand.open{display:table-row;}
+.expand-panel{background:linear-gradient(135deg,#fff5f7 0%,#ffffff 60%,#f0fff4 100%);border-top:2px solid var(--red);border-bottom:2px solid var(--red);padding:20px 24px;}
+.expand-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:16px;margin-bottom:14px;}
+.expand-cell-label{font-size:10px;font-weight:700;color:var(--red);text-transform:uppercase;letter-spacing:.6px;margin-bottom:4px;}
+.expand-cell-val{font-size:14px;font-weight:600;color:var(--gray-800);}
+.expand-cell-sub{font-size:11px;color:var(--gray-400);margin-top:2px;}
+.expand-desc{background:var(--white);border-radius:var(--radius-sm);padding:12px 16px;border-left:3px solid var(--red);font-size:12px;color:var(--gray-600);line-height:1.6;margin-bottom:14px;}
+.expand-actions{display:flex;gap:8px;flex-wrap:wrap;}
+.expand-tag{display:inline-block;background:var(--red-light);color:var(--red-dark);border-radius:20px;padding:3px 10px;font-size:11px;font-weight:600;}
+.login-trend{display:flex;align-items:center;gap:5px;margin-top:4px;}
+.lt-val{background:var(--white);border:1px solid var(--gray-200);border-radius:5px;padding:2px 8px;font-size:12px;font-weight:700;}
+.lt-val.lt-red{background:var(--red-light);color:var(--red-dark);border-color:var(--red-mid);}
+.lt-val.lt-green{background:var(--green-light);color:var(--green);}
+.lt-arrow{color:var(--gray-400);font-size:11px;}
+
+/* Badges */
+.badge{display:inline-flex;align-items:center;gap:4px;border-radius:20px;padding:3px 10px;font-size:11px;font-weight:700;white-space:nowrap;}
 .badge-green{background:var(--green-light);color:var(--green);}
 .badge-red{background:var(--red-light);color:var(--red-dark);}
 .badge-amber{background:var(--amber-light);color:var(--amber);}
 .badge-gray{background:var(--gray-100);color:var(--gray-600);}
 
-/* Health score bar */
-.health-bar-wrap{display:flex;align-items:center;gap:8px;}
-.health-bar-bg{flex:1;height:6px;border-radius:3px;background:var(--gray-200);overflow:hidden;min-width:80px;}
-.health-bar-fill{height:100%;border-radius:3px;transition:width .4s;}
-.health-val{font-size:12px;font-weight:700;min-width:36px;text-align:right;}
+/* Health bar */
+.hbar{display:flex;align-items:center;gap:8px;}
+.hbar-bg{flex:1;height:6px;border-radius:3px;background:var(--gray-200);overflow:hidden;min-width:70px;}
+.hbar-fill{height:100%;border-radius:3px;transition:width .3s;}
+.hbar-val{font-size:12px;font-weight:700;min-width:32px;text-align:right;}
 
-/* Action button */
-.btn-action{
-  background:var(--red-light);color:var(--red);
-  border:none;border-radius:var(--radius-sm);
-  padding:4px 10px;font-size:11px;font-weight:600;
-  transition:all .2s;
-}
-.btn-action:hover{background:var(--red);color:var(--white);}
-.btn-ia{
-  background:linear-gradient(135deg,#667eea,#764ba2);
-  color:var(--white);border:none;border-radius:var(--radius-sm);
-  padding:4px 10px;font-size:11px;font-weight:600;
-  transition:all .2s;
-}
+/* Buttons */
+.btn-primary{background:var(--red);color:#fff;border:none;border-radius:var(--radius-sm);padding:8px 18px;font-size:12px;font-weight:600;transition:background .2s;}
+.btn-primary:hover{background:var(--red-dark);}
+.btn-secondary{background:none;color:var(--gray-600);border:1px solid var(--gray-200);border-radius:var(--radius-sm);padding:7px 14px;font-size:12px;font-weight:500;transition:all .2s;}
+.btn-secondary:hover{background:var(--gray-100);}
+.btn-action{background:var(--red-light);color:var(--red);border:none;border-radius:var(--radius-sm);padding:5px 11px;font-size:11px;font-weight:600;transition:all .2s;cursor:pointer;}
+.btn-action:hover{background:var(--red);color:#fff;}
+.btn-ia{background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;border:none;border-radius:var(--radius-sm);padding:5px 11px;font-size:11px;font-weight:600;cursor:pointer;transition:opacity .2s;}
 .btn-ia:hover{opacity:.85;}
 
-/* IA Panel */
-#ia-panel{
-  position:fixed;right:0;top:0;height:100vh;
-  width:420px;background:var(--white);
-  box-shadow:-4px 0 32px rgba(0,0,0,0.14);
-  z-index:500;transform:translateX(100%);
-  transition:transform .3s cubic-bezier(.4,0,.2,1);
-  display:flex;flex-direction:column;
-}
-#ia-panel.open{transform:translateX(0);}
-.ia-header{
-  padding:20px 20px 16px;
-  border-bottom:1px solid var(--gray-200);
-  display:flex;align-items:center;gap:12px;
-}
-.ia-icon{
-  width:38px;height:38px;border-radius:10px;
-  background:linear-gradient(135deg,#667eea,#764ba2);
-  display:flex;align-items:center;justify-content:center;
-  color:#fff;font-size:18px;flex-shrink:0;
-}
-.ia-header-text h3{font-size:15px;font-weight:700;color:var(--gray-800);}
-.ia-header-text p{font-size:11px;color:var(--gray-400);margin-top:2px;}
-#btn-close-ia{
-  margin-left:auto;background:none;border:none;
-  color:var(--gray-400);font-size:20px;padding:4px;
-  border-radius:6px;transition:all .2s;
-}
-#btn-close-ia:hover{background:var(--gray-100);color:var(--gray-800);}
-.ia-context-bar{
-  padding:10px 16px;background:var(--gray-50);
-  border-bottom:1px solid var(--gray-200);
-  font-size:11px;color:var(--gray-600);
-}
-.ia-context-bar strong{color:var(--red);font-weight:700;}
-.ia-messages{
-  flex:1;overflow-y:auto;padding:16px;
-  display:flex;flex-direction:column;gap:12px;
-}
-.msg{max-width:90%;padding:10px 14px;border-radius:12px;font-size:13px;line-height:1.6;}
-.msg-user{
-  align-self:flex-end;
-  background:var(--red);color:var(--white);
-  border-radius:12px 12px 2px 12px;
-}
-.msg-ai{
-  align-self:flex-start;
-  background:var(--gray-100);color:var(--gray-800);
-  border-radius:12px 12px 12px 2px;
-}
-.msg-ai.loading{opacity:.6;}
-.msg-ai ul{margin:6px 0 0 16px;}
-.msg-ai li{margin-bottom:4px;}
-.msg-ai strong{color:var(--red);}
-.ia-quick-btns{
-  padding:10px 16px;display:flex;flex-wrap:wrap;gap:6px;
-  border-top:1px solid var(--gray-100);
-}
-.ia-quick-btn{
-  background:var(--white);border:1px solid var(--gray-200);
-  border-radius:20px;padding:5px 12px;
-  font-size:11px;font-weight:500;color:var(--gray-600);
-  transition:all .2s;
-}
-.ia-quick-btn:hover{background:var(--red-light);color:var(--red);border-color:var(--red-mid);}
-.ia-input-row{
-  padding:14px 16px;border-top:1px solid var(--gray-200);
-  display:flex;gap:8px;
-}
-#ia-input{
-  flex:1;border:1px solid var(--gray-200);border-radius:var(--radius-sm);
-  padding:8px 12px;font-size:13px;font-family:inherit;resize:none;
-  max-height:100px;
-}
-#ia-input:focus{outline:none;border-color:var(--red);}
-#btn-send-ia{
-  background:var(--red);color:var(--white);
-  border:none;border-radius:var(--radius-sm);
-  padding:8px 14px;font-size:14px;
-  transition:background .2s;flex-shrink:0;
-}
-#btn-send-ia:hover{background:var(--red-dark);}
-
-/* Overlay */
-#ia-overlay{
-  display:none;position:fixed;inset:0;
-  background:rgba(0,0,0,.3);z-index:499;
-}
-#ia-overlay.open{display:block;}
-
-/* Fab */
-#fab-ia{
-  position:fixed;bottom:28px;right:28px;
-  width:52px;height:52px;border-radius:50%;
-  background:linear-gradient(135deg,#667eea,#764ba2);
-  color:#fff;border:none;font-size:22px;
-  box-shadow:0 4px 20px rgba(102,126,234,.5);
-  transition:all .2s;z-index:300;display:none;
-}
-#fab-ia:hover{transform:scale(1.08);}
-
-/* Modal notificacion */
-#notif-modal{
-  display:none;position:fixed;inset:0;z-index:600;
-  background:rgba(0,0,0,.4);
-  align-items:center;justify-content:center;
-}
-#notif-modal.open{display:flex;}
-.notif-card{
-  background:var(--white);border-radius:16px;
-  box-shadow:var(--shadow-lg);
-  padding:32px;max-width:560px;width:90%;
-  max-height:80vh;overflow-y:auto;
-}
-.notif-card h3{font-size:16px;font-weight:700;color:var(--gray-800);margin-bottom:6px;}
-.notif-card .notif-empresa{font-size:13px;color:var(--gray-400);margin-bottom:20px;}
-.notif-textarea{
-  width:100%;border:1px solid var(--gray-200);border-radius:var(--radius-sm);
-  padding:14px;font-size:13px;font-family:inherit;
-  resize:vertical;min-height:200px;line-height:1.6;
-}
-.notif-textarea:focus{outline:none;border-color:var(--red);}
-.notif-actions{display:flex;gap:8px;margin-top:16px;justify-content:flex-end;}
-.btn-primary{
-  background:var(--red);color:#fff;border:none;
-  border-radius:var(--radius-sm);padding:8px 20px;
-  font-size:13px;font-weight:600;transition:background .2s;
-}
-.btn-primary:hover{background:var(--red-dark);}
-.btn-secondary{
-  background:none;color:var(--gray-600);
-  border:1px solid var(--gray-200);border-radius:var(--radius-sm);
-  padding:8px 16px;font-size:13px;font-weight:500;
-  transition:all .2s;
-}
-.btn-secondary:hover{background:var(--gray-100);}
-
-/* Scatter plot */
-.cuadrante-legend{
-  display:flex;gap:12px;flex-wrap:wrap;margin-top:12px;
-}
-.legend-item{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--gray-600);}
-.legend-dot{width:10px;height:10px;border-radius:50%;}
-
-/* Toast */
-#toast{
-  position:fixed;bottom:30px;left:50%;
-  transform:translateX(-50%) translateY(20px);
-  background:var(--gray-800);color:#fff;
-  padding:10px 20px;border-radius:8px;
-  font-size:13px;font-weight:500;
-  opacity:0;transition:all .3s;z-index:700;pointer-events:none;
-}
-#toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
-
 /* Section header */
-.section-header{
-  display:flex;align-items:center;justify-content:space-between;
-  margin-bottom:20px;flex-wrap:wrap;gap:12px;
-}
+.section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px;}
 .section-header h2{font-size:18px;font-weight:700;color:var(--gray-800);}
 .section-header p{font-size:13px;color:var(--gray-400);margin-top:2px;}
 
-/* Kam cards */
-.kam-grid{
-  display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
-  gap:16px;margin-bottom:24px;
-}
-.kam-card{
-  background:var(--white);border-radius:var(--radius);
-  padding:20px;box-shadow:var(--shadow-sm);
-  border:1px solid var(--gray-200);
-  transition:box-shadow .2s;cursor:pointer;
-}
+/* KAM cards */
+.kam-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px;margin-bottom:24px;}
+.kam-card{background:var(--white);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow-sm);border:1px solid var(--gray-200);cursor:pointer;transition:box-shadow .2s;}
 .kam-card:hover{box-shadow:var(--shadow-md);}
 .kam-card-header{display:flex;align-items:center;gap:12px;margin-bottom:16px;}
-.kam-avatar{
-  width:42px;height:42px;border-radius:50%;
-  background:linear-gradient(135deg,var(--red),var(--red-dark));
-  color:#fff;font-size:16px;font-weight:700;
-  display:flex;align-items:center;justify-content:center;
-  flex-shrink:0;
-}
+.kam-avatar{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,var(--red),var(--red-dark));color:#fff;font-size:15px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
 .kam-name{font-size:14px;font-weight:700;color:var(--gray-800);}
 .kam-count{font-size:11px;color:var(--gray-400);margin-top:2px;}
-.kam-semaforos{display:flex;gap:8px;}
-.sem-mini{
-  flex:1;border-radius:var(--radius-sm);padding:8px;text-align:center;
-}
-.sem-mini-val{font-size:18px;font-weight:800;}
-.sem-mini-label{font-size:10px;font-weight:600;margin-top:2px;}
-.sem-green{background:var(--green-light);color:var(--green);}
-.sem-amber{background:var(--amber-light);color:var(--amber);}
-.sem-red{background:var(--red-light);color:var(--red-dark);}
+.kam-sems{display:flex;gap:8px;}
+.ks{flex:1;border-radius:var(--radius-sm);padding:8px;text-align:center;}
+.ks-val{font-size:18px;font-weight:800;}
+.ks-lbl{font-size:10px;font-weight:600;margin-top:2px;}
+.ks-g{background:var(--green-light);color:var(--green);}
+.ks-a{background:var(--amber-light);color:var(--amber);}
+.ks-r{background:var(--red-light);color:var(--red-dark);}
 
-/* Radar */
-.radar-card{
-  background:var(--white);border-radius:var(--radius);
-  padding:20px;box-shadow:var(--shadow-sm);
-  border:1px solid var(--gray-200);
-}
+/* IA Panel */
+#ia-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.3);z-index:499;}
+#ia-overlay.open{display:block;}
+#ia-panel{position:fixed;right:0;top:0;height:100vh;width:420px;background:var(--white);box-shadow:-4px 0 32px rgba(0,0,0,0.14);z-index:500;transform:translateX(100%);transition:transform .3s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;}
+#ia-panel.open{transform:translateX(0);}
+.ia-header{padding:20px 20px 16px;border-bottom:1px solid var(--gray-200);display:flex;align-items:center;gap:12px;}
+.ia-icon{width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,#667eea,#764ba2);display:flex;align-items:center;justify-content:center;color:#fff;font-size:18px;flex-shrink:0;}
+.ia-head-text h3{font-size:15px;font-weight:700;color:var(--gray-800);}
+.ia-head-text p{font-size:11px;color:var(--gray-400);margin-top:2px;}
+#btn-close-ia{margin-left:auto;background:none;border:none;color:var(--gray-400);font-size:20px;padding:4px;border-radius:6px;cursor:pointer;transition:all .2s;}
+#btn-close-ia:hover{background:var(--gray-100);color:var(--gray-800);}
+.ia-ctx{padding:8px 16px;background:var(--gray-50);border-bottom:1px solid var(--gray-200);font-size:11px;color:var(--gray-600);}
+.ia-ctx strong{color:var(--red);}
+.ia-msgs{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:12px;}
+.msg{max-width:90%;padding:10px 14px;border-radius:12px;font-size:13px;line-height:1.6;}
+.msg-user{align-self:flex-end;background:var(--red);color:#fff;border-radius:12px 12px 2px 12px;}
+.msg-ai{align-self:flex-start;background:var(--gray-100);color:var(--gray-800);border-radius:12px 12px 12px 2px;}
+.ia-quick-btns{padding:10px 16px;display:flex;flex-wrap:wrap;gap:6px;border-top:1px solid var(--gray-100);}
+.ia-qbtn{background:var(--white);border:1px solid var(--gray-200);border-radius:20px;padding:5px 12px;font-size:11px;font-weight:500;color:var(--gray-600);cursor:pointer;transition:all .2s;}
+.ia-qbtn:hover{background:var(--red-light);color:var(--red);border-color:var(--red-mid);}
+.ia-input-row{padding:14px 16px;border-top:1px solid var(--gray-200);display:flex;gap:8px;}
+#ia-input{flex:1;border:1px solid var(--gray-200);border-radius:var(--radius-sm);padding:8px 12px;font-size:13px;resize:none;max-height:100px;}
+#ia-input:focus{outline:none;border-color:var(--red);}
+#btn-send-ia{background:var(--red);color:#fff;border:none;border-radius:var(--radius-sm);padding:8px 14px;font-size:16px;transition:background .2s;flex-shrink:0;}
+#btn-send-ia:hover{background:var(--red-dark);}
 
-/* Empty state */
-.empty-state{
-  text-align:center;padding:60px 20px;
-  color:var(--gray-400);
-}
-.empty-state .emoji{font-size:48px;margin-bottom:12px;}
-.empty-state p{font-size:14px;}
+/* FAB */
+#fab-ia{position:fixed;bottom:28px;right:28px;width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;border:none;font-size:22px;box-shadow:0 4px 20px rgba(102,126,234,.5);cursor:pointer;transition:all .2s;z-index:300;display:none;align-items:center;justify-content:center;}
+#fab-ia:hover{transform:scale(1.08);}
+
+/* Notif modal */
+#notif-modal{display:none;position:fixed;inset:0;z-index:600;background:rgba(0,0,0,.4);align-items:center;justify-content:center;}
+#notif-modal.open{display:flex;}
+.notif-card{background:var(--white);border-radius:16px;box-shadow:var(--shadow-lg);padding:32px;max-width:560px;width:90%;max-height:80vh;overflow-y:auto;}
+.notif-card h3{font-size:16px;font-weight:700;margin-bottom:6px;}
+.notif-sub{font-size:13px;color:var(--gray-400);margin-bottom:20px;}
+.notif-ta{width:100%;border:1px solid var(--gray-200);border-radius:var(--radius-sm);padding:14px;font-size:13px;resize:vertical;min-height:200px;line-height:1.6;}
+.notif-ta:focus{outline:none;border-color:var(--red);}
+.notif-actions{display:flex;gap:8px;margin-top:16px;justify-content:flex-end;}
 
 /* Pagination */
-.pagination{
-  display:flex;align-items:center;justify-content:space-between;
-  padding:14px 20px;border-top:1px solid var(--gray-100);
-}
-.pagination-info{font-size:12px;color:var(--gray-400);}
-.pagination-btns{display:flex;gap:6px;}
-.pg-btn{
-  background:none;border:1px solid var(--gray-200);border-radius:6px;
-  padding:5px 12px;font-size:12px;color:var(--gray-600);
-  transition:all .2s;
-}
+.pagination{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;border-top:1px solid var(--gray-100);}
+.pg-info{font-size:12px;color:var(--gray-400);}
+.pg-btns{display:flex;gap:6px;}
+.pg-btn{background:none;border:1px solid var(--gray-200);border-radius:6px;padding:5px 12px;font-size:12px;color:var(--gray-600);cursor:pointer;transition:all .2s;}
 .pg-btn:hover:not(:disabled){background:var(--red-light);color:var(--red);border-color:var(--red-mid);}
 .pg-btn:disabled{opacity:.4;cursor:not-allowed;}
 .pg-btn.active{background:var(--red);color:#fff;border-color:var(--red);}
 
-/* Loading */
-.spinner{
-  display:inline-block;width:20px;height:20px;
-  border:2px solid var(--gray-200);border-top-color:var(--red);
-  border-radius:50%;animation:spin .6s linear infinite;
-}
+/* Spinner */
+.spinner{display:inline-block;width:16px;height:16px;border:2px solid var(--gray-200);border-top-color:var(--red);border-radius:50%;animation:spin .6s linear infinite;vertical-align:middle;margin-right:6px;}
 @keyframes spin{to{transform:rotate(360deg);}}
+
+/* Toast */
+#toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--gray-800);color:#fff;padding:10px 20px;border-radius:8px;font-size:13px;opacity:0;transition:all .3s;z-index:700;pointer-events:none;}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
 
 /* Responsive */
 @media(max-width:768px){
   .charts-row,.charts-row-3{grid-template-columns:1fr;}
   #ia-panel{width:100%;}
   .kpi-grid{grid-template-columns:repeat(2,1fr);}
-  #topbar{padding:0 12px;}
   #main-content{padding:14px;}
+  #topbar{padding:0 12px;}
 }
-
-/* ── EXPAND ROW ── */
-.tr-main{cursor:pointer;transition:background .15s;}
-.tr-main:hover td{background:var(--red-light)!important;}
-.tr-main.expanded td{background:var(--red-light)!important;border-bottom:none;}
-.tr-expand{display:none;}
-.tr-expand.open{display:table-row;}
-.expand-panel{
-  background:linear-gradient(135deg,#fff5f7 0%,#ffffff 60%,#f0fff4 100%);
-  border-top:2px solid var(--red);
-  border-bottom:2px solid var(--red);
-  padding:20px 24px;
-}
-.expand-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
-  gap:16px;margin-bottom:16px;
-}
-.expand-cell{}
-.expand-cell-label{
-  font-size:10px;font-weight:700;color:var(--red);
-  text-transform:uppercase;letter-spacing:.6px;margin-bottom:4px;
-}
-.expand-cell-val{font-size:14px;font-weight:600;color:var(--gray-800);}
-.expand-cell-sub{font-size:11px;color:var(--gray-400);margin-top:2px;}
-.expand-desc{
-  background:var(--white);border-radius:var(--radius-sm);
-  padding:12px 16px;border-left:3px solid var(--red);
-  font-size:12px;color:var(--gray-600);line-height:1.6;
-  margin-bottom:14px;
-}
-.expand-logins{
-  display:flex;align-items:center;gap:6px;
-  font-size:13px;font-weight:600;
-}
-.login-arrow{color:var(--gray-400);font-size:12px;}
-.login-val{
-  background:var(--white);border:1px solid var(--gray-200);
-  border-radius:6px;padding:3px 10px;
-  font-size:13px;font-weight:700;color:var(--gray-800);
-}
-.login-val.red{background:var(--red-light);color:var(--red-dark);border-color:var(--red-mid);}
-.login-val.green{background:var(--green-light);color:var(--green);border-color:#a7f3d0;}
-.expand-actions{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap;}
-.expand-tag{
-  display:inline-block;background:var(--red-light);color:var(--red-dark);
-  border-radius:20px;padding:3px 10px;font-size:11px;font-weight:600;
-}
-.expand-link{
-  font-size:11px;color:var(--red);text-decoration:none;font-weight:600;
-}
-.expand-link:hover{text-decoration:underline;}
-.tr-main td:first-child::before{
-  content:'▶';font-size:9px;color:var(--gray-400);
-  margin-right:6px;transition:transform .2s;display:inline-block;
-}
-.tr-main.expanded td:first-child::before{transform:rotate(90deg);color:var(--red);}
-
 </style>
 </head>
 <body>
 
-<!-- ══════════════════════════════════════════
-     LOGIN
-══════════════════════════════════════════ -->
+<!-- LOGIN -->
 <div id="login-screen">
   <div class="login-card">
-    <img src="https://estudios.apprecio.com/hubfs/logos/Apprecio-logo-rojo.png"
-         alt="Apprecio" class="login-logo"/>
-    <div class="login-badge">🔒 Acceso interno</div>
+    <img src="https://estudios.apprecio.com/hubfs/logos/Apprecio-logo-rojo.png" alt="Apprecio" class="login-logo"/>
+    <div class="login-badge">🔒 Acceso restringido</div>
     <div class="login-title">Salud del Cliente</div>
-    <div class="login-subtitle">
-      Panel de monitoreo KAM — Health Score, Semáforo,<br>
-      Churn Prevention & IA Recomendaciones
-    </div>
+    <div class="login-subtitle">Panel KAM · Monitoreo de Health Score,<br>Churn Prevention y Recomendaciones IA</div>
     <div class="google-btn-wrap">
       <div id="g_id_onload"
-           data-client_id="980562257177-tqe7n8bv6n0bukcd54r07e1rp0l4nu2b.apps.googleusercontent.com"
-           data-callback="handleCredential"
+           data-client_id="980562257177-puv5d868eouoc68cfm14oub1ljdedf5d.apps.googleusercontent.com"
+           data-callback="handleGoogleLogin"
            data-auto_prompt="false">
       </div>
       <div class="g_id_signin"
@@ -606,23 +286,20 @@ tr:hover td{background:var(--gray-50);}
       </div>
     </div>
     <div id="login-error" class="login-error">
-      ⛔ Solo se permite el acceso con correos <strong>@apprecio.com</strong> o <strong>@dcanje.com</strong>
+      ⛔ Solo se permite acceso con correos <strong>@apprecio.com</strong> o <strong>@dcanje.com</strong>
     </div>
-    <hr class="login-divider"/>
-    <div class="login-footer">Sistema interno · Uso exclusivo Apprecio</div>
+    <div style="border-top:1px solid var(--gray-200);margin:24px 0 0;padding-top:16px;">
+      <div class="login-footer">Sistema interno · Uso exclusivo Apprecio</div>
+    </div>
   </div>
 </div>
 
-<!-- ══════════════════════════════════════════
-     APP
-══════════════════════════════════════════ -->
+<!-- APP -->
 <div id="app-screen">
 
-  <!-- Topbar -->
   <div id="topbar">
     <div class="topbar-left">
-      <img src="https://estudios.apprecio.com/hubfs/logos/Apprecio-logo-rojo.png"
-           alt="Apprecio" id="topbar-logo"/>
+      <img src="https://estudios.apprecio.com/hubfs/logos/Apprecio-logo-rojo.png" alt="Apprecio" id="topbar-logo"/>
       <div class="topbar-divider"></div>
       <div>
         <div class="topbar-title">Salud del Cliente</div>
@@ -634,38 +311,32 @@ tr:hover td{background:var(--gray-50);}
         <img id="user-avatar" src="" alt=""/>
         <span id="user-name">—</span>
       </div>
-      <button id="btn-logout" onclick="logout()">Cerrar sesión</button>
+      <button id="btn-logout" onclick="doLogout()">Cerrar sesión</button>
     </div>
   </div>
 
-  <!-- Nav tabs -->
   <div id="nav-tabs">
-    <button class="nav-tab active" onclick="showSection('resumen',this)">📊 Resumen</button>
-    <button class="nav-tab" onclick="showSection('clientes',this)">🏢 Clientes</button>
-    <button class="nav-tab" onclick="showSection('kams',this)">👤 Por KAM</button>
-    <button class="nav-tab" onclick="showSection('graficos',this)">📈 Gráficos</button>
-    <button class="nav-tab" onclick="showSection('ia',this)">🤖 IA Análisis</button>
+    <button class="nav-tab active" onclick="showTab('resumen',this)">📊 Resumen</button>
+    <button class="nav-tab" onclick="showTab('clientes',this)">🏢 Clientes</button>
+    <button class="nav-tab" onclick="showTab('kams',this)">👤 Por KAM</button>
+    <button class="nav-tab" onclick="showTab('graficos',this)">📈 Gráficos</button>
+    <button class="nav-tab" onclick="showTab('ia',this)">🤖 IA Análisis</button>
   </div>
 
   <div id="main-content">
 
-    <!-- ── RESUMEN ── -->
-    <div id="section-resumen" class="section active">
+    <!-- RESUMEN -->
+    <div id="tab-resumen" class="section active">
       <div class="section-header">
-        <div>
-          <h2>Resumen de Cartera</h2>
-          <p>Vista consolidada del estado de salud de todos los clientes</p>
-        </div>
-        <button class="btn-filter" onclick="openIaPanel('¿Cuáles son los clientes con mayor riesgo de churn este mes y qué acciones debería tomar cada KAM?')">🤖 Análisis IA</button>
+        <div><h2>Resumen de Cartera</h2><p>Vista consolidada del estado de salud</p></div>
+        <button class="btn-ia" onclick="openIA('¿Cuáles son los clientes con mayor riesgo de churn y qué acciones deben tomar los KAMs esta semana?')">🤖 Análisis IA</button>
       </div>
-
       <div class="kpi-grid" id="kpi-grid"></div>
-
       <div class="charts-row">
         <div class="chart-card">
           <div class="chart-title">Distribución por Semáforo</div>
-          <div class="chart-sub">Clientes activos por estado de salud</div>
-          <div class="chart-wrap"><canvas id="cSemaforo"></canvas></div>
+          <div class="chart-sub">Clientes activos por estado</div>
+          <div class="chart-wrap"><canvas id="cSem"></canvas></div>
         </div>
         <div class="chart-card">
           <div class="chart-title">Distribución por País</div>
@@ -673,273 +344,226 @@ tr:hover td{background:var(--gray-50);}
           <div class="chart-wrap"><canvas id="cPais"></canvas></div>
         </div>
       </div>
-
       <div class="charts-row">
         <div class="chart-card">
           <div class="chart-title">Health Score por KAM</div>
-          <div class="chart-sub">Promedio ponderado de la cartera de cada KAM</div>
-          <div class="chart-wrap"><canvas id="cKamHealth"></canvas></div>
+          <div class="chart-sub">Promedio de la cartera</div>
+          <div class="chart-wrap"><canvas id="cKam"></canvas></div>
         </div>
         <div class="chart-card">
           <div class="chart-title">Adopción vs Adherencia</div>
-          <div class="chart-sub">Clientes activos — tamaño = N° usuarios</div>
+          <div class="chart-sub">Tamaño = N° usuarios</div>
           <div class="chart-wrap"><canvas id="cScatter"></canvas></div>
         </div>
       </div>
-
-      <div class="chart-card" style="margin-bottom:24px;">
-        <div class="chart-title">Clientes Prioritarios — Atención Urgente</div>
-        <div class="chart-sub">Clientes activos con semáforo rojo o en riesgo de churn</div>
+      <div class="table-card">
+        <div class="table-header">
+          <div class="table-header-title">⚠️ Clientes Prioritarios — Atención Urgente</div>
+        </div>
         <div class="table-scroll">
-          <table id="t-urgentes">
-            <thead><tr>
-              <th>Cliente</th><th>KAM</th><th>País</th>
-              <th>Health Score</th><th>Semáforo</th>
-              <th>ROI Apprecio</th><th>Acción IA</th>
-            </tr></thead>
+          <table>
+            <thead><tr><th>Cliente</th><th>KAM</th><th>País</th><th>Health Score</th><th>Semáforo</th><th>ROI</th><th>Acciones</th></tr></thead>
             <tbody id="tb-urgentes"></tbody>
           </table>
         </div>
       </div>
     </div>
 
-    <!-- ── CLIENTES ── -->
-    <div id="section-clientes" class="section">
+    <!-- CLIENTES -->
+    <div id="tab-clientes" class="section">
       <div class="section-header">
-        <div>
-          <h2>Todos los Clientes</h2>
-          <p>Listado completo con filtros y métricas de salud</p>
-        </div>
-        <button class="btn-filter" onclick="exportCSV()">⬇ Exportar CSV</button>
+        <div><h2>Todos los Clientes</h2><p>Haz clic en una fila para ver detalles</p></div>
+        <button class="btn-secondary" onclick="exportCSV()">⬇ Exportar CSV</button>
       </div>
-
       <div class="filters-bar">
         <div class="filter-group">
           <div class="filter-label">País</div>
           <select class="filter-select" id="f-pais" onchange="applyFilters()">
             <option value="">Todos</option>
-            <option>Chile</option><option>Colombia</option>
-            <option>Perú</option><option>México</option><option>Ecuador</option>
+            <option>Chile</option><option>Colombia</option><option>Perú</option><option>México</option><option>Ecuador</option>
           </select>
         </div>
         <div class="filter-group">
           <div class="filter-label">Estado</div>
           <select class="filter-select" id="f-estado" onchange="applyFilters()">
             <option value="">Todos</option>
-            <option>Activo</option><option>Inactivo</option>
-            <option>Activo por lanzar</option><option>Baja</option>
+            <option>Activo</option><option>Activo por lanzar</option><option>Inactivo</option><option>Baja</option>
           </select>
         </div>
         <div class="filter-group">
           <div class="filter-label">Semáforo</div>
-          <select class="filter-select" id="f-semaforo" onchange="applyFilters()">
+          <select class="filter-select" id="f-sem" onchange="applyFilters()">
             <option value="">Todos</option>
-            <option value="verde">🟢 Saludable</option>
-            <option value="amarillo">🟠 En desarrollo</option>
-            <option value="rojo">🔴 En riesgo</option>
+            <option value="🟢">🟢 Saludable</option>
+            <option value="🟠">🟠 En desarrollo</option>
+            <option value="🔴">🔴 En riesgo</option>
           </select>
         </div>
         <div class="filter-group">
           <div class="filter-label">KAM</div>
-          <select class="filter-select" id="f-kam" onchange="applyFilters()">
-            <option value="">Todos</option>
-          </select>
+          <select class="filter-select" id="f-kam" onchange="applyFilters()"><option value="">Todos</option></select>
         </div>
         <div class="filter-group" style="flex:1;">
           <div class="filter-label">Buscar</div>
-          <input type="text" class="filter-search" id="f-search"
-                 placeholder="Nombre empresa, programa..."
-                 oninput="applyFilters()"/>
+          <input type="text" class="filter-search" id="f-q" placeholder="Nombre empresa o programa..." oninput="applyFilters()"/>
         </div>
-        <button class="btn-reset" onclick="resetFilters()">✕ Limpiar</button>
+        <button class="btn-secondary" onclick="resetFilters()">✕</button>
       </div>
-
       <div class="table-card">
         <div class="table-header">
           <div class="table-header-title">Listado de Clientes</div>
-          <div class="table-count" id="table-count">— clientes</div>
+          <div class="table-count" id="tbl-count"></div>
         </div>
         <div class="table-scroll">
           <table>
             <thead><tr>
-              <th>Empresa</th><th>País</th><th>Estado</th>
-              <th>Tipo</th><th>Admin</th><th>KAM</th>
-              <th>Usuarios</th><th>Fee Mensual</th>
+              <th>Empresa</th><th>País</th><th>Estado</th><th>Tipo</th>
+              <th>Admin</th><th>KAM</th><th>Usuarios</th><th>Fee Mensual</th>
               <th>Health Score</th><th>Semáforo</th><th>ROI</th>
             </tr></thead>
             <tbody id="tb-clientes"></tbody>
           </table>
         </div>
-        <div class="pagination" id="pagination-clientes">
-          <div class="pagination-info" id="pg-info"></div>
-          <div class="pagination-btns" id="pg-btns"></div>
+        <div class="pagination">
+          <div class="pg-info" id="pg-info"></div>
+          <div class="pg-btns" id="pg-btns"></div>
         </div>
       </div>
     </div>
 
-    <!-- ── KAMS ── -->
-    <div id="section-kams" class="section">
+    <!-- KAMS -->
+    <div id="tab-kams" class="section">
       <div class="section-header">
-        <div><h2>Cartera por KAM</h2>
-          <p>Estado de los clientes agrupados por Key Account Manager</p></div>
+        <div><h2>Cartera por KAM</h2><p>Haz clic en un KAM para ver su cartera completa</p></div>
       </div>
       <div class="kam-grid" id="kam-grid"></div>
       <div id="kam-detail"></div>
     </div>
 
-    <!-- ── GRAFICOS ── -->
-    <div id="section-graficos" class="section">
+    <!-- GRAFICOS -->
+    <div id="tab-graficos" class="section">
       <div class="section-header">
-        <div><h2>Análisis Visual</h2>
-          <p>Gráficos detallados de adopción, adherencia, performance y ROI</p></div>
-        <button class="btn-filter" onclick="openIaPanel('Analiza los gráficos de la cartera y genera un informe ejecutivo con las principales tendencias, oportunidades y riesgos detectados.')">🤖 Interpretar con IA</button>
+        <div><h2>Análisis Visual</h2><p>Métricas detalladas de adopción, adherencia y performance</p></div>
+        <button class="btn-ia" onclick="openIA('Analiza todos los gráficos de la cartera y genera un informe ejecutivo con principales tendencias, oportunidades y riesgos.')">🤖 Interpretar con IA</button>
       </div>
-
       <div class="charts-row-3">
-        <div class="chart-card">
-          <div class="chart-title">Adopción Promedio por País</div>
-          <div class="chart-sub">% adopción clientes activos</div>
-          <div class="chart-wrap-sm"><canvas id="cAdopPais"></canvas></div>
-        </div>
-        <div class="chart-card">
-          <div class="chart-title">Adherencia Promedio por País</div>
-          <div class="chart-sub">% adherencia clientes activos</div>
-          <div class="chart-wrap-sm"><canvas id="cAdherPais"></canvas></div>
-        </div>
-        <div class="chart-card">
-          <div class="chart-title">Performance Promedio por País</div>
-          <div class="chart-sub">% performance clientes activos</div>
-          <div class="chart-wrap-sm"><canvas id="cPerfPais"></canvas></div>
-        </div>
+        <div class="chart-card"><div class="chart-title">Adopción por País</div><div class="chart-sub">Promedio %</div><div class="chart-wrap-sm"><canvas id="cAdop"></canvas></div></div>
+        <div class="chart-card"><div class="chart-title">Adherencia por País</div><div class="chart-sub">Promedio %</div><div class="chart-wrap-sm"><canvas id="cAdher"></canvas></div></div>
+        <div class="chart-card"><div class="chart-title">Performance por País</div><div class="chart-sub">Promedio %</div><div class="chart-wrap-sm"><canvas id="cPerf"></canvas></div></div>
       </div>
-
       <div class="charts-row">
-        <div class="chart-card">
-          <div class="chart-title">Distribución ROI Apprecio</div>
-          <div class="chart-sub">Clientes activos por rentabilidad</div>
-          <div class="chart-wrap"><canvas id="cROI"></canvas></div>
-        </div>
-        <div class="chart-card">
-          <div class="chart-title">Clientes por Segmento</div>
-          <div class="chart-sub">Distribución por tier (A+, A, B, C)</div>
-          <div class="chart-wrap"><canvas id="cSegmento"></canvas></div>
-        </div>
+        <div class="chart-card"><div class="chart-title">Distribución ROI</div><div class="chart-sub">Rentabilidad de la cartera</div><div class="chart-wrap"><canvas id="cROI"></canvas></div></div>
+        <div class="chart-card"><div class="chart-title">Clientes por Segmento</div><div class="chart-sub">Distribución A+, A, B, C</div><div class="chart-wrap"><canvas id="cSeg"></canvas></div></div>
       </div>
-
       <div class="chart-card">
-        <div class="chart-title">Health Score por Cliente (Top activos)</div>
-        <div class="chart-sub">Score integral de salud — coloreado por semáforo</div>
+        <div class="chart-title">Health Score por Cliente (Top 20 activos)</div>
+        <div class="chart-sub">Coloreado por semáforo</div>
         <div style="position:relative;height:320px;"><canvas id="cHealthBar"></canvas></div>
       </div>
     </div>
 
-    <!-- ── IA ANÁLISIS ── -->
-    <div id="section-ia" class="section">
+    <!-- IA -->
+    <div id="tab-ia" class="section">
       <div class="section-header">
-        <div><h2>🤖 IA Análisis — Apprecio Health</h2>
-          <p>Consulta los datos de la cartera en tiempo real y obtén recomendaciones</p></div>
+        <div><h2>🤖 Apprecio IA Health</h2><p>Consultas inteligentes sobre la cartera via Ollama</p></div>
       </div>
-
       <div class="charts-row" style="margin-bottom:16px;">
         <div class="chart-card">
           <div class="chart-title">Consultas Rápidas</div>
-          <div class="chart-sub">Haz clic en cualquier consulta para analizarla</div>
-          <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:8px;">
-            <button class="ia-quick-btn" onclick="openIaPanelFull(this.textContent)">🚨 Clientes en riesgo de churn</button>
-            <button class="ia-quick-btn" onclick="openIaPanelFull(this.textContent)">📋 Resumen ejecutivo de cartera</button>
-            <button class="ia-quick-btn" onclick="openIaPanelFull(this.textContent)">💡 Oportunidades de upsell</button>
-            <button class="ia-quick-btn" onclick="openIaPanelFull(this.textContent)">📊 Análisis de adopción por país</button>
-            <button class="ia-quick-btn" onclick="openIaPanelFull(this.textContent)">👤 Carga y estado por KAM</button>
-            <button class="ia-quick-btn" onclick="openIaPanelFull(this.textContent)">💰 Clientes con ROI negativo — qué hacer</button>
-            <button class="ia-quick-btn" onclick="openIaPanelFull(this.textContent)">🎯 Plan de acciones prioritarias para esta semana</button>
-            <button class="ia-quick-btn" onclick="openIaPanelFull(this.textContent)">📧 Genera notificaciones automáticas para KAMs</button>
+          <div class="chart-sub">Haz clic para analizar al instante</div>
+          <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;">
+            <button class="ia-qbtn" onclick="openIA(this.textContent)">🚨 Clientes en riesgo de churn</button>
+            <button class="ia-qbtn" onclick="openIA(this.textContent)">📋 Resumen ejecutivo de cartera</button>
+            <button class="ia-qbtn" onclick="openIA(this.textContent)">💡 Oportunidades de upsell</button>
+            <button class="ia-qbtn" onclick="openIA(this.textContent)">📊 Análisis de adopción por país</button>
+            <button class="ia-qbtn" onclick="openIA(this.textContent)">👤 Carga y estado por KAM</button>
+            <button class="ia-qbtn" onclick="openIA(this.textContent)">💰 Clientes con ROI negativo — qué hacer</button>
+            <button class="ia-qbtn" onclick="openIA(this.textContent)">🎯 Plan de acciones prioritarias esta semana</button>
+            <button class="ia-qbtn" onclick="openIA(this.textContent)">📧 Genera notificaciones para todos los KAMs</button>
           </div>
         </div>
         <div class="chart-card">
-          <div class="chart-title">Chat con los datos</div>
+          <div class="chart-title">Chat libre con los datos</div>
           <div class="chart-sub">Escribe tu consulta sobre la cartera</div>
-          <textarea id="ia-section-input" style="width:100%;border:1px solid var(--gray-200);border-radius:8px;padding:12px;font-size:13px;font-family:inherit;resize:none;height:100px;margin-top:8px;" placeholder="Ej: ¿Qué clientes de Chile tienen baja adherencia pero buen ROI?"></textarea>
-          <button class="btn-primary" style="margin-top:8px;width:100%;" onclick="sendFromSection()">Analizar con IA →</button>
+          <textarea id="ia-sec-input" style="width:100%;border:1px solid var(--gray-200);border-radius:8px;padding:12px;font-size:13px;resize:none;height:110px;margin-top:10px;font-family:inherit;" placeholder="Ej: ¿Qué clientes de Chile tienen baja adherencia pero buen ROI?"></textarea>
+          <button class="btn-primary" style="margin-top:10px;width:100%;" onclick="sendFromPage()">Analizar →</button>
         </div>
       </div>
-
-      <div class="chart-card" id="ia-section-result" style="display:none;">
+      <div class="chart-card" id="ia-result-card" style="display:none;">
         <div class="chart-title">Resultado del Análisis</div>
-        <div id="ia-section-content" style="margin-top:12px;font-size:13px;line-height:1.8;color:var(--gray-800);"></div>
+        <div id="ia-result-body" style="margin-top:12px;font-size:13px;line-height:1.8;"></div>
       </div>
     </div>
 
   </div><!-- /main-content -->
 </div><!-- /app-screen -->
 
-<!-- IA Panel lateral -->
-<div id="ia-overlay" onclick="closeIaPanel()"></div>
+<!-- IA Panel -->
+<div id="ia-overlay" onclick="closeIA()"></div>
 <div id="ia-panel">
   <div class="ia-header">
     <div class="ia-icon">🤖</div>
-    <div class="ia-header-text">
+    <div class="ia-head-text">
       <h3>Apprecio IA Health</h3>
-      <p>Análisis de cartera en tiempo real</p>
+      <p>Powered by Ollama · llama3.3</p>
     </div>
-    <button id="btn-close-ia" onclick="closeIaPanel()">✕</button>
+    <button id="btn-close-ia" onclick="closeIA()">✕</button>
   </div>
-  <div class="ia-context-bar" id="ia-context-bar">
-    Datos cargados: <strong id="ia-context-count">—</strong> clientes activos
-  </div>
-  <div class="ia-messages" id="ia-messages"></div>
+  <div class="ia-ctx">Analizando <strong id="ia-ctx-count">—</strong> clientes activos en tiempo real</div>
+  <div class="ia-msgs" id="ia-msgs"></div>
   <div class="ia-quick-btns">
-    <button class="ia-quick-btn" onclick="sendQuick('¿Quién está en riesgo de churn?')">🚨 Riesgo churn</button>
-    <button class="ia-quick-btn" onclick="sendQuick('Genera acciones para los clientes en rojo')">📋 Plan acción</button>
-    <button class="ia-quick-btn" onclick="sendQuick('¿Cuáles son las oportunidades de upsell?')">💡 Upsell</button>
-    <button class="ia-quick-btn" onclick="sendQuick('Resumen ejecutivo de la cartera')">📊 Resumen</button>
+    <button class="ia-qbtn" onclick="sendQuick('¿Quién está en riesgo de churn?')">🚨 Riesgo churn</button>
+    <button class="ia-qbtn" onclick="sendQuick('Genera acciones para los clientes en rojo')">📋 Plan acción</button>
+    <button class="ia-qbtn" onclick="sendQuick('¿Oportunidades de upsell?')">💡 Upsell</button>
+    <button class="ia-qbtn" onclick="sendQuick('Resumen ejecutivo de la cartera')">📊 Resumen</button>
   </div>
   <div class="ia-input-row">
-    <textarea id="ia-input" rows="1" placeholder="Pregunta sobre la cartera..." onkeydown="iaKeydown(event)"></textarea>
-    <button id="btn-send-ia" onclick="sendIaMessage()">➤</button>
+    <textarea id="ia-input" rows="1" placeholder="Pregunta sobre la cartera..." onkeydown="iaKey(event)"></textarea>
+    <button id="btn-send-ia" onclick="sendIA()">➤</button>
   </div>
 </div>
 
-<button id="fab-ia" onclick="openIaPanel('')" title="Abrir IA">🤖</button>
+<button id="fab-ia" onclick="openIA('')" title="Abrir IA">🤖</button>
 
-<!-- Modal notificación -->
+<!-- Notif modal -->
 <div id="notif-modal">
   <div class="notif-card">
     <h3>📧 Notificación para KAM</h3>
-    <div class="notif-empresa" id="notif-empresa-name"></div>
-    <textarea class="notif-textarea" id="notif-content" placeholder="Generando mensaje..."></textarea>
+    <div class="notif-sub" id="notif-sub"></div>
+    <textarea class="notif-ta" id="notif-ta"></textarea>
     <div class="notif-actions">
       <button class="btn-secondary" onclick="closeNotif()">Cerrar</button>
-      <button class="btn-primary" onclick="copyNotif()">📋 Copiar</button>
+      <button class="btn-primary" onclick="copyNotif()">📋 Copiar mensaje</button>
     </div>
   </div>
 </div>
 
-<div id="toast">Copiado al portapapeles ✓</div>
+<div id="toast"></div>
 
-<!-- ══════════════════════════════════════════
-     SCRIPT
-══════════════════════════════════════════ -->
+<!-- Google Sign-In SDK (se carga al final para no bloquear render) -->
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+
 <script>
-<script>
-/* ══════════════════════════════════════════
-   CONFIG — solo cambia esta línea
-══════════════════════════════════════════ */
+/* ════════════════════════════════════════
+   CONFIG
+════════════════════════════════════════ */
 const N8N_WEBHOOK = "https://n8n.openip.cl/webhook/ia-salud-cliente";
+const ALLOWED_DOMAINS = ["apprecio.com", "dcanje.com"];
 
-/* ══════════════════════════════════════════
-   DATOS
-══════════════════════════════════════════ */
+/* ════════════════════════════════════════
+   DATOS — todos los campos en línea sin parches
+════════════════════════════════════════ */
 const CLIENTES = [
   {id:755,empresa:"Blue Express",programa:"Blue Express",tipo:"Teams Motivation",admin:"In House",pais:"Chile",estado:"Activo",segmento:"A",usuarios:44,kam:"Camilo Figueroa",fee:1.5,feeMensual:1067.96,driver:"Capacitar stakeholders",adopcion:0.547,adherencia:0.075,performance:0,healthScore:0.186,semaforo:"🟠",roi:0.483,desc:"Blue Express utiliza la plataforma principalmente para carga de Entrenamientos para sus courrier.",link:"https://blueexpress.apprecio.cl/#/login",fechaInicio:"01 Ago 2019",tiempoProg:6,loginsM2:1.61,loginsM1:1.42,loginsM:0},
   {id:44,empresa:"Global Hitss",programa:"Honor Hitss",tipo:"Teams Motivation",admin:"Convenience",pais:"México",estado:"Activo",segmento:"A+",usuarios:4603,kam:"Colombina Trujillo",fee:1.5,feeMensual:1806,driver:"Conexión emocional",adopcion:0.085,adherencia:0,performance:0,healthScore:0.026,semaforo:"🔴",roi:1.508,desc:"Global Hitss usa SSO con Microsoft. Enfocado en engagement con insignias, aniversario laboral y banners.",link:"https://myrewards.globalhitss.com/#/login",fechaInicio:"01 Ago 2019",tiempoProg:6,loginsM2:1.04,loginsM1:1.0,loginsM:0},
   {id:233,empresa:"Autofin",programa:"Autofin",tipo:"Force Manager",admin:"Full Administration",pais:"Chile",estado:"Activo",segmento:"A+",usuarios:0,kam:"Johana Calzada",fee:0,feeMensual:0,driver:"Incrementar Performance Comercial",adopcion:0.313,adherencia:0,performance:0,healthScore:0.094,semaforo:"🔴",roi:-1,desc:"Módulo legal. En proceso de implementación.",link:null,fechaInicio:"—",tiempoProg:"—",loginsM2:null,loginsM1:null,loginsM:null},
   {id:990,empresa:"Entel Inbound Chile",programa:"Ser más",tipo:"Force Manager",admin:"Full Administration",pais:"Chile",estado:"Activo",segmento:"A+",usuarios:434,kam:"Benjamin Gonzales",fee:11.81,feeMensual:4152.48,driver:"Incrementar Performance Comercial",adopcion:0.704,adherencia:0,performance:0,healthScore:0.211,semaforo:"🟠",roi:4.767,desc:"Programa de ventas Entel Chile, uso de metas y KPIs para fuerza de venta.",link:"https://sermas.dcanje.cl/#/login",fechaInicio:"01 Ago 2019",tiempoProg:6,loginsM2:2.90,loginsM1:2.0,loginsM:0},
-  {id:14353,empresa:"Entel Impulsa GGTT",programa:"Impulsa GGTT",tipo:"Force Manager",admin:"Full Administration",pais:"Chile",estado:"Activo",segmento:"A",usuarios:116,kam:"Lorenzo Jamasmie",fee:4.62,feeMensual:433.91,driver:"Incrementar Performance Comercial",adopcion:0.643,adherencia:0.012,performance:0,healthScore:0.197,semaforo:"🔴",roi:-0.397,desc:"Canal de GGTT enfocado en vendedores en grandes tiendas y retail para incentivar venta de fibra.",link:"https://impulsa.apprecio.cl",fechaInicio:"15 Ene 2024",tiempoProg:2,loginsM2:3.36,loginsM1:1.74,loginsM:0},
+  {id:14353,empresa:"Entel Impulsa GGTT",programa:"Impulsa GGTT",tipo:"Force Manager",admin:"Full Administration",pais:"Chile",estado:"Activo",segmento:"A",usuarios:116,kam:"Lorenzo Jamasmie",fee:4.62,feeMensual:433.91,driver:"Incrementar Performance Comercial",adopcion:0.643,adherencia:0.012,performance:0,healthScore:0.197,semaforo:"🔴",roi:-0.397,desc:"Canal GGTT enfocado en vendedores en grandes tiendas y retail para incentivar venta de fibra.",link:"https://impulsa.apprecio.cl",fechaInicio:"15 Ene 2024",tiempoProg:2,loginsM2:3.36,loginsM1:1.74,loginsM:0},
   {id:14352,empresa:"Entel Impulsa Terreno",programa:"Impulsa Terreno",tipo:"Force Manager",admin:"Full Administration",pais:"Chile",estado:"Activo",segmento:"A+",usuarios:155,kam:"Benjamin Gonzales",fee:8.11,feeMensual:1018.30,driver:"Incrementar Performance Comercial",adopcion:0.569,adherencia:0.004,performance:0,healthScore:0.171,semaforo:"🟠",roi:0.414,desc:"Vendedores de terreno con foco en adherencia y días trabajados.",link:"https://impulsa.apprecio.cl",fechaInicio:"15 Ene 2024",tiempoProg:2,loginsM2:2.79,loginsM1:2.88,loginsM:0},
-  {id:14351,empresa:"Entel Impulsa Tiendas",programa:"Impulsa Tiendas",tipo:"Force Manager",admin:"Full Administration",pais:"Chile",estado:"Activo",segmento:"A+",usuarios:760,kam:"Lorenzo Jamasmie",fee:5.74,feeMensual:3534.30,driver:"Incrementar Performance Comercial",adopcion:0.766,adherencia:0.073,performance:0.261,healthScore:0.356,semaforo:"🟢",roi:3.909,desc:"Canal de tiendas Entel con marcas externas (Samsung, Xiaomi, etc). Bien alineado con metas.",link:"https://impulsa.apprecio.cl",fechaInicio:"15 Ene 2024",tiempoProg:2,loginsM2:4.34,loginsM1:2.46,loginsM:0},
+  {id:14351,empresa:"Entel Impulsa Tiendas",programa:"Impulsa Tiendas",tipo:"Force Manager",admin:"Full Administration",pais:"Chile",estado:"Activo",segmento:"A+",usuarios:760,kam:"Lorenzo Jamasmie",fee:5.74,feeMensual:3534.30,driver:"Incrementar Performance Comercial",adopcion:0.766,adherencia:0.073,performance:0.261,healthScore:0.356,semaforo:"🟢",roi:3.909,desc:"Canal tiendas Entel con marcas externas (Samsung, Xiaomi, etc). Bien alineado con metas.",link:"https://impulsa.apprecio.cl",fechaInicio:"15 Ene 2024",tiempoProg:2,loginsM2:4.34,loginsM1:2.46,loginsM:0},
   {id:102,empresa:"Hino",programa:"Hino",tipo:"Force Manager",admin:"Full Administration",pais:"Chile",estado:"Activo",segmento:"B",usuarios:226,kam:"Benjamín Castro",fee:2.90,feeMensual:530.20,driver:"Capacitar stakeholders",adopcion:0.673,adherencia:0,performance:0,healthScore:0.202,semaforo:"🟠",roi:0.105,desc:"Programa autoadministrado, uso ocasional del módulo de entrenamiento.",link:"https://hinosmarteam.apprecio.cl/#",fechaInicio:"01 Mar 2020",tiempoProg:6,loginsM2:null,loginsM1:null,loginsM:4.0},
-  {id:1342,empresa:"Nualart",programa:"Nualart",tipo:"Force Manager",admin:"Full Administration",pais:"Chile",estado:"Activo",segmento:"C",usuarios:0,kam:"Johana Calzada",fee:0,feeMensual:0,driver:"Mejorar Productividad",adopcion:0.188,adherencia:0,performance:0,healthScore:0.056,semaforo:"🔴",roi:-1,desc:"Programa activo pero sin usuarios registrados. Requiere intervención.",link:null,fechaInicio:"—",tiempoProg:"—",loginsM2:null,loginsM1:null,loginsM:null},
-  {id:1614,empresa:"StockSur",programa:"Stocksur",tipo:"Force Manager",admin:"Full Administration",pais:"Chile",estado:"Activo",segmento:"C",usuarios:87,kam:"Camilo Figueroa",fee:6.02,feeMensual:424.16,driver:"Incrementar Performance Comercial",adopcion:0.257,adherencia:0.091,performance:0.163,healthScore:0.170,semaforo:"🟠",roi:0,desc:"Usa módulo de metas y ocasionalmente registro fotográfico.",link:null,fechaInicio:"—",tiempoProg:"—",loginsM2:null,loginsM1:null,loginsM:null},
+  {id:1342,empresa:"Nualart",programa:"Nualart",tipo:"Force Manager",admin:"Full Administration",pais:"Chile",estado:"Activo",segmento:"C",usuarios:0,kam:"Johana Calzada",fee:0,feeMensual:0,driver:"Mejorar Productividad",adopcion:0.188,adherencia:0,performance:0,healthScore:0.056,semaforo:"🔴",roi:-1,desc:"Programa activo pero sin usuarios registrados. Requiere intervención urgente.",link:null,fechaInicio:"—",tiempoProg:"—",loginsM2:null,loginsM1:null,loginsM:null},
+  {id:1614,empresa:"StockSur",programa:"Stocksur",tipo:"Force Manager",admin:"Full Administration",pais:"Chile",estado:"Activo",segmento:"C",usuarios:87,kam:"Camilo Figueroa",fee:6.02,feeMensual:424.16,driver:"Incrementar Performance Comercial",adopcion:0.257,adherencia:0.091,performance:0.163,healthScore:0.170,semaforo:"🟠",roi:0,desc:"Usa módulo de metas y ocasionalmente registro fotográfico. Autoadministrado.",link:null,fechaInicio:"—",tiempoProg:"—",loginsM2:null,loginsM1:null,loginsM:null},
   {id:1784,empresa:"Ford Chile",programa:"Escuderia Ford",tipo:"Force Manager",admin:"Full Administration",pais:"Chile",estado:"Activo",segmento:"A",usuarios:411,kam:"Lorenzo Jamasmie",fee:3.12,feeMensual:1039.19,driver:"Incrementar Performance Comercial",adopcion:0.361,adherencia:0,performance:0,healthScore:0.108,semaforo:"🔴",roi:0.443,desc:"Uso del módulo de metas y ranking de vendedores. Actualmente en declive de uso.",link:"https://escuderiaford.apprecio.cl/#/login",fechaInicio:"01 Abr 2025",tiempoProg:0,loginsM2:2.53,loginsM1:1.0,loginsM:0},
   {id:314,empresa:"Loreal Colombia",programa:"Loreal Consumo Masivo",tipo:"Force Manager",admin:"Full Administration",pais:"Colombia",estado:"Activo",segmento:"B",usuarios:382,kam:"Sharon Hernandez",fee:2.8,feeMensual:341.29,driver:"Incrementar Performance Comercial",adopcion:0.525,adherencia:0,performance:0,healthScore:0.158,semaforo:"🔴",roi:-0.289,desc:"Venta de productos en supermercados, salones de belleza y retail.",link:"https://redimeyganaconloreal.dcanje.co/#/login",fechaInicio:"01 Ene 2025",tiempoProg:1,loginsM2:1.82,loginsM1:4.0,loginsM:0},
   {id:629,empresa:"Loreal Mayorista",programa:"Loreal",tipo:"Force Manager",admin:"Convenience",pais:"Colombia",estado:"Activo",segmento:"A",usuarios:0,kam:"Sharon Hernandez",fee:1,feeMensual:0,driver:"Capacitar stakeholders",adopcion:0.188,adherencia:0,performance:0,healthScore:0.056,semaforo:"🔴",roi:-1,desc:"Canal mayorista Loreal Colombia. Sin usuarios activos registrados.",link:null,fechaInicio:"—",tiempoProg:"—",loginsM2:null,loginsM1:null,loginsM:null},
@@ -959,685 +583,593 @@ const CLIENTES = [
 
 const ACTIVOS = CLIENTES.filter(c => c.estado === "Activo");
 
-/* ══════════════════════════════════════════
+/* ════════════════════════════════════════
    ESTADO
-══════════════════════════════════════════ */
+════════════════════════════════════════ */
 let filteredData = [...CLIENTES];
 let currentPage = 1;
 const PAGE_SIZE = 15;
-let chartsInitialized = false;
+let chartsBuilt = false;
 
-/* ══════════════════════════════════════════
-   INIT — se ejecuta cuando el DOM está listo
-══════════════════════════════════════════ */
-document.addEventListener('DOMContentLoaded', () => {
-  // Modo sin login: mostrar app directo
-  document.getElementById('login-screen').style.display = 'none';
-  document.getElementById('app-screen').style.display = 'block';
-  document.getElementById('fab-ia').style.display = 'flex';
-  document.getElementById('user-name').textContent = 'KAM Demo';
-  document.getElementById('user-avatar').src = 'https://ui-avatars.com/api/?name=KAM+Demo&background=FA345E&color=fff&size=64';
-  document.getElementById('ia-context-count').textContent = ACTIVOS.length;
-  initDashboard();
-});
-
-function logout() { location.reload(); }
-
-/* ══════════════════════════════════════════
-   NAVIGATION
-══════════════════════════════════════════ */
-function showSection(name, btn) {
-  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
-  document.getElementById('section-' + name).classList.add('active');
-  btn.classList.add('active');
-  if (name === 'graficos' && !chartsInitialized) {
-    chartsInitialized = true;
-    initCharts();
+/* ════════════════════════════════════════
+   GOOGLE AUTH
+════════════════════════════════════════ */
+function handleGoogleLogin(response) {
+  try {
+    const payload = JSON.parse(atob(response.credential.split('.')[1]));
+    const email = payload.email || '';
+    const domain = email.split('@')[1] || '';
+    if (!ALLOWED_DOMAINS.includes(domain)) {
+      document.getElementById('login-error').style.display = 'block';
+      return;
+    }
+    sessionStorage.setItem('appr_user', JSON.stringify({
+      name: payload.name, email: payload.email, picture: payload.picture
+    }));
+    bootApp(payload);
+  } catch(e) {
+    document.getElementById('login-error').style.display = 'block';
   }
 }
 
-/* ══════════════════════════════════════════
-   INIT DASHBOARD
-══════════════════════════════════════════ */
-function initDashboard() {
+function bootApp(user) {
+  document.getElementById('login-screen').style.display = 'none';
+  document.getElementById('app-screen').style.display = 'block';
+  document.getElementById('fab-ia').style.display = 'flex';
+  document.getElementById('user-name').textContent = (user.name || '').split(' ')[0];
+  document.getElementById('user-avatar').src = user.picture || '';
+  document.getElementById('ia-ctx-count').textContent = ACTIVOS.length;
+  buildDashboard();
+}
+
+function doLogout() {
+  sessionStorage.removeItem('appr_user');
+  location.reload();
+}
+
+/* ════════════════════════════════════════
+   INIT — esperamos que el DOM esté listo
+════════════════════════════════════════ */
+document.addEventListener('DOMContentLoaded', function() {
+  // Verificar sesión guardada
+  const saved = sessionStorage.getItem('appr_user');
+  if (saved) {
+    try { bootApp(JSON.parse(saved)); return; } catch(e) { sessionStorage.removeItem('appr_user'); }
+  }
+  // Sin sesión → mostrar login
+  // (login-screen ya está visible por defecto con display:flex en CSS)
+});
+
+/* ════════════════════════════════════════
+   NAVEGACIÓN DE PESTAÑAS
+════════════════════════════════════════ */
+function showTab(name, btn) {
+  // Ocultar todas las secciones
+  document.querySelectorAll('.section').forEach(function(s) {
+    s.classList.remove('active');
+  });
+  // Desactivar todos los tabs
+  document.querySelectorAll('.nav-tab').forEach(function(t) {
+    t.classList.remove('active');
+  });
+  // Mostrar sección seleccionada
+  var sec = document.getElementById('tab-' + name);
+  if (sec) sec.classList.add('active');
+  // Activar tab
+  if (btn) btn.classList.add('active');
+  // Cargar gráficos detallados solo al entrar a esa pestaña
+  if (name === 'graficos' && !chartsBuilt) {
+    chartsBuilt = true;
+    buildDetailCharts();
+  }
+}
+
+/* ════════════════════════════════════════
+   BUILD DASHBOARD
+════════════════════════════════════════ */
+function buildDashboard() {
   buildKPIs();
   buildResumenCharts();
   buildUrgentes();
   buildClientesTable();
-  buildKamSection();
+  buildKamCards();
   buildKamFilter();
 }
 
-/* ══════════════════════════════════════════
+/* ════════════════════════════════════════
    KPIs
-══════════════════════════════════════════ */
+════════════════════════════════════════ */
 function buildKPIs() {
-  const activos = ACTIVOS.length;
-  const verdes = ACTIVOS.filter(c => c.semaforo === "🟢").length;
-  const rojos = ACTIVOS.filter(c => c.semaforo === "🔴").length;
-  const amarillos = ACTIVOS.filter(c => c.semaforo === "🟠").length;
-  const avgHealth = (ACTIVOS.reduce((s, c) => s + c.healthScore, 0) / activos * 100).toFixed(1);
-  const roiPos = ACTIVOS.filter(c => c.roi > 0).length;
-  const totalFee = ACTIVOS.reduce((s, c) => s + c.feeMensual, 0);
+  var n = ACTIVOS.length;
+  var verde = ACTIVOS.filter(function(c){return c.semaforo==="🟢";}).length;
+  var rojo  = ACTIVOS.filter(function(c){return c.semaforo==="🔴";}).length;
+  var ambar = ACTIVOS.filter(function(c){return c.semaforo==="🟠";}).length;
+  var avgHS = (ACTIVOS.reduce(function(s,c){return s+c.healthScore;},0)/n*100).toFixed(1);
+  var roiP  = ACTIVOS.filter(function(c){return c.roi>0;}).length;
+  var mrr   = ACTIVOS.reduce(function(s,c){return s+c.feeMensual;},0);
 
-  const kpis = [
-    {label:"Clientes Activos", val:activos, sub:"Total cartera activa", cls:"kpi-gray"},
-    {label:"Saludables 🟢", val:verdes, sub:`${(verdes/activos*100).toFixed(0)}% del total`, cls:"kpi-green"},
-    {label:"En Riesgo 🔴", val:rojos, sub:`${(rojos/activos*100).toFixed(0)}% del total`, cls:"kpi-red"},
-    {label:"En Desarrollo 🟠", val:amarillos, sub:`${(amarillos/activos*100).toFixed(0)}% del total`, cls:"kpi-amber"},
-    {label:"Health Score Avg", val:avgHealth+"%", sub:"Promedio ponderado", cls:"kpi-gray"},
-    {label:"ROI Positivo", val:roiPos, sub:`${(roiPos/activos*100).toFixed(0)}% rentables`, cls:"kpi-green"},
-    {label:"MRR Total", val:"$"+fmt(totalFee), sub:"Fee mensual cartera", cls:"kpi-gray"},
+  var kpis = [
+    {lbl:"Clientes Activos", val:n, sub:"Total cartera activa", cls:"kpi-gray"},
+    {lbl:"Saludables 🟢", val:verde, sub:pct(verde,n)+" del total", cls:"kpi-green"},
+    {lbl:"En Riesgo 🔴", val:rojo, sub:pct(rojo,n)+" del total", cls:"kpi-red"},
+    {lbl:"En Desarrollo 🟠", val:ambar, sub:pct(ambar,n)+" del total", cls:"kpi-amber"},
+    {lbl:"Health Score Avg", val:avgHS+"%", sub:"Promedio ponderado", cls:"kpi-gray"},
+    {lbl:"ROI Positivo", val:roiP, sub:pct(roiP,n)+" rentables", cls:"kpi-green"},
+    {lbl:"MRR Total", val:"$"+fmt(mrr), sub:"Fee mensual cartera", cls:"kpi-gray"},
   ];
-  document.getElementById('kpi-grid').innerHTML = kpis.map(k => `
-    <div class="kpi-card ${k.cls}">
-      <div class="kpi-label">${k.label}</div>
-      <div class="kpi-value">${k.val}</div>
-      <div class="kpi-sub">${k.sub}</div>
-    </div>`).join('');
+  document.getElementById('kpi-grid').innerHTML = kpis.map(function(k){
+    return '<div class="kpi-card '+k.cls+'"><div class="kpi-label">'+k.lbl+'</div><div class="kpi-value">'+k.val+'</div><div class="kpi-sub">'+k.sub+'</div></div>';
+  }).join('');
 }
 
-function fmt(n) { return Math.round(n).toLocaleString('es-CL'); }
+function pct(a,b){ return b>0 ? Math.round(a/b*100)+'%' : '0%'; }
+function fmt(n){ return Math.round(n).toLocaleString('es-CL'); }
 
-/* ══════════════════════════════════════════
+/* ════════════════════════════════════════
    RESUMEN CHARTS
-══════════════════════════════════════════ */
+════════════════════════════════════════ */
 function buildResumenCharts() {
-  const sem = {verde:0, amarillo:0, rojo:0};
-  ACTIVOS.forEach(c => {
-    if (c.semaforo === "🟢") sem.verde++;
-    else if (c.semaforo === "🟠") sem.amarillo++;
-    else sem.rojo++;
+  var sv=0,sa=0,sr=0;
+  ACTIVOS.forEach(function(c){
+    if(c.semaforo==="🟢") sv++;
+    else if(c.semaforo==="🟠") sa++;
+    else sr++;
   });
-  new Chart(document.getElementById('cSemaforo'), {
+  new Chart(document.getElementById('cSem'),{
     type:'doughnut',
-    data:{
-      labels:['🟢 Saludable','🟠 En desarrollo','🔴 En riesgo'],
-      datasets:[{data:[sem.verde, sem.amarillo, sem.rojo],
-        backgroundColor:['#065F46','#B45309','#FA345E'], borderWidth:0, hoverOffset:4}]
-    },
-    options:{responsive:true, maintainAspectRatio:false,
-      plugins:{legend:{position:'bottom', labels:{font:{family:'Montserrat',size:12}, padding:16}}}}
+    data:{labels:['🟢 Saludable','🟠 En desarrollo','🔴 En riesgo'],
+      datasets:[{data:[sv,sa,sr],backgroundColor:['#065F46','#B45309','#FA345E'],borderWidth:0,hoverOffset:4}]},
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{position:'bottom',labels:{font:{family:'Montserrat',size:12},padding:14}}}}
   });
 
-  const paises = {};
-  ACTIVOS.forEach(c => { paises[c.pais] = (paises[c.pais]||0)+1; });
-  new Chart(document.getElementById('cPais'), {
+  var paises={};
+  ACTIVOS.forEach(function(c){paises[c.pais]=(paises[c.pais]||0)+1;});
+  new Chart(document.getElementById('cPais'),{
     type:'doughnut',
-    data:{
-      labels:Object.keys(paises),
-      datasets:[{data:Object.values(paises),
-        backgroundColor:['#FA345E','#667eea','#f59e0b','#10b981','#06b6d4'], borderWidth:0, hoverOffset:4}]
-    },
-    options:{responsive:true, maintainAspectRatio:false,
-      plugins:{legend:{position:'bottom', labels:{font:{family:'Montserrat',size:12}, padding:16}}}}
+    data:{labels:Object.keys(paises),
+      datasets:[{data:Object.values(paises),backgroundColor:['#FA345E','#667eea','#f59e0b','#10b981','#06b6d4'],borderWidth:0,hoverOffset:4}]},
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{position:'bottom',labels:{font:{family:'Montserrat',size:12},padding:14}}}}
   });
 
-  const kamData = {};
-  ACTIVOS.forEach(c => {
-    if (!kamData[c.kam]) kamData[c.kam] = {sum:0, count:0};
-    kamData[c.kam].sum += c.healthScore * 100;
-    kamData[c.kam].count++;
+  var kd={};
+  ACTIVOS.forEach(function(c){
+    if(!kd[c.kam]) kd[c.kam]={sum:0,n:0};
+    kd[c.kam].sum+=c.healthScore*100; kd[c.kam].n++;
   });
-  new Chart(document.getElementById('cKamHealth'), {
+  var knames=Object.keys(kd).map(function(k){return k.split(' ')[0];});
+  var kvals=Object.keys(kd).map(function(k){return (kd[k].sum/kd[k].n).toFixed(1);});
+  new Chart(document.getElementById('cKam'),{
     type:'bar',
-    data:{
-      labels:Object.keys(kamData).map(k => k.split(' ')[0]),
-      datasets:[{label:'Health Score Avg %',
-        data:Object.keys(kamData).map(k => (kamData[k].sum/kamData[k].count).toFixed(1)),
-        backgroundColor:'#FA345E', borderRadius:6}]
-    },
-    options:{responsive:true, maintainAspectRatio:false,
+    data:{labels:knames,datasets:[{label:'Health Score %',data:kvals,backgroundColor:'#FA345E',borderRadius:6}]},
+    options:{responsive:true,maintainAspectRatio:false,
       plugins:{legend:{display:false}},
-      scales:{
-        x:{ticks:{font:{family:'Montserrat',size:11}}},
-        y:{min:0, max:50, ticks:{font:{family:'Montserrat',size:11}, callback:v=>v+'%'}}
-      }}
+      scales:{x:{ticks:{font:{family:'Montserrat',size:11}}},
+        y:{min:0,max:45,ticks:{font:{family:'Montserrat',size:11},callback:function(v){return v+'%';}}}}}
   });
 
-  const scatterData = ACTIVOS.map(c => ({
-    x: +(c.adopcion*100).toFixed(1),
-    y: +(c.adherencia*100).toFixed(1),
-    r: Math.max(4, Math.min(16, (c.usuarios||20)/60)),
-    label: c.empresa,
-    color: c.semaforo==="🟢" ? "#065F46" : c.semaforo==="🟠" ? "#B45309" : "#FA345E"
-  }));
-  new Chart(document.getElementById('cScatter'), {
+  var sd=ACTIVOS.map(function(c){
+    return {x:+(c.adopcion*100).toFixed(1),y:+(c.adherencia*100).toFixed(1),
+      r:Math.max(4,Math.min(16,(c.usuarios||20)/60)),
+      label:c.empresa,
+      col:c.semaforo==="🟢"?"#065F46":c.semaforo==="🟠"?"#B45309":"#FA345E"};
+  });
+  new Chart(document.getElementById('cScatter'),{
     type:'bubble',
-    data:{datasets:[{
-      label:'Clientes',
-      data: scatterData.map(d => ({x:d.x, y:d.y, r:d.r})),
-      backgroundColor: scatterData.map(d => d.color+'99'),
-      borderColor: scatterData.map(d => d.color),
-      borderWidth:1.5
-    }]},
-    options:{responsive:true, maintainAspectRatio:false,
+    data:{datasets:[{label:'Clientes',
+      data:sd.map(function(d){return {x:d.x,y:d.y,r:d.r};}),
+      backgroundColor:sd.map(function(d){return d.col+'99';}),
+      borderColor:sd.map(function(d){return d.col;}),borderWidth:1.5}]},
+    options:{responsive:true,maintainAspectRatio:false,
       plugins:{legend:{display:false},
-        tooltip:{callbacks:{label:ctx => {
-          const d = scatterData[ctx.dataIndex];
-          return `${d.label}: Adop ${d.x}% | Adh ${d.y}%`;
-        }}}},
+        tooltip:{callbacks:{label:function(ctx){var d=sd[ctx.dataIndex];return d.label+': Adop '+d.x+'% | Adh '+d.y+'%';}}}},
       scales:{
-        x:{title:{display:true, text:'Adopción %', font:{family:'Montserrat',size:11}}, min:0, max:110},
-        y:{title:{display:true, text:'Adherencia %', font:{family:'Montserrat',size:11}}, min:0, max:50}
-      }}
+        x:{title:{display:true,text:'Adopción %',font:{family:'Montserrat',size:11}},min:0,max:110},
+        y:{title:{display:true,text:'Adherencia %',font:{family:'Montserrat',size:11}},min:0,max:50}}}
   });
 }
 
-/* ══════════════════════════════════════════
+/* ════════════════════════════════════════
    URGENTES
-══════════════════════════════════════════ */
+════════════════════════════════════════ */
 function buildUrgentes() {
-  const urgentes = ACTIVOS
-    .filter(c => c.semaforo === "🔴" || c.healthScore < 0.15)
-    .sort((a,b) => a.healthScore - b.healthScore)
-    .slice(0, 8);
-
-  document.getElementById('tb-urgentes').innerHTML = urgentes.map(c => `
-    <tr>
-      <td><strong>${c.empresa}</strong><br><span style="font-size:11px;color:var(--gray-400)">${c.programa}</span></td>
-      <td>${c.kam.split(' ')[0]}</td>
-      <td>${c.pais}</td>
-      <td>${healthBar(c.healthScore)}</td>
-      <td>${semBadge(c.semaforo)}</td>
-      <td>${roiBadge(c.roi)}</td>
-      <td>
-        <button class="btn-ia" onclick="genNotif(${c.id})">📧 Notificar</button>
-        <button class="btn-action" style="margin-left:4px;" onclick="openIaPanel('Analiza el cliente ${c.empresa.replace(/'/g,"\\'")} (Health Score: ${(c.healthScore*100).toFixed(0)}%, semáforo ${c.semaforo}, ROI ${c.roi.toFixed(2)}) y genera un plan de acción concreto para el KAM ${c.kam.replace(/'/g,"\\'")}')">🤖 IA</button>
-      </td>
-    </tr>`).join('');
+  var lista = ACTIVOS
+    .filter(function(c){return c.semaforo==="🔴"||c.healthScore<0.15;})
+    .sort(function(a,b){return a.healthScore-b.healthScore;})
+    .slice(0,8);
+  document.getElementById('tb-urgentes').innerHTML = lista.map(function(c){
+    return '<tr><td><strong>'+c.empresa+'</strong><br><span style="font-size:11px;color:var(--gray-400)">'+c.programa+'</span></td>'
+      +'<td>'+c.kam.split(' ')[0]+'</td><td>'+c.pais+'</td>'
+      +'<td>'+hbar(c.healthScore)+'</td><td>'+semBadge(c.semaforo)+'</td><td>'+roiBadge(c.roi)+'</td>'
+      +'<td style="white-space:nowrap;">'
+      +'<button class="btn-ia" onclick="genNotif('+c.id+')">📧 Notif.</button> '
+      +'<button class="btn-action" onclick="openIA(\'Analiza '+esc(c.empresa)+' (HS:'+Math.round(c.healthScore*100)+'%, '+c.semaforo+', ROI:'+c.roi.toFixed(2)+') y genera plan para KAM '+esc(c.kam)+'.\')">🤖 IA</button>'
+      +'</td></tr>';
+  }).join('');
 }
 
-/* ══════════════════════════════════════════
+/* ════════════════════════════════════════
    TABLA CLIENTES CON EXPAND
-══════════════════════════════════════════ */
+════════════════════════════════════════ */
 function buildKamFilter() {
-  const kams = [...new Set(CLIENTES.map(c => c.kam))].sort();
-  const sel = document.getElementById('f-kam');
-  kams.forEach(k => {
-    const o = document.createElement('option');
-    o.value = k;
-    o.textContent = k.split(' ')[0] + ' ' + (k.split(' ')[1]||'');
+  var kams=[...new Set(CLIENTES.map(function(c){return c.kam;}))].sort();
+  var sel=document.getElementById('f-kam');
+  kams.forEach(function(k){
+    var o=document.createElement('option');
+    o.value=k; o.textContent=k.split(' ')[0]+' '+(k.split(' ')[1]||'');
     sel.appendChild(o);
   });
 }
 
 function applyFilters() {
-  const pais = document.getElementById('f-pais').value;
-  const estado = document.getElementById('f-estado').value;
-  const sem = document.getElementById('f-semaforo').value;
-  const kam = document.getElementById('f-kam').value;
-  const q = document.getElementById('f-search').value.toLowerCase();
-  const semMap = {verde:"🟢", amarillo:"🟠", rojo:"🔴"};
-
-  filteredData = CLIENTES.filter(c => {
-    if (pais && c.pais !== pais) return false;
-    if (estado && c.estado !== estado) return false;
-    if (sem && c.semaforo !== semMap[sem]) return false;
-    if (kam && c.kam !== kam) return false;
-    if (q && !c.empresa.toLowerCase().includes(q) && !c.programa.toLowerCase().includes(q)) return false;
+  var p=document.getElementById('f-pais').value;
+  var e=document.getElementById('f-estado').value;
+  var s=document.getElementById('f-sem').value;
+  var k=document.getElementById('f-kam').value;
+  var q=document.getElementById('f-q').value.toLowerCase();
+  filteredData=CLIENTES.filter(function(c){
+    if(p && c.pais!==p) return false;
+    if(e && c.estado!==e) return false;
+    if(s && c.semaforo!==s) return false;
+    if(k && c.kam!==k) return false;
+    if(q && !c.empresa.toLowerCase().includes(q) && !c.programa.toLowerCase().includes(q)) return false;
     return true;
   });
-  currentPage = 1;
-  renderTable();
+  currentPage=1; renderTable();
 }
 
-function resetFilters() {
-  ['f-pais','f-estado','f-semaforo','f-kam'].forEach(id => document.getElementById(id).value = '');
-  document.getElementById('f-search').value = '';
-  filteredData = [...CLIENTES];
-  currentPage = 1;
-  renderTable();
+function resetFilters(){
+  ['f-pais','f-estado','f-sem','f-kam'].forEach(function(id){document.getElementById(id).value='';});
+  document.getElementById('f-q').value='';
+  filteredData=[...CLIENTES]; currentPage=1; renderTable();
 }
 
-function buildClientesTable() { filteredData = [...CLIENTES]; renderTable(); }
-
-function loginTrend(c) {
-  const fmt = (v, prev) => {
-    if (v === null || v === undefined) return '<span class="login-val">—</span>';
-    const cls = prev !== null && prev !== undefined && v < prev && v === 0 ? 'red'
-               : prev !== null && prev !== undefined && v > prev ? 'green' : '';
-    return `<span class="login-val ${cls}">${v.toFixed(1)}</span>`;
-  };
-  return `<div class="expand-logins">
-    ${fmt(c.loginsM2)} <span class="login-arrow">→</span>
-    ${fmt(c.loginsM1, c.loginsM2)} <span class="login-arrow">→</span>
-    ${fmt(c.loginsM, c.loginsM1)}
-  </div>`;
-}
+function buildClientesTable(){ filteredData=[...CLIENTES]; renderTable(); }
 
 function expandRow(id) {
-  const mainRow = document.getElementById('tr-main-' + id);
-  const expRow = document.getElementById('tr-exp-' + id);
-  if (!mainRow || !expRow) return;
-  const isOpen = expRow.classList.contains('open');
-  document.querySelectorAll('.tr-expand.open').forEach(r => {
+  var main=document.getElementById('tr-m-'+id);
+  var exp=document.getElementById('tr-e-'+id);
+  if(!main||!exp) return;
+  var isOpen=exp.classList.contains('open');
+  document.querySelectorAll('.tr-expand.open').forEach(function(r){
     r.classList.remove('open');
-    const mid = r.dataset.id;
-    const mr = document.getElementById('tr-main-' + mid);
-    if (mr) mr.classList.remove('expanded');
+    var m=document.getElementById('tr-m-'+r.dataset.id);
+    if(m) m.classList.remove('expanded');
   });
-  if (!isOpen) {
-    expRow.classList.add('open');
-    mainRow.classList.add('expanded');
-  }
+  if(!isOpen){ exp.classList.add('open'); main.classList.add('expanded'); }
+}
+
+function ltVal(v, prev) {
+  if(v===null||v===undefined) return '<span class="lt-val">—</span>';
+  var cls='';
+  if(prev!==null&&prev!==undefined&&v<prev) cls='lt-red';
+  else if(prev!==null&&prev!==undefined&&v>prev) cls='lt-green';
+  return '<span class="lt-val '+cls+'">'+v.toFixed(1)+'</span>';
 }
 
 function renderTable() {
-  const total = filteredData.length;
-  const pages = Math.ceil(total / PAGE_SIZE) || 1;
-  const start = (currentPage - 1) * PAGE_SIZE;
-  const slice = filteredData.slice(start, start + PAGE_SIZE);
-  const flagMap = {Chile:'🇨🇱', Colombia:'🇨🇴', Perú:'🇵🇪', México:'🇲🇽', Ecuador:'🇪🇨'};
+  var flags={Chile:'🇨🇱',Colombia:'🇨🇴',Perú:'🇵🇪',México:'🇲🇽',Ecuador:'🇪🇨'};
+  var total=filteredData.length;
+  var pages=Math.ceil(total/PAGE_SIZE)||1;
+  var start=(currentPage-1)*PAGE_SIZE;
+  var slice=filteredData.slice(start,start+PAGE_SIZE);
 
-  document.getElementById('table-count').textContent = `${total} clientes`;
-  document.getElementById('pg-info').textContent = `Mostrando ${start+1}–${Math.min(start+PAGE_SIZE,total)} de ${total}`;
+  document.getElementById('tbl-count').textContent=total+' clientes';
+  document.getElementById('pg-info').textContent='Mostrando '+(start+1)+'–'+Math.min(start+PAGE_SIZE,total)+' de '+total;
 
-  document.getElementById('tb-clientes').innerHTML = slice.map(c => {
-    const flag = flagMap[c.pais] || '🌎';
-    const desc = (c.desc||'').replace(/'/g, "\\'");
-    const emp = c.empresa.replace(/'/g, "\\'");
-    const kamn = c.kam.replace(/'/g, "\\'");
+  document.getElementById('tb-clientes').innerHTML = slice.map(function(c){
+    var flag=flags[c.pais]||'🌎';
+    var mainRow='<tr class="tr-main" id="tr-m-'+c.id+'" onclick="expandRow('+c.id+')">'
+      +'<td><strong>'+c.empresa+'</strong><br><span style="font-size:11px;color:var(--gray-400)">'+c.programa+'</span></td>'
+      +'<td>'+flag+' '+c.pais+'</td>'
+      +'<td>'+estadoBadge(c.estado)+'</td>'
+      +'<td style="font-size:12px;">'+c.tipo+'</td>'
+      +'<td style="font-size:12px;">'+c.admin+'</td>'
+      +'<td style="font-size:12px;">'+c.kam.split(' ')[0]+' '+c.kam.split(' ').slice(-1)[0]+'</td>'
+      +'<td style="text-align:center;font-weight:600;">'+(c.usuarios||'—')+'</td>'
+      +'<td style="font-weight:600;">'+(c.feeMensual>0?'$'+fmt(c.feeMensual):'—')+'</td>'
+      +'<td>'+hbar(c.healthScore)+'</td>'
+      +'<td>'+semBadge(c.semaforo)+'</td>'
+      +'<td>'+roiBadge(c.roi)+'</td>'
+      +'</tr>';
 
-    const mainRow = `<tr class="tr-main" id="tr-main-${c.id}" onclick="expandRow(${c.id})">
-      <td><strong>${c.empresa}</strong><br><span style="font-size:11px;color:var(--gray-400)">${c.programa}</span></td>
-      <td>${flag} ${c.pais}</td>
-      <td>${estadoBadge(c.estado)}</td>
-      <td style="font-size:12px;">${c.tipo}</td>
-      <td style="font-size:12px;">${c.admin}</td>
-      <td style="font-size:12px;">${c.kam.split(' ')[0]+' '+c.kam.split(' ').slice(-1)[0]}</td>
-      <td style="text-align:center;font-weight:600;">${c.usuarios||'—'}</td>
-      <td style="font-weight:600;">${c.feeMensual>0?'$'+Math.round(c.feeMensual).toLocaleString('es-CL'):'—'}</td>
-      <td>${healthBar(c.healthScore)}</td>
-      <td>${semBadge(c.semaforo)}</td>
-      <td>${roiBadge(c.roi)}</td>
-    </tr>`;
+    var expPanel='<tr class="tr-expand" id="tr-e-'+c.id+'" data-id="'+c.id+'">'
+      +'<td colspan="11" style="padding:0;">'
+      +'<div class="expand-panel">'
+      +'<div class="expand-grid">'
+      +'<div class="expand-cell"><div class="expand-cell-label">Objetivo / Driver</div><div class="expand-cell-val" style="font-size:13px;">'+c.driver+'</div></div>'
+      +'<div class="expand-cell"><div class="expand-cell-label">Fecha de inicio</div><div class="expand-cell-val">'+c.fechaInicio+'</div><div class="expand-cell-sub">Tiempo: '+(c.tiempoProg!=='—'?c.tiempoProg+' meses':'—')+'</div></div>'
+      +'<div class="expand-cell"><div class="expand-cell-label">Fee por usuario</div><div class="expand-cell-val">'+(c.fee>0?'$'+c.fee.toFixed(2):'—')+'</div></div>'
+      +'<div class="expand-cell"><div class="expand-cell-label">Logins M-2 → M-1 → M</div>'
+      +'<div class="login-trend">'+ltVal(c.loginsM2)+' <span class="lt-arrow">→</span> '+ltVal(c.loginsM1,c.loginsM2)+' <span class="lt-arrow">→</span> '+ltVal(c.loginsM,c.loginsM1)+'</div>'
+      +'</div>'
+      +'</div>'
+      +'<div class="expand-grid" style="grid-template-columns:repeat(4,1fr);margin-bottom:12px;">'
+      +'<div class="expand-cell"><div class="expand-cell-label">Adopción</div><div class="expand-cell-val">'+(c.adopcion>0?Math.round(c.adopcion*100)+'%':'—')+'</div></div>'
+      +'<div class="expand-cell"><div class="expand-cell-label">Adherencia</div><div class="expand-cell-val">'+(c.adherencia>0?Math.round(c.adherencia*100)+'%':'—')+'</div></div>'
+      +'<div class="expand-cell"><div class="expand-cell-label">Performance</div><div class="expand-cell-val">'+(c.performance>0?Math.round(c.performance*100)+'%':'—')+'</div></div>'
+      +'<div class="expand-cell"><div class="expand-cell-label">Segmento</div><div class="expand-cell-val"><span class="badge badge-gray">'+(c.segmento||'—')+'</span></div></div>'
+      +'</div>'
+      +(c.desc?'<div class="expand-desc">📝 '+c.desc+'</div>':'')
+      +'<div class="expand-actions">'
+      +(c.link?'<a href="'+c.link+'" target="_blank" class="btn-action" onclick="event.stopPropagation()" style="text-decoration:none;">🔗 Abrir plataforma</a>':'')
+      +' <button class="btn-ia" onclick="event.stopPropagation();genNotif('+c.id+')">📧 Notificar KAM</button>'
+      +' <button class="btn-action" onclick="event.stopPropagation();openIA(\'Análisis detallado de '+esc(c.empresa)+': HS '+Math.round(c.healthScore*100)+'%, '+c.semaforo+', ROI:'+c.roi.toFixed(2)+', driver:'+c.driver+'.\')">🤖 Análisis IA</button>'
+      +' <span class="expand-tag">'+c.tipo+'</span>'
+      +' <span class="expand-tag">'+c.admin+'</span>'
+      +'</div>'
+      +'</div></td></tr>';
 
-    const expPanel = `<tr class="tr-expand" id="tr-exp-${c.id}" data-id="${c.id}">
-      <td colspan="11" style="padding:0;">
-        <div class="expand-panel">
-          <div class="expand-grid">
-            <div class="expand-cell">
-              <div class="expand-cell-label">Objetivo / Driver</div>
-              <div class="expand-cell-val" style="font-size:13px;">${c.driver}</div>
-            </div>
-            <div class="expand-cell">
-              <div class="expand-cell-label">Fecha de inicio</div>
-              <div class="expand-cell-val">${c.fechaInicio}</div>
-              <div class="expand-cell-sub">Tiempo en plataforma: ${c.tiempoProg !== '—' ? c.tiempoProg+' meses' : '—'}</div>
-            </div>
-            <div class="expand-cell">
-              <div class="expand-cell-label">Fee por usuario</div>
-              <div class="expand-cell-val">${c.fee > 0 ? '$'+c.fee.toFixed(2) : '—'}</div>
-            </div>
-            <div class="expand-cell">
-              <div class="expand-cell-label">Logins M-2 → M-1 → M</div>
-              ${loginTrend(c)}
-            </div>
-          </div>
-          <div class="expand-grid" style="grid-template-columns:repeat(4,1fr);margin-bottom:12px;">
-            <div class="expand-cell">
-              <div class="expand-cell-label">Adopción</div>
-              <div class="expand-cell-val">${c.adopcion>0?(c.adopcion*100).toFixed(0)+'%':'—'}</div>
-            </div>
-            <div class="expand-cell">
-              <div class="expand-cell-label">Adherencia</div>
-              <div class="expand-cell-val">${c.adherencia>0?(c.adherencia*100).toFixed(0)+'%':'—'}</div>
-            </div>
-            <div class="expand-cell">
-              <div class="expand-cell-label">Performance</div>
-              <div class="expand-cell-val">${c.performance>0?(c.performance*100).toFixed(0)+'%':'—'}</div>
-            </div>
-            <div class="expand-cell">
-              <div class="expand-cell-label">Segmento</div>
-              <div class="expand-cell-val"><span class="badge badge-gray">${c.segmento||'—'}</span></div>
-            </div>
-          </div>
-          ${c.desc ? `<div class="expand-desc">📝 ${c.desc}</div>` : ''}
-          <div class="expand-actions">
-            ${c.link ? `<a href="${c.link}" target="_blank" class="btn-action" onclick="event.stopPropagation()" style="text-decoration:none;display:inline-flex;align-items:center;">🔗 Abrir plataforma</a>` : ''}
-            <button class="btn-ia" onclick="event.stopPropagation();genNotif(${c.id})">📧 Notificar KAM</button>
-            <button class="btn-action" onclick="event.stopPropagation();openIaPanel('Dame un análisis detallado y plan de acción para ${emp}: HS ${(c.healthScore*100).toFixed(0)}%, semáforo ${c.semaforo}, KAM ${kamn}, país ${c.pais}, driver: ${c.driver}, ROI: ${c.roi.toFixed(2)}. ${desc}')">🤖 Análisis IA</button>
-            <span class="expand-tag">${c.tipo}</span>
-            <span class="expand-tag">${c.admin}</span>
-          </div>
-        </div>
-      </td>
-    </tr>`;
-
-    return mainRow + expPanel;
+    return mainRow+expPanel;
   }).join('');
 
   // Paginación
-  const btns = document.getElementById('pg-btns');
-  btns.innerHTML = '';
-  const mkBtn = (label, page, dis, act) => {
-    const btn = document.createElement('button');
-    btn.className = 'pg-btn' + (act ? ' active' : '');
-    btn.textContent = label;
-    btn.disabled = dis;
-    btn.onclick = () => { currentPage = page; renderTable(); };
-    btns.appendChild(btn);
-  };
-  mkBtn('‹', currentPage-1, currentPage===1, false);
-  for (let i = Math.max(1, currentPage-2); i <= Math.min(pages, currentPage+2); i++) mkBtn(i, i, false, i===currentPage);
-  mkBtn('›', currentPage+1, currentPage===pages, false);
+  var btns=document.getElementById('pg-btns');
+  btns.innerHTML='';
+  function mkBtn(label,page,dis,act){
+    var b=document.createElement('button');
+    b.className='pg-btn'+(act?' active':'');
+    b.textContent=label; b.disabled=dis;
+    b.onclick=function(){currentPage=page;renderTable();};
+    btns.appendChild(b);
+  }
+  mkBtn('‹',currentPage-1,currentPage===1,false);
+  for(var i=Math.max(1,currentPage-2);i<=Math.min(pages,currentPage+2);i++) mkBtn(i,i,false,i===currentPage);
+  mkBtn('›',currentPage+1,currentPage===pages,false);
 }
 
-/* ══════════════════════════════════════════
-   HELPERS UI
-══════════════════════════════════════════ */
-function pctBar(val, color) {
-  if (!val || val <= 0) return '<span style="font-size:11px;color:var(--gray-400)">—</span>';
-  const pct = Math.min(val*100, 100).toFixed(0);
-  return `<div class="health-bar-wrap"><div class="health-bar-bg"><div class="health-bar-fill" style="width:${pct}%;background:${color};"></div></div><span class="health-val" style="color:${color}">${pct}%</span></div>`;
-}
-
-function healthBar(val) {
-  const pct = Math.min(val*100, 100);
-  const color = pct >= 35 ? "#065F46" : pct >= 15 ? "#B45309" : "#FA345E";
-  return `<div class="health-bar-wrap"><div class="health-bar-bg"><div class="health-bar-fill" style="width:${pct.toFixed(0)}%;background:${color};"></div></div><span class="health-val" style="color:${color}">${pct.toFixed(0)}%</span></div>`;
-}
-
-function semBadge(s) {
-  if (s === "🟢") return '<span class="badge badge-green">🟢 Saludable</span>';
-  if (s === "🟠") return '<span class="badge badge-amber">🟠 En desarrollo</span>';
-  return '<span class="badge badge-red">🔴 En riesgo</span>';
-}
-
-function roiBadge(r) {
-  if (r === undefined || r === null || r === -1) return '<span style="color:var(--gray-400);font-size:12px;">—</span>';
-  const cls = r > 0 ? "badge-green" : "badge-red";
-  return `<span class="badge ${cls}">${r>0?'+':''}${r.toFixed(2)}x</span>`;
-}
-
-function estadoBadge(e) {
-  if (e === "Activo") return '<span class="badge badge-green">Activo</span>';
-  if (e === "Activo por lanzar") return '<span class="badge badge-amber">Por lanzar</span>';
-  if (e === "Inactivo") return '<span class="badge badge-gray">Inactivo</span>';
-  return `<span class="badge badge-gray">${e}</span>`;
-}
-
-/* ══════════════════════════════════════════
-   KAM SECTION
-══════════════════════════════════════════ */
-function buildKamSection() {
-  const kamMap = {};
-  ACTIVOS.forEach(c => {
-    if (!kamMap[c.kam]) kamMap[c.kam] = {clientes:[], verde:0, amarillo:0, rojo:0};
-    kamMap[c.kam].clientes.push(c);
-    if (c.semaforo === "🟢") kamMap[c.kam].verde++;
-    else if (c.semaforo === "🟠") kamMap[c.kam].amarillo++;
-    else kamMap[c.kam].rojo++;
+/* ════════════════════════════════════════
+   KAM CARDS
+════════════════════════════════════════ */
+function buildKamCards() {
+  var km={};
+  ACTIVOS.forEach(function(c){
+    if(!km[c.kam]) km[c.kam]={cl:[],v:0,a:0,r:0};
+    km[c.kam].cl.push(c);
+    if(c.semaforo==="🟢") km[c.kam].v++;
+    else if(c.semaforo==="🟠") km[c.kam].a++;
+    else km[c.kam].r++;
   });
-
-  document.getElementById('kam-grid').innerHTML = Object.entries(kamMap).map(([kam, d]) => `
-    <div class="kam-card" onclick="showKamDetail('${kam.replace(/'/g,"\\'")}')">
-      <div class="kam-card-header">
-        <div class="kam-avatar">${kam.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase()}</div>
-        <div>
-          <div class="kam-name">${kam}</div>
-          <div class="kam-count">${d.clientes.length} clientes activos</div>
-        </div>
-      </div>
-      <div class="kam-semaforos">
-        <div class="sem-mini sem-green"><div class="sem-mini-val">${d.verde}</div><div class="sem-mini-label">🟢</div></div>
-        <div class="sem-mini sem-amber"><div class="sem-mini-val">${d.amarillo}</div><div class="sem-mini-label">🟠</div></div>
-        <div class="sem-mini sem-red"><div class="sem-mini-val">${d.rojo}</div><div class="sem-mini-label">🔴</div></div>
-      </div>
-    </div>`).join('');
+  document.getElementById('kam-grid').innerHTML=Object.entries(km).map(function(e){
+    var kam=e[0],d=e[1];
+    var ini=kam.split(' ').map(function(w){return w[0]||'';}).join('').slice(0,2).toUpperCase();
+    return '<div class="kam-card" onclick="showKamDetail(\''+esc(kam)+'\')">'
+      +'<div class="kam-card-header"><div class="kam-avatar">'+ini+'</div>'
+      +'<div><div class="kam-name">'+kam+'</div><div class="kam-count">'+d.cl.length+' clientes activos</div></div></div>'
+      +'<div class="kam-sems">'
+      +'<div class="ks ks-g"><div class="ks-val">'+d.v+'</div><div class="ks-lbl">🟢</div></div>'
+      +'<div class="ks ks-a"><div class="ks-val">'+d.a+'</div><div class="ks-lbl">🟠</div></div>'
+      +'<div class="ks ks-r"><div class="ks-val">'+d.r+'</div><div class="ks-lbl">🔴</div></div>'
+      +'</div></div>';
+  }).join('');
 }
 
 function showKamDetail(kam) {
-  const clientes = ACTIVOS.filter(c => c.kam === kam).sort((a,b) => a.healthScore - b.healthScore);
-  const avg = (clientes.reduce((s,c) => s+c.healthScore*100, 0) / clientes.length).toFixed(1);
-  const kamEsc = kam.replace(/'/g, "\\'");
-  document.getElementById('kam-detail').innerHTML = `
-    <div class="table-card" style="margin-top:16px;">
-      <div class="table-header">
-        <div class="table-header-title">Cartera de ${kam} — Health Score promedio: ${avg}%</div>
-        <button class="btn-ia" onclick="openIaPanel('Analiza la cartera del KAM ${kamEsc}: ${clientes.length} clientes activos, health score promedio ${avg}%. Genera recomendaciones priorizadas y un plan semanal de acción.')">🤖 Análisis completo</button>
-      </div>
-      <div class="table-scroll">
-        <table>
-          <thead><tr><th>Cliente</th><th>País</th><th>Health</th><th>Semáforo</th><th>ROI</th><th>Acción</th></tr></thead>
-          <tbody>${clientes.map(c => `
-            <tr>
-              <td><strong>${c.empresa}</strong></td>
-              <td>${c.pais}</td>
-              <td>${healthBar(c.healthScore)}</td>
-              <td>${semBadge(c.semaforo)}</td>
-              <td>${roiBadge(c.roi)}</td>
-              <td><button class="btn-ia" onclick="genNotif(${c.id})">📧 Notif.</button></td>
-            </tr>`).join('')}
-          </tbody>
-        </table>
-      </div>
-    </div>`;
+  var lista=ACTIVOS.filter(function(c){return c.kam===kam;}).sort(function(a,b){return a.healthScore-b.healthScore;});
+  var avg=(lista.reduce(function(s,c){return s+c.healthScore*100;},0)/lista.length).toFixed(1);
+  document.getElementById('kam-detail').innerHTML='<div class="table-card" style="margin-top:16px;">'
+    +'<div class="table-header"><div class="table-header-title">Cartera de '+kam+' — HS Promedio: '+avg+'%</div>'
+    +'<button class="btn-ia" onclick="openIA(\'Analiza la cartera del KAM '+esc(kam)+': '+lista.length+' clientes, HS promedio '+avg+'%. Plan de acción semanal priorizado.\')">🤖 Análisis completo</button></div>'
+    +'<div class="table-scroll"><table><thead><tr><th>Cliente</th><th>País</th><th>Health</th><th>Semáforo</th><th>ROI</th><th>Acción</th></tr></thead><tbody>'
+    +lista.map(function(c){
+      return '<tr><td><strong>'+c.empresa+'</strong></td><td>'+c.pais+'</td><td>'+hbar(c.healthScore)+'</td><td>'+semBadge(c.semaforo)+'</td><td>'+roiBadge(c.roi)+'</td>'
+        +'<td><button class="btn-ia" onclick="genNotif('+c.id+')">📧 Notif.</button></td></tr>';
+    }).join('')
+    +'</tbody></table></div></div>';
 }
 
-/* ══════════════════════════════════════════
+/* ════════════════════════════════════════
    GRÁFICOS DETALLADOS
-══════════════════════════════════════════ */
-function initCharts() {
-  const paises = [...new Set(ACTIVOS.map(c => c.pais))];
-  const colors = ['#FA345E','#667eea','#f59e0b','#10b981','#06b6d4'];
+════════════════════════════════════════ */
+function buildDetailCharts() {
+  var paises=[...new Set(ACTIVOS.map(function(c){return c.pais;}))];
+  var colors=['#FA345E','#667eea','#f59e0b','#10b981','#06b6d4'];
 
-  const byPais = field => paises.map(p => {
-    const cs = ACTIVOS.filter(c => c.pais === p);
-    return cs.length ? (cs.reduce((s,c) => s+c[field], 0) / cs.length * 100).toFixed(1) : 0;
-  });
+  function byPais(field) {
+    return paises.map(function(p){
+      var cs=ACTIVOS.filter(function(c){return c.pais===p;});
+      return cs.length?(cs.reduce(function(s,c){return s+c[field];},0)/cs.length*100).toFixed(1):0;
+    });
+  }
 
-  ['cAdopPais','cAdherPais','cPerfPais'].forEach((id, i) => {
-    new Chart(document.getElementById(id), {
+  [['cAdop','adopcion'],['cAdher','adherencia'],['cPerf','performance']].forEach(function(pair){
+    new Chart(document.getElementById(pair[0]),{
       type:'bar',
-      data:{labels:paises, datasets:[{data:byPais(['adopcion','adherencia','performance'][i]), backgroundColor:colors, borderRadius:6}]},
-      options:{responsive:true, maintainAspectRatio:false,
-        plugins:{legend:{display:false}},
-        scales:{
-          x:{ticks:{font:{family:'Montserrat',size:10}}},
-          y:{ticks:{callback:v=>v+'%', font:{family:'Montserrat',size:10}}, max:100}
-        }}
+      data:{labels:paises,datasets:[{data:byPais(pair[1]),backgroundColor:colors,borderRadius:6}]},
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
+        scales:{x:{ticks:{font:{family:'Montserrat',size:10}}},
+          y:{ticks:{callback:function(v){return v+'%';},font:{family:'Montserrat',size:10}},max:100}}}
     });
   });
 
-  const roiPos = ACTIVOS.filter(c=>c.roi>0).length;
-  const roiNeg = ACTIVOS.filter(c=>c.roi<0).length;
-  const roiCero = ACTIVOS.filter(c=>c.roi===0).length;
-  new Chart(document.getElementById('cROI'), {
+  var rp=ACTIVOS.filter(function(c){return c.roi>0;}).length;
+  var rn=ACTIVOS.filter(function(c){return c.roi<0;}).length;
+  var rz=ACTIVOS.filter(function(c){return c.roi===0;}).length;
+  new Chart(document.getElementById('cROI'),{
     type:'pie',
     data:{labels:['ROI Positivo','ROI Negativo','ROI Neutro'],
-      datasets:[{data:[roiPos,roiNeg,roiCero], backgroundColor:['#065F46','#FA345E','#9CA3AF'], borderWidth:0}]},
-    options:{responsive:true, maintainAspectRatio:false,
-      plugins:{legend:{position:'bottom', labels:{font:{family:'Montserrat',size:12}}}}}
+      datasets:[{data:[rp,rn,rz],backgroundColor:['#065F46','#FA345E','#9CA3AF'],borderWidth:0}]},
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{position:'bottom',labels:{font:{family:'Montserrat',size:12}}}}}
   });
 
-  const segs = {};
-  ACTIVOS.forEach(c => { const s=c.segmento||'N/A'; segs[s]=(segs[s]||0)+1; });
-  new Chart(document.getElementById('cSegmento'), {
+  var segs={};
+  ACTIVOS.forEach(function(c){var s=c.segmento||'N/A';segs[s]=(segs[s]||0)+1;});
+  new Chart(document.getElementById('cSeg'),{
     type:'bar',
-    data:{labels:Object.keys(segs), datasets:[{data:Object.values(segs), backgroundColor:'#667eea', borderRadius:6}]},
-    options:{responsive:true, maintainAspectRatio:false,
-      plugins:{legend:{display:false}},
-      scales:{x:{ticks:{font:{family:'Montserrat',size:12}}}, y:{ticks:{font:{family:'Montserrat',size:11}}}}}
+    data:{labels:Object.keys(segs),datasets:[{data:Object.values(segs),backgroundColor:'#667eea',borderRadius:6}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
+      scales:{x:{ticks:{font:{family:'Montserrat',size:12}}},y:{ticks:{font:{family:'Montserrat',size:11}}}}}
   });
 
-  const sorted = ACTIVOS.filter(c=>c.healthScore>0).sort((a,b)=>b.healthScore-a.healthScore).slice(0,20);
-  new Chart(document.getElementById('cHealthBar'), {
+  var sorted=ACTIVOS.filter(function(c){return c.healthScore>0;})
+    .sort(function(a,b){return b.healthScore-a.healthScore;}).slice(0,20);
+  new Chart(document.getElementById('cHealthBar'),{
     type:'bar',
     data:{
-      labels: sorted.map(c => c.empresa.slice(0,16)),
-      datasets:[{data: sorted.map(c => +(c.healthScore*100).toFixed(1)),
-        backgroundColor: sorted.map(c => c.semaforo==="🟢"?"#065F46":c.semaforo==="🟠"?"#B45309":"#FA345E"),
+      labels:sorted.map(function(c){return c.empresa.slice(0,16);}),
+      datasets:[{data:sorted.map(function(c){return +(c.healthScore*100).toFixed(1);}),
+        backgroundColor:sorted.map(function(c){return c.semaforo==="🟢"?"#065F46":c.semaforo==="🟠"?"#B45309":"#FA345E";}),
         borderRadius:5}]
     },
-    options:{responsive:true, maintainAspectRatio:false,
-      plugins:{legend:{display:false}},
-      scales:{
-        x:{ticks:{font:{family:'Montserrat',size:10}, maxRotation:40}},
-        y:{ticks:{callback:v=>v+'%', font:{family:'Montserrat',size:11}}, max:50}
-      }}
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
+      scales:{x:{ticks:{font:{family:'Montserrat',size:10},maxRotation:40}},
+        y:{ticks:{callback:function(v){return v+'%';},font:{family:'Montserrat',size:11}},max:50}}}
   });
 }
 
-/* ══════════════════════════════════════════
+/* ════════════════════════════════════════
    IA — CONTEXTO
-══════════════════════════════════════════ */
-function buildContext() {
-  const activos = ACTIVOS;
-  const verdes = activos.filter(c=>c.semaforo==="🟢").length;
-  const rojos = activos.filter(c=>c.semaforo==="🔴").length;
-  const amarillos = activos.filter(c=>c.semaforo==="🟠").length;
-  const avgHealth = (activos.reduce((s,c)=>s+c.healthScore*100,0)/activos.length).toFixed(1);
-
-  return `Eres Apprecio IA Health, asistente de Customer Success para la plataforma SaaS Apprecio (Reward & Recognition). Analiza los datos reales y genera recomendaciones accionables.
-
-CARTERA (${activos.length} clientes activos):
-🟢 Saludables: ${verdes} | 🟠 En desarrollo: ${amarillos} | 🔴 En riesgo: ${rojos}
-Health Score promedio: ${avgHealth}%
-
-CLIENTES ACTIVOS:
-${activos.map(c=>`- ${c.empresa} | ${c.pais} | KAM:${c.kam.split(' ')[0]} | HS:${(c.healthScore*100).toFixed(0)}% | ${c.semaforo} | Adop:${(c.adopcion*100).toFixed(0)}% | Adh:${(c.adherencia*100).toFixed(0)}% | ROI:${c.roi.toFixed(2)} | Driver:${c.driver}`).join('\n')}
-
-INSTRUCCIONES: Responde en español, tono profesional. Sé específico con nombres. Para clientes en riesgo sugiere acciones concretas. Usa emojis para legibilidad. Máximo 400 palabras.`;
+════════════════════════════════════════ */
+function buildCtx() {
+  var n=ACTIVOS.length;
+  var sv=ACTIVOS.filter(function(c){return c.semaforo==="🟢";}).length;
+  var sr=ACTIVOS.filter(function(c){return c.semaforo==="🔴";}).length;
+  var sa=ACTIVOS.filter(function(c){return c.semaforo==="🟠";}).length;
+  var avg=(ACTIVOS.reduce(function(s,c){return s+c.healthScore*100;},0)/n).toFixed(1);
+  return 'Eres Apprecio IA Health, asistente de Customer Success para la plataforma SaaS Apprecio (Reward & Recognition).\n\n'
+    +'CARTERA ('+n+' clientes activos):\n'
+    +'🟢 Saludables: '+sv+' | 🟠 En desarrollo: '+sa+' | 🔴 En riesgo: '+sr+'\n'
+    +'Health Score promedio: '+avg+'%\n\n'
+    +'CLIENTES ACTIVOS:\n'
+    +ACTIVOS.map(function(c){
+      return '- '+c.empresa+' | '+c.pais+' | KAM:'+c.kam.split(' ')[0]+' | HS:'+Math.round(c.healthScore*100)+'% | '+c.semaforo+' | Adop:'+Math.round(c.adopcion*100)+'% | Adh:'+Math.round(c.adherencia*100)+'% | ROI:'+c.roi.toFixed(2)+' | Driver:'+c.driver;
+    }).join('\n')
+    +'\n\nINSTRUCCIONES: Responde en español, tono profesional. Sé específico con nombres. Para clientes en riesgo sugiere acciones concretas. Usa emojis. Máximo 400 palabras.';
 }
 
-/* ══════════════════════════════════════════
+/* ════════════════════════════════════════
    IA — PANEL LATERAL
-══════════════════════════════════════════ */
-function openIaPanel(pregunta) {
+════════════════════════════════════════ */
+function openIA(pregunta) {
   document.getElementById('ia-panel').classList.add('open');
   document.getElementById('ia-overlay').classList.add('open');
-  if (pregunta) {
+  if(pregunta && pregunta.trim()) {
     document.getElementById('ia-input').value = pregunta;
-    setTimeout(() => sendIaMessage(), 200);
+    setTimeout(sendIA, 200);
   }
 }
 
-function openIaPanelFull(pregunta) { openIaPanel(pregunta); }
-
-function closeIaPanel() {
+function closeIA() {
   document.getElementById('ia-panel').classList.remove('open');
   document.getElementById('ia-overlay').classList.remove('open');
 }
 
-function sendQuick(q) {
-  document.getElementById('ia-input').value = q;
-  sendIaMessage();
-}
+function sendQuick(q) { document.getElementById('ia-input').value=q; sendIA(); }
 
-function iaKeydown(e) {
-  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendIaMessage(); }
-}
+function iaKey(e) { if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendIA();} }
 
-async function sendIaMessage() {
-  const input = document.getElementById('ia-input');
-  const q = input.value.trim();
-  if (!q) return;
-  input.value = '';
-
-  const msgs = document.getElementById('ia-messages');
-  msgs.innerHTML += `<div class="msg msg-user">${q}</div>`;
-  msgs.innerHTML += `<div class="msg msg-ai loading" id="ai-typing">⏳ Consultando Ollama...</div>`;
-  msgs.scrollTop = msgs.scrollHeight;
-
+async function sendIA() {
+  var input=document.getElementById('ia-input');
+  var q=input.value.trim();
+  if(!q) return;
+  input.value='';
+  var msgs=document.getElementById('ia-msgs');
+  msgs.innerHTML+='<div class="msg msg-user">'+escHTML(q)+'</div>';
+  msgs.innerHTML+='<div class="msg msg-ai" id="ai-loading"><span class="spinner"></span> Consultando Ollama...</div>';
+  msgs.scrollTop=msgs.scrollHeight;
   try {
-    const res = await fetch(N8N_WEBHOOK, {
-      method:"POST",
-      headers:{"Content-Type":"application/json"},
-      body: JSON.stringify({pregunta: q, contexto: buildContext()})
-    });
-    const data = await res.json();
-    const text = data.respuesta || "No pude procesar la consulta.";
-    document.getElementById('ai-typing').remove();
-    msgs.innerHTML += `<div class="msg msg-ai">${text.replace(/\n/g,'<br>')}</div>`;
-    msgs.scrollTop = msgs.scrollHeight;
+    var res=await fetch(N8N_WEBHOOK,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({pregunta:q,contexto:buildCtx()})});
+    var data=await res.json();
+    var text=data.respuesta||'Sin respuesta del modelo.';
+    document.getElementById('ai-loading').remove();
+    msgs.innerHTML+='<div class="msg msg-ai">'+text.replace(/\n/g,'<br>')+'</div>';
+    msgs.scrollTop=msgs.scrollHeight;
   } catch(e) {
-    document.getElementById('ai-typing').remove();
-    msgs.innerHTML += `<div class="msg msg-ai">❌ No se pudo conectar con n8n. Verifica que el workflow esté activo.</div>`;
+    document.getElementById('ai-loading').remove();
+    msgs.innerHTML+='<div class="msg msg-ai">❌ No se pudo conectar con n8n. Verifica que el workflow esté activo en <strong>'+N8N_WEBHOOK+'</strong></div>';
   }
 }
 
-async function sendFromSection() {
-  const q = document.getElementById('ia-section-input').value.trim();
-  if (!q) return;
-  const result = document.getElementById('ia-section-result');
-  const content = document.getElementById('ia-section-content');
-  result.style.display = 'block';
-  content.innerHTML = '<div class="spinner"></div> Consultando Ollama...';
+async function sendFromPage() {
+  var q=document.getElementById('ia-sec-input').value.trim();
+  if(!q) return;
+  var card=document.getElementById('ia-result-card');
+  var body=document.getElementById('ia-result-body');
+  card.style.display='block';
+  body.innerHTML='<span class="spinner"></span> Consultando Ollama...';
   try {
-    const res = await fetch(N8N_WEBHOOK, {
-      method:"POST",
-      headers:{"Content-Type":"application/json"},
-      body: JSON.stringify({pregunta: q, contexto: buildContext()})
-    });
-    const data = await res.json();
-    content.innerHTML = (data.respuesta || "Sin respuesta.").replace(/\n/g,'<br>');
+    var res=await fetch(N8N_WEBHOOK,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({pregunta:q,contexto:buildCtx()})});
+    var data=await res.json();
+    body.innerHTML=(data.respuesta||'Sin respuesta.').replace(/\n/g,'<br>');
   } catch(e) {
-    content.innerHTML = '❌ No se pudo conectar con n8n. Verifica que el workflow esté activo.';
+    body.innerHTML='❌ No se pudo conectar con n8n.';
   }
 }
 
-/* ══════════════════════════════════════════
-   NOTIFICACIONES IA
-══════════════════════════════════════════ */
+/* ════════════════════════════════════════
+   NOTIFICACIONES
+════════════════════════════════════════ */
 async function genNotif(id) {
-  const c = CLIENTES.find(x => x.id === id);
-  if (!c) return;
-  document.getElementById('notif-empresa-name').textContent = `${c.empresa} — KAM: ${c.kam}`;
-  document.getElementById('notif-content').value = '⏳ Generando mensaje con Ollama...';
+  var c=CLIENTES.find(function(x){return x.id===id;});
+  if(!c) return;
+  document.getElementById('notif-sub').textContent=c.empresa+' — KAM: '+c.kam;
+  document.getElementById('notif-ta').value='⏳ Generando con Ollama...';
   document.getElementById('notif-modal').classList.add('open');
-
-  const prompt = `Redacta un mensaje de notificación para el KAM ${c.kam} sobre el cliente ${c.empresa} (${c.pais}).
-Datos: Health Score ${(c.healthScore*100).toFixed(0)}%, semáforo ${c.semaforo}, adopción ${(c.adopcion*100).toFixed(0)}%, adherencia ${(c.adherencia*100).toFixed(0)}%, ROI ${c.roi.toFixed(2)}, driver: ${c.driver}.
-${c.desc}
-El mensaje debe: resumir el estado actual (2-3 líneas), proponer 3 acciones concretas según el driver, indicar urgencia, tono Customer Success. Máximo 200 palabras.`;
-
+  var prompt='Redacta notificación para KAM '+c.kam+' sobre cliente '+c.empresa+' ('+c.pais+').\n'
+    +'Health Score: '+Math.round(c.healthScore*100)+'%, semáforo: '+c.semaforo+', ROI: '+c.roi.toFixed(2)+'.\n'
+    +'Driver: '+c.driver+'. '+c.desc+'\n'
+    +'Incluye: estado actual (2-3 líneas), 3 acciones concretas, nivel de urgencia. Tono CS. Máx 200 palabras.';
   try {
-    const res = await fetch(N8N_WEBHOOK, {
-      method:"POST",
-      headers:{"Content-Type":"application/json"},
-      body: JSON.stringify({pregunta: prompt, contexto: buildContext()})
-    });
-    const data = await res.json();
-    document.getElementById('notif-content').value = data.respuesta || "Error generando mensaje.";
+    var res=await fetch(N8N_WEBHOOK,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({pregunta:prompt,contexto:buildCtx()})});
+    var data=await res.json();
+    document.getElementById('notif-ta').value=data.respuesta||'Error generando mensaje.';
   } catch(e) {
-    document.getElementById('notif-content').value = "❌ Error al conectar con n8n.";
+    document.getElementById('notif-ta').value='❌ Error al conectar con n8n.';
   }
 }
 
-function closeNotif() { document.getElementById('notif-modal').classList.remove('open'); }
+function closeNotif(){ document.getElementById('notif-modal').classList.remove('open'); }
+function copyNotif(){ navigator.clipboard.writeText(document.getElementById('notif-ta').value); showToast('Copiado ✓'); }
 
-function copyNotif() {
-  navigator.clipboard.writeText(document.getElementById('notif-content').value);
-  showToast("Mensaje copiado ✓");
-}
-
-/* ══════════════════════════════════════════
+/* ════════════════════════════════════════
    EXPORT CSV
-══════════════════════════════════════════ */
+════════════════════════════════════════ */
 function exportCSV() {
-  const headers = ["ID","Empresa","KAM","País","Estado","Segmento","Usuarios","Adopción","Adherencia","Performance","Health Score","Semáforo","ROI"];
-  const rows = filteredData.map(c => [c.id,c.empresa,c.kam,c.pais,c.estado,c.segmento,c.usuarios,
-    (c.adopcion*100).toFixed(1),(c.adherencia*100).toFixed(1),(c.performance*100).toFixed(1),
-    (c.healthScore*100).toFixed(1),c.semaforo,c.roi.toFixed(2)]);
-  const csv = [headers, ...rows].map(r => r.join(',')).join('\n');
-  const a = document.createElement('a');
-  a.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv);
-  a.download = 'salud_clientes_apprecio.csv';
-  a.click();
-  showToast("CSV exportado ✓");
+  var h=['ID','Empresa','KAM','País','Estado','Segmento','Usuarios','Adopción%','Adherencia%','Performance%','HealthScore%','Semáforo','ROI'];
+  var rows=filteredData.map(function(c){return [c.id,c.empresa,c.kam,c.pais,c.estado,c.segmento,c.usuarios,Math.round(c.adopcion*100),Math.round(c.adherencia*100),Math.round(c.performance*100),Math.round(c.healthScore*100),c.semaforo,c.roi.toFixed(2)];});
+  var csv=[h].concat(rows).map(function(r){return r.join(',');}).join('\n');
+  var a=document.createElement('a');
+  a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(csv);
+  a.download='salud_clientes_apprecio.csv'; a.click();
+  showToast('CSV exportado ✓');
 }
 
-/* ══════════════════════════════════════════
-   UTILS
-══════════════════════════════════════════ */
-function showToast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 2200);
+/* ════════════════════════════════════════
+   HELPERS UI
+════════════════════════════════════════ */
+function hbar(val) {
+  var p=Math.min(val*100,100);
+  var col=p>=35?"#065F46":p>=15?"#B45309":"#FA345E";
+  return '<div class="hbar"><div class="hbar-bg"><div class="hbar-fill" style="width:'+p.toFixed(0)+'%;background:'+col+';"></div></div><span class="hbar-val" style="color:'+col+'">'+p.toFixed(0)+'%</span></div>';
+}
+
+function semBadge(s){
+  if(s==="🟢") return '<span class="badge badge-green">🟢 Saludable</span>';
+  if(s==="🟠") return '<span class="badge badge-amber">🟠 En desarrollo</span>';
+  return '<span class="badge badge-red">🔴 En riesgo</span>';
+}
+
+function roiBadge(r){
+  if(r===undefined||r===null||r===-1) return '<span style="color:var(--gray-400);font-size:12px;">—</span>';
+  var cls=r>0?"badge-green":"badge-red";
+  return '<span class="badge '+cls+'">'+(r>0?'+':'')+r.toFixed(2)+'x</span>';
+}
+
+function estadoBadge(e){
+  if(e==="Activo") return '<span class="badge badge-green">Activo</span>';
+  if(e==="Activo por lanzar") return '<span class="badge badge-amber">Por lanzar</span>';
+  return '<span class="badge badge-gray">'+e+'</span>';
+}
+
+function esc(s){ return (s||'').replace(/'/g,"\\'"); }
+function escHTML(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+function showToast(msg){
+  var t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('show');
+  setTimeout(function(){t.classList.remove('show');},2200);
 }
 </script>
 </body>
