@@ -1500,75 +1500,172 @@ function showToast(msg){
 // GID 555420292: acciones por salud | GID 593648111: acciones 14-30-90 días
 // GID 1183417501: drivers
 var ACCIONES_DATA = {
-  'Incrementar Performance Comercial': {
-    color:'#667eea', emoji:'💰',
-    acciones:[
-      {plazo:'14 días', titulo:'Revisar carga de metas', desc:'Verificar que los KPIs del mes estén cargados y sean visibles para todos los usuarios. Validar que las metas sean alcanzables y estén actualizadas.', salud:'rojo'},
-      {plazo:'14 días', titulo:'Activar campaña de activación', desc:'Diseñar una dinámica de corto plazo (concurso o reto) vinculada al principal KPI comercial del cliente para reactivar el uso de la plataforma.', salud:'rojo'},
-      {plazo:'30 días', titulo:'Análisis de cumplimiento', desc:'Revisar el % de cumplimiento individual y total. Identificar a los usuarios que no han cumplido y contactar al administrador con un informe.', salud:'amarillo'},
-      {plazo:'30 días', titulo:'Optimizar notificaciones', desc:'Configurar recordatorios automáticos para usuarios con bajo cumplimiento. Revisar la frecuencia y el mensaje de las notificaciones actuales.', salud:'amarillo'},
-      {plazo:'90 días', titulo:'Evaluación de ROI', desc:'Realizar análisis de retorno de inversión comparando el fee mensual con el incremento en ventas atribuible al programa. Preparar informe para renovación.', salud:'verde'},
-    ]
+  'Incrementar la Performance Comercial (Ventas)': {
+    color:'#FA345E', emoji:'💰',
+    drivers_sec:['Cumplimiento de metas comerciales (por usuario / equipo)','Activación de comportamientos clave (visitas, cierres, seguimiento)','Conversión de incentivos en resultados de negocio'],
+    acciones_salud:{
+      verde:{
+        '1-2':{ t14:'• Cambio de logo por Aniversario del programa\n• Reunión para presentar los resultados de la operación.\n• Ver oportunidades de crecimiento', t30:'• Mini retos especiales flash para sumar puntos con motivo del aniversario.\n• Campaña de Insignias del mejor vendedor de la temporada con un jugoso premio en puntos\n• Video del líder comercial felicitando al equipo', t90:'• Reunión de premiación, reconocimientos e hitos con los logros del programa.\n• Difusión de videos con testimonios de los Top 10 vendedores' },
+        '3-4':{ t14:'• Lanzar campaña "Evolución del programa" (antes vs ahora con data real)\n• Activar votación de usuarios para nuevas funcionalidades o beneficios\n• Presentar roadmap del programa', t30:'• Lanzar retos avanzados (retos por equipos, metas acumulativas, ranking por niveles)\n• Activar beneficios diferenciados según nivel de usuario\n• Implementar ranking segmentado (por zona, equipo o categoría)', t90:'• Evento tipo: "Evolución del programa + próximos pasos"\n• Lanzar programa formal de embajadores\n• Generar reporte de impacto del programa en el negocio' },
+        '5+':{ t14:'• Lanzar rebranding del programa (nuevo nombre, identidad o narrativa)\n• Activar campaña "Nueva etapa del programa"\n• Realizar encuesta profunda (qué cambiarías / qué ya no aporta valor)', t30:'• Implementar gamificación avanzada (niveles, badges por trayectoria, ranking histórico)\n• Integrar el programa con objetivos reales del negocio\n• Crear beneficios premium para top usuarios', t90:'• Ejecutar relanzamiento completo del programa\n• Presentar impacto del programa en indicadores del negocio (ventas, engagement, retención, productividad)' },
+      },
+      amarillo:{
+        '1-2':{ t14:'• Solicitud de reportería de uso de módulos al equipo SAAS\n• Reunión con el equipo SAAS para definir estrategia\n• Reunión con el cliente para presentar estrategia sugerida\n• Identificar posibles aliados dentro de los usuarios que promuevan el programa', t30:'• Puesta en marcha del plan de acción en campañas activas\n• Reformular los incentivos y mecánicas de las metas\n• Lanzar una campaña express con un premio importante', t90:'• Evaluación de los resultados obtenidos\n• Envío de mailing con resultados de las campañas\n• Reunión de cierre de campañas y análisis de resultados' },
+        '3-4':{ t14:'• Solicitud de reportería profunda (uso por módulo, tendencia 3 meses)\n• Reunión con equipo SAAS para identificar qué módulo está cayendo y por qué\n• Reunión con cliente para presentar diagnóstico + quick wins\n• Lanzar encuesta corta de percepción\n• Identificar segmentos de usuarios (top, medios, inactivos)', t30:'• Rediseñar campañas actuales (no repetir las mismas dinámicas)\n• Lanzar campaña de reactivación de usuarios inactivos con incentivo específico\n• Implementar ranking segmentado (por equipo / zona / nivel)\n• Activar beneficios diferenciados', t90:'• Evaluación comparativa (antes vs después del rediseño)\n• Generación de video testimonial + casos de uso reales\n• Reunión con cliente para definir evolución del programa' },
+        '5+':{ t14:'• Solicitud de reportería histórica (últimos 5 años): uso por módulo, caída de engagement\n• Reunión con equipo SAAS para identificar qué módulos ya no generan valor\n• Reunión con cliente: "el programa necesita evolución, no solo campañas nuevas"\n• Lanzar encuesta profunda a usuarios\n• Identificar usuarios fieles (core) y desconectados', t30:'• Lanzar nueva dinámica del programa (no incremental)\n• Activar campaña de reenganche emocional: storytelling\n• Implementar beneficios diferenciados/premium\n• Introducir gamificación más avanzada: niveles, progresión, status', t90:'• Evaluación de impacto: engagement, uso por módulo, reactivación\n• Reunión con cliente para definir si escalar o relanzar el programa' },
+      },
+      rojo:{
+        '1-2':{ t14:'• Solicitud de reportería básica (logins, uso por módulo, activos vs inactivos)\n• Reunión SAAS para identificar fricción inicial (onboarding, acceso, uso)\n• Reunión con cliente con 3 quick wins definidos\n• Activar campaña express: insignias + registro fotográfico + encuesta\n• Comunicación multicanal (mail + WhatsApp + push)', t30:'• Lanzar micro-retos semanales (acciones simples y rápidas)\n• Implementar ranking visible por usuario o equipo\n• Activar recordatorios automáticos (2 veces por semana)\n• Campaña específica para usuarios inactivos (incentivo inicial)', t90:'• Evaluación de reactivación (antes vs después)\n• Envío de mailing con resultados y logros\n• Reunión de cierre con cliente (qué funcionó / qué no)\n• Definición de siguiente plan de acción' },
+        '3-4':{ t14:'• Solicitud de reportería comparativa (últimos 3–6 meses)\n• Identificar caída por módulo (insignias, fotos, encuestas, etc.)\n• Reunión SAAS para detectar fatiga de campañas actuales\n• Reunión con cliente con diagnóstico + 3 acciones inmediatas\n• Encuesta rápida de percepción', t30:'• Rediseñar campañas (nuevos conceptos, no repetir los mismos)\n• Lanzar campaña de reactivación con incentivo fuerte\n• Implementar ranking segmentado\n• Activar beneficios diferenciados\n• Introducir dinámicas nuevas (retos por equipo, progresión)', t90:'• Evaluación comparativa (antes vs después del rediseño)\n• Generación de casos de éxito internos\n• Reunión con cliente para ajustar estructura del programa\n• Definir evolución del programa (cambios más estructurales)' },
+        '5+':{ t14:'• Solicitud de reportería histórica (6–12 meses)\n• Análisis de desgaste del programa (caída sostenida de uso)\n• Reunión SAAS para identificar módulos obsoletos\n• Reunión con cliente planteando necesidad de evolución (no solo mejora)\n• Encuesta profunda (qué eliminar / qué cambiar / qué agregar)', t30:'• Lanzar nueva dinámica del programa (reglas distintas, no incremental)\n• Activar campaña de reenganche emocional (storytelling + propósito)\n• Implementar beneficios premium/diferenciados\n• Introducir gamificación avanzada (niveles, status, progresión)\n• Reestructurar campañas principales', t90:'• Evaluación de impacto (engagement + reactivación)\n• Generación de testimoniales y casos de éxito\n• Reunión estratégica con cliente (decidir escalar o relanzar)\n• Definir roadmap de nueva etapa del programa' },
+      }
+    }
   },
-  'Capacitar stakeholders': {
-    color:'#10b981', emoji:'📚',
-    acciones:[
-      {plazo:'14 días', titulo:'Auditoría de entrenamientos activos', desc:'Revisar qué entrenamientos están publicados, cuáles tienen mayor completación y cuáles están pendientes. Identificar gaps de contenido.', salud:'rojo'},
-      {plazo:'14 días', titulo:'Recordatorio masivo de quizzes', desc:'Enviar comunicación a usuarios con entrenamientos pendientes. Coordinar con el administrador para activar recordatorios desde la plataforma.', salud:'rojo'},
-      {plazo:'30 días', titulo:'Revisar % aprobación', desc:'Analizar el porcentaje de aprobados en entrenamientos. Si es bajo, revisar la dificultad del contenido o la comprensión del material.', salud:'amarillo'},
-      {plazo:'90 días', titulo:'Plan de contenido trimestral', desc:'Definir junto al cliente un calendario de entrenamientos para el próximo trimestre, alineado con sus necesidades de capacitación y temporalidad.', salud:'verde'},
-    ]
-  },
-  'Conexión emocional': {
-    color:'#f59e0b', emoji:'❤️',
-    acciones:[
-      {plazo:'14 días', titulo:'Revisar uso de insignias', desc:'Verificar si se están otorgando insignias con regularidad. Si no, plantear una campaña de reconocimiento con motivo específico (aniversario, logro, etc).', salud:'rojo'},
-      {plazo:'30 días', titulo:'Activar campaña cultural', desc:'Diseñar una dinámica de reconocimiento entre pares (peer-to-peer) alineada con los valores de la empresa. Puede ser digitalizada en la plataforma.', salud:'amarillo'},
-      {plazo:'30 días', titulo:'Encuesta de engagement', desc:'Lanzar una encuesta breve para medir el nivel de conexión de los colaboradores con la empresa y el programa. Usar los resultados para definir próximas acciones.', salud:'amarillo'},
-      {plazo:'90 días', titulo:'Revisión de estrategia de engagement', desc:'Analizar métricas de participación en insignias, encuestas y entrenamientos. Proponer un plan de engagement para el siguiente periodo.', salud:'verde'},
-    ]
-  },
-  'Mejorar Productividad': {
-    color:'#06b6d4', emoji:'⚡',
-    acciones:[
-      {plazo:'14 días', titulo:'Diagnóstico de uso operativo', desc:'Revisar qué módulos están siendo utilizados y cuáles no. Identificar procesos manuales que podrían automatizarse con la plataforma.', salud:'rojo'},
-      {plazo:'30 días', titulo:'Taller de adopción con admin', desc:'Coordinar sesión de trabajo con el administrador del programa para revisar el setup actual y proponer mejoras en los flujos de uso.', salud:'amarillo'},
-      {plazo:'90 días', titulo:'Medición de impacto en productividad', desc:'Comparar métricas de eficiencia antes y después de la implementación. Preparar caso de éxito para presentar al cliente.', salud:'verde'},
-    ]
-  },
-  'Aumentar Engagement': {
+  'Aumentar Engagement y Sentido de Pertenencia': {
     color:'#8b5cf6', emoji:'🚀',
-    acciones:[
-      {plazo:'14 días', titulo:'Revisar participación en módulos', desc:'Analizar qué módulos tienen mayor y menor participación. Identificar barreras de acceso o uso que puedan estar afectando el engagement.', salud:'rojo'},
-      {plazo:'30 días', titulo:'Diseñar campaña de reactivación', desc:'Crear una campaña con mecánica atractiva (retos, rankings, premios) para reactivar usuarios inactivos y aumentar la frecuencia de logins.', salud:'amarillo'},
-      {plazo:'90 días', titulo:'Programa de embajadores', desc:'Identificar a los usuarios más activos y convertirlos en embajadores internos del programa. Darles reconocimiento especial y utilizarlos como promotores.', salud:'verde'},
-    ]
+    drivers_sec:['Frecuencia de interacción con la plataforma (logins, acciones)','Participación en dinámicas (encuestas, entrenamientos, insignias)','Reconocimiento social entre pares (peer-to-peer recognition)'],
+    acciones_salud:{
+      verde:{
+        '1-2':{ t14:'• Cambio del logo con participación de los usuarios por votación\n• Reunión para presentar resultados de la operación y acciones a tomar\n• Ver oportunidades de crecimiento', t30:'• Campaña de Registro Fotográfico sobre hitos claves del programa\n• Campaña de Insignias por el aniversario del programa\n• Concurso de "Embajador del programa"\n• Video del líder felicitandolos por el éxito del programa', t90:'• Reunión de premiación, reconocimientos e hitos con los logros del programa\n• Difusión de videos con testimonios de embajadores del programa' },
+        '3-4':{ t14:'• Lanzar campaña "Evolución del programa" (antes vs ahora con data real)\n• Activar votación de usuarios para nuevas funcionalidades o beneficios', t30:'• Lanzar retos avanzados (ej: retos por equipos, metas acumulativas)\n• Activar beneficios diferenciados según nivel de usuario\n• Implementar ranking segmentado (por zona, equipo o categoría)', t90:'• Evento "Evolución del programa + próximos pasos"\n• Lanzar programa formal de embajadores\n• Generar reporte de impacto en el negocio' },
+        '5+':{ t14:'• Lanzar rebranding del programa (nuevo nombre, identidad o narrativa)\n• Activar campaña "Nueva etapa del programa"\n• Realizar encuesta profunda', t30:'• Implementar gamificación avanzada (niveles, badges por trayectoria)\n• Crear beneficios premium para top usuarios (experiencias, reconocimiento diferenciado)', t90:'• Ejecutar relanzamiento completo del programa\n• Presentar impacto en indicadores del negocio' },
+      },
+      amarillo:{
+        '1-2':{ t14:'• Solicitud de reportería de uso de módulos al equipo SAAS\n• Reunión con equipo SAAS para definir estrategia\n• Utilizar canales de comunicación distintos al mail (WhatsApp, mensaje de texto, alertas por app)\n• Identificar posibles aliados dentro de los usuarios', t30:'• Puesta en marcha del plan de acción en campañas activas\n• Activación de campaña de Encuestas para levantar información\n• Activación de campaña de insignias con conceptos clave para la empresa\n• Activación de campaña de Registro Fotográfico con premio jugoso', t90:'• Evaluación de los resultados obtenidos\n• Envío de mailing con resultados de las campañas\n• Reunión de cierre de campañas y análisis de resultados' },
+        '3-4':{ t14:'• Solicitud de reportería profunda (uso por módulo, tendencia 3 meses)\n• Reunión con equipo SAAS para identificar qué módulo está cayendo\n• Lanzar encuesta corta de percepción (¿qué te aburre / qué mejorarías?)', t30:'• Rediseñar campañas actuales (no repetir las mismas dinámicas)\n• Nuevos conceptos de insignias\n• Registro fotográfico con storytelling\n• Lanzar campaña de reactivación de usuarios inactivos con incentivo específico', t90:'• Evaluación comparativa (antes vs después del rediseño)\n• Generación de video testimonial + casos de uso reales\n• Reunión con cliente para definir evolución' },
+        '5+':{ t14:'• Solicitud de reportería histórica (últimos 5 años)\n• Reunión con cliente: "el programa necesita evolución, no solo campañas nuevas"\n• Lanzar encuesta profunda a usuarios\n• Identificar usuarios fieles (core) y desconectados', t30:'• Lanzar nueva dinámica del programa (no incremental)\n• Activar campaña de reenganche emocional: storytelling\n• Implementar beneficios diferenciados/premium\n• Introducir gamificación más avanzada', t90:'• Evaluación de impacto\n• Reunión con cliente para definir si escalar o relanzar el programa' },
+      },
+      rojo:{
+        '1-2':{ t14:'• Solicitud de reportería básica\n• Reunión SAAS para identificar fricción inicial\n• Reunión con cliente con 3 quick wins definidos\n• Activar campaña express: insignias + registro fotográfico + encuesta\n• Comunicación multicanal (mail + WhatsApp + push)', t30:'• Lanzar micro-retos semanales\n• Implementar ranking visible\n• Activar recordatorios automáticos (2 veces por semana)\n• Campaña específica para usuarios inactivos', t90:'• Evaluación de reactivación\n• Reunión de cierre con cliente\n• Definición de siguiente plan de acción' },
+        '3-4':{ t14:'• Solicitud de reportería comparativa (últimos 3–6 meses)\n• Reunión con cliente con diagnóstico + 3 acciones inmediatas\n• Encuesta rápida de percepción', t30:'• Rediseñar campañas\n• Lanzar campaña de reactivación con incentivo fuerte\n• Introducir dinámicas nuevas (retos por equipo, progresión)', t90:'• Evaluación comparativa\n• Reunión con cliente para ajustar estructura del programa' },
+        '5+':{ t14:'• Solicitud de reportería histórica (6–12 meses)\n• Reunión SAAS para identificar módulos obsoletos\n• Reunión con cliente planteando necesidad de evolución\n• Encuesta profunda', t30:'• Lanzar nueva dinámica del programa (reglas distintas)\n• Activar campaña de reenganche emocional\n• Implementar beneficios premium\n• Introducir gamificación avanzada', t90:'• Evaluación de impacto\n• Reunión estratégica con cliente (decidir escalar o relanzar)\n• Definir roadmap de nueva etapa' },
+      }
+    }
+  },
+  'Capacitar a los diferentes stakeholders de la organización': {
+    color:'#10b981', emoji:'📚',
+    drivers_sec:['Nivel de adopción de entrenamientos','Evaluación de aprendizaje (quizzes, certificaciones)','Aplicación práctica del conocimiento en el trabajo'],
+    acciones_salud:{
+      verde:{
+        '1-2':{ t14:'• Cambio del logo con participación de los usuarios por votación\n• Reunión para presentar los resultados de la operación\n• Ver oportunidades de crecimiento', t30:'• Campaña de Registro Fotográfico sobre hitos claves del programa\n• Campaña de Insignias por el aniversario del programa\n• Concurso de "Embajador del programa"\n• Video del líder felicitandolos', t90:'• Reunión de premiación, reconocimientos e hitos\n• Difusión de videos con testimonios de embajadores\n• Entrega de certificados a quienes lograron completar las capacitaciones' },
+        '3-4':{ t14:'• Lanzar campaña "Evolución del programa"\n• Activar votación de usuarios para nuevas funcionalidades', t30:'• Lanzar retos avanzados\n• Activar beneficios diferenciados según nivel de usuario', t90:'• Evento "Evolución del programa + próximos pasos"\n• Lanzar programa formal de embajadores\n• Generar reporte de impacto en el negocio' },
+        '5+':{ t14:'• Lanzar rebranding del programa\n• Activar campaña "Nueva etapa del programa"\n• Realizar encuesta profunda', t30:'• Implementar gamificación avanzada\n• Crear beneficios premium para top usuarios', t90:'• Ejecutar relanzamiento completo\n• Presentar impacto en indicadores del negocio' },
+      },
+      amarillo:{
+        '1-2':{ t14:'• Solicitud de reportería de uso de módulos al equipo SAAS\n• Reunión con equipo SAAS para definir estrategia\n• Utilizar canales de comunicación distintos al mail', t30:'• Puesta en marcha del plan de acción\n• Activación de campaña de Encuestas para levantar información\n• Activación de campaña de insignias con conceptos clave', t90:'• Evaluación de los resultados obtenidos\n• Reunión de cierre de campañas y análisis de resultados' },
+        '3-4':{ t14:'• Solicitud de reportería profunda\n• Reunión con equipo SAAS para identificar qué módulo está cayendo\n• Lanzar encuesta corta de percepción', t30:'• Rediseñar campañas actuales\n• Lanzar campaña de reactivación con incentivo específico\n• Implementar ranking segmentado', t90:'• Evaluación comparativa\n• Reunión con cliente para definir evolución' },
+        '5+':{ t14:'• Solicitud de reportería histórica (últimos 5 años)\n• Reunión con cliente: "el programa necesita evolución"\n• Lanzar encuesta profunda a usuarios', t30:'• Lanzar nueva dinámica del programa\n• Activar campaña de reenganche emocional\n• Implementar beneficios premium', t90:'• Evaluación de impacto\n• Reunión con cliente para definir si escalar o relanzar' },
+      },
+      rojo:{
+        '1-2':{ t14:'• Solicitud de reportería básica\n• Reunión SAAS para identificar fricción inicial\n• Reunión con cliente con 3 quick wins definidos\n• Activar campaña express: insignias + registro fotográfico + encuesta', t30:'• Lanzar micro-retos semanales\n• Activar recordatorios automáticos (2 veces por semana)\n• Campaña específica para usuarios inactivos', t90:'• Evaluación de reactivación\n• Reunión de cierre con cliente\n• Definición de siguiente plan de acción' },
+        '3-4':{ t14:'• Solicitud de reportería comparativa (últimos 3–6 meses)\n• Reunión con cliente con diagnóstico + 3 acciones inmediatas\n• Encuesta rápida de percepción', t30:'• Rediseñar campañas\n• Lanzar campaña de reactivación con incentivo fuerte\n• Activar beneficios diferenciados', t90:'• Evaluación comparativa\n• Reunión con cliente para ajustar estructura del programa' },
+        '5+':{ t14:'• Solicitud de reportería histórica (6–12 meses)\n• Reunión con cliente planteando necesidad de evolución\n• Encuesta profunda (qué eliminar / qué cambiar / qué agregar)', t30:'• Lanzar nueva dinámica del programa\n• Activar campaña de reenganche emocional\n• Introducir gamificación avanzada', t90:'• Evaluación de impacto\n• Reunión estratégica con cliente\n• Definir roadmap de nueva etapa' },
+      }
+    }
+  },
+  'Generar una conexión emocional y cultural con la compañia': {
+    color:'#f59e0b', emoji:'❤️',
+    drivers_sec:['Participación en iniciativas culturales','Percepción de reconocimiento y valoración','Alineación con valores y propósito de la empresa'],
+    acciones_salud:{
+      verde:{ '1-2':{ t14:'• Cambio del logo con participación por votación\n• Reunión para presentar resultados', t30:'• Campaña de Registro Fotográfico sobre hitos claves\n• Campaña de Insignias por el aniversario\n• Concurso de "Embajador del programa"', t90:'• Reunión de premiación y reconocimientos\n• Difusión de videos con testimonios' }, '3-4':{ t14:'• Lanzar campaña "Evolución del programa"', t30:'• Lanzar retos avanzados\n• Activar beneficios diferenciados', t90:'• Evento "Evolución del programa + próximos pasos"\n• Lanzar programa formal de embajadores' }, '5+':{ t14:'• Lanzar rebranding del programa\n• Encuesta profunda', t30:'• Implementar gamificación avanzada\n• Crear beneficios premium', t90:'• Ejecutar relanzamiento completo' } },
+      amarillo:{ '1-2':{ t14:'• Solicitud de reportería\n• Reunión con SAAS para definir estrategia\n• Utilizar canales de comunicación distintos al mail', t30:'• Activación de campaña de insignias\n• Activación de campaña de Registro Fotográfico con premio jugoso', t90:'• Evaluación de resultados\n• Reunión de cierre y análisis' }, '3-4':{ t14:'• Solicitud de reportería profunda\n• Reunión con cliente con quick wins\n• Lanzar encuesta de percepción', t30:'• Rediseñar campañas\n• Lanzar campaña de reactivación\n• Nuevos conceptos de insignias', t90:'• Evaluación comparativa\n• Reunión para definir evolución' }, '5+':{ t14:'• Solicitud de reportería histórica\n• Encuesta profunda a usuarios', t30:'• Lanzar nueva dinámica del programa\n• Activar campaña de reenganche emocional', t90:'• Reunión con cliente para definir si escalar o relanzar' } },
+      rojo:{ '1-2':{ t14:'• Reunión SAAS para identificar fricción\n• 3 quick wins definidos\n• Activar campaña express: insignias + encuesta\n• Comunicación multicanal', t30:'• Micro-retos semanales\n• Ranking visible\n• Recordatorios automáticos', t90:'• Evaluación de reactivación\n• Reunión de cierre\n• Definición de siguiente plan' }, '3-4':{ t14:'• Reportería comparativa (últimos 3–6 meses)\n• Diagnóstico + 3 acciones inmediatas\n• Encuesta rápida de percepción', t30:'• Rediseñar campañas\n• Campaña de reactivación con incentivo fuerte\n• Dinámicas nuevas', t90:'• Evaluación comparativa\n• Reunión para ajustar estructura del programa' }, '5+':{ t14:'• Reportería histórica (6–12 meses)\n• Reunión planteando necesidad de evolución\n• Encuesta profunda', t30:'• Nueva dinámica del programa (reglas distintas)\n• Campaña de reenganche emocional\n• Gamificación avanzada', t90:'• Evaluación de impacto\n• Reunión estratégica: escalar o relanzar\n• Roadmap de nueva etapa' } }
+    }
+  },
+  'Mejorar la Productividad Organizacional (Enfoque HR / Compañía)': {
+    color:'#06b6d4', emoji:'⚡',
+    drivers_sec:['Uso eficiente del tiempo en tareas de alto valor','Reducción de tareas manuales operativas','Alineación de objetivos individuales con objetivos organizacionales'],
+    acciones_salud:{
+      verde:{ '1-2':{ t14:'• Cambio del logo con participación por votación\n• Reunión para presentar resultados', t30:'• Campaña de Registro Fotográfico sobre hitos claves\n• Campaña de Insignias por el aniversario\n• Concurso de "Embajador del programa"', t90:'• Reunión de premiación\n• Difusión de videos con testimonios' }, '3-4':{ t14:'• Lanzar campaña "Evolución del programa"', t30:'• Retos avanzados\n• Beneficios diferenciados\n• Ranking segmentado', t90:'• Evento de evolución\n• Programa formal de embajadores\n• Reporte de impacto' }, '5+':{ t14:'• Rebranding del programa\n• Encuesta profunda', t30:'• Gamificación avanzada\n• Beneficios premium', t90:'• Relanzamiento completo\n• Presentar impacto en indicadores' } },
+      amarillo:{ '1-2':{ t14:'• Solicitud de reportería\n• Reunión con SAAS\n• Canales alternativos de comunicación', t30:'• Plan de acción en campañas activas\n• Reformular incentivos y mecánicas de metas\n• Campaña express con premio importante', t90:'• Evaluación de resultados\n• Reunión de cierre y análisis' }, '3-4':{ t14:'• Reportería profunda\n• Diagnóstico con quick wins\n• Encuesta de percepción', t30:'• Rediseñar campañas\n• Campaña de reactivación\n• Ranking segmentado\n• Beneficios diferenciados', t90:'• Evaluación comparativa\n• Reunión para definir evolución' }, '5+':{ t14:'• Reportería histórica\n• Encuesta profunda a usuarios', t30:'• Nueva dinámica del programa\n• Reenganche emocional\n• Gamificación avanzada', t90:'• Reunión para escalar o relanzar' } },
+      rojo:{ '1-2':{ t14:'• Reportería básica\n• Fricción inicial identificada\n• 3 quick wins\n• Campaña express\n• Comunicación multicanal', t30:'• Micro-retos semanales\n• Ranking visible\n• Recordatorios automáticos', t90:'• Evaluación de reactivación\n• Reunión de cierre\n• Siguiente plan de acción' }, '3-4':{ t14:'• Reportería comparativa\n• Diagnóstico + 3 acciones inmediatas\n• Encuesta de percepción', t30:'• Rediseñar campañas\n• Reactivación con incentivo fuerte\n• Dinámicas nuevas', t90:'• Evaluación comparativa\n• Ajustar estructura del programa' }, '5+':{ t14:'• Reportería histórica\n• Necesidad de evolución planteada\n• Encuesta profunda', t30:'• Nueva dinámica\n• Reenganche emocional\n• Gamificación avanzada', t90:'• Evaluación de impacto\n• Escalar o relanzar\n• Roadmap de nueva etapa' } }
+    }
+  },
+  'Gobernar todos los reconcimientos y recompensas en una sola plataforma': {
+    color:'#667eea', emoji:'🏛️',
+    drivers_sec:['Centralización de campañas e incentivos','Consistencia en reglas y criterios de reconocimiento','Visibilidad consolidada de recompensas y costos'],
+    acciones_salud:{
+      verde:{ '1-2':{ t14:'• Cambio del logo con participación por votación\n• Reunión para presentar resultados', t30:'• Campaña de Registro Fotográfico sobre hitos claves\n• Campaña de Insignias por el aniversario', t90:'• Reunión de premiación\n• Videos con testimonios de embajadores' }, '3-4':{ t14:'• Campaña "Evolución del programa"', t30:'• Retos avanzados\n• Beneficios diferenciados', t90:'• Evento de evolución\n• Programa de embajadores' }, '5+':{ t14:'• Rebranding del programa\n• Encuesta profunda', t30:'• Gamificación avanzada\n• Beneficios premium', t90:'• Relanzamiento completo' } },
+      amarillo:{ '1-2':{ t14:'• Solicitud de reportería\n• Reunión con SAAS\n• Canales alternativos', t30:'• Plan de acción en campañas activas', t90:'• Evaluación de resultados' }, '3-4':{ t14:'• Reportería profunda\n• Diagnóstico con quick wins', t30:'• Rediseñar campañas\n• Reactivación con incentivo', t90:'• Evaluación comparativa' }, '5+':{ t14:'• Reportería histórica\n• Encuesta profunda', t30:'• Nueva dinámica\n• Reenganche emocional', t90:'• Reunión para escalar o relanzar' } },
+      rojo:{ '1-2':{ t14:'• Reportería básica\n• 3 quick wins\n• Campaña express\n• Comunicación multicanal', t30:'• Micro-retos\n• Ranking visible\n• Recordatorios automáticos', t90:'• Evaluación de reactivación\n• Siguiente plan' }, '3-4':{ t14:'• Reportería comparativa\n• 3 acciones inmediatas', t30:'• Rediseñar campañas\n• Reactivación con incentivo fuerte', t90:'• Ajustar estructura' }, '5+':{ t14:'• Reportería histórica\n• Evolución planteada\n• Encuesta profunda', t30:'• Nueva dinámica\n• Reenganche emocional\n• Gamificación avanzada', t90:'• Escalar o relanzar' } }
+    }
+  },
+  'Reducir la rotación de la compañia': {
+    color:'#ef4444', emoji:'🔄',
+    drivers_sec:['Nivel de engagement vs churn de colaboradores','Participación en programas de reconocimiento','Satisfacción del colaborador (encuestas, feedback)'],
+    acciones_salud:{
+      verde:{ '1-2':{ t14:'• Cambio del logo\n• Reunión para presentar resultados', t30:'• Campaña de Registro Fotográfico\n• Campaña de Insignias por aniversario', t90:'• Reunión de premiación\n• Videos con testimonios' }, '3-4':{ t14:'• Campaña "Evolución del programa"', t30:'• Retos avanzados\n• Beneficios diferenciados', t90:'• Evento de evolución\n• Programa de embajadores' }, '5+':{ t14:'• Rebranding del programa', t30:'• Gamificación avanzada\n• Beneficios premium', t90:'• Relanzamiento completo' } },
+      amarillo:{ '1-2':{ t14:'• Solicitud de reportería\n• Reunión con SAAS', t30:'• Plan de acción en campañas', t90:'• Evaluación de resultados' }, '3-4':{ t14:'• Reportería profunda\n• Quick wins + diagnóstico', t30:'• Rediseñar campañas\n• Reactivación de usuarios', t90:'• Evaluación comparativa' }, '5+':{ t14:'• Reportería histórica\n• Encuesta profunda', t30:'• Nueva dinámica\n• Reenganche emocional', t90:'• Reunión para escalar o relanzar' } },
+      rojo:{ '1-2':{ t14:'• Reportería básica\n• 3 quick wins\n• Campaña express\n• Comunicación multicanal', t30:'• Micro-retos\n• Ranking visible\n• Recordatorios automáticos', t90:'• Evaluación de reactivación\n• Siguiente plan' }, '3-4':{ t14:'• Reportería comparativa\n• 3 acciones inmediatas', t30:'• Rediseñar campañas\n• Incentivo fuerte\n• Dinámicas nuevas', t90:'• Ajustar estructura del programa' }, '5+':{ t14:'• Reportería histórica\n• Evolución planteada', t30:'• Nueva dinámica\n• Reenganche emocional\n• Gamificación avanzada', t90:'• Escalar o relanzar\n• Roadmap de nueva etapa' } }
+    }
+  },
+  'Implementar un programa de reconocimientos e incentivos inteligente, dinámico y basado en datos': {
+    color:'#a855f7', emoji:'🧠',
+    drivers_sec:['Diseño de mecánicas adaptativas según comportamiento del usuario','Segmentación dinámica de usuarios (roles, desempeño, engagement)','Optimización continua basada en analítica de uso y resultados'],
+    acciones_salud:{
+      verde:{ '1-2':{ t14:'• Cambio de logo por Aniversario del programa\n• Reunión para presentar resultados\n• Ver oportunidades de crecimiento', t30:'• Campaña de Registro Fotográfico sobre hitos claves\n• Campaña de Insignias por aniversario\n• Concurso de "Embajador del programa"', t90:'• Reunión de premiación, reconocimientos e hitos\n• Difusión de videos con testimonios' }, '3-4':{ t14:'• Campaña "Evolución del programa"', t30:'• Retos avanzados\n• Beneficios diferenciados\n• Ranking segmentado', t90:'• Evento de evolución\n• Programa formal de embajadores\n• Reporte de impacto' }, '5+':{ t14:'• Rebranding del programa\n• Encuesta profunda', t30:'• Gamificación avanzada\n• Beneficios premium', t90:'• Relanzamiento completo\n• Impacto en indicadores del negocio' } },
+      amarillo:{ '1-2':{ t14:'• Solicitud de reportería\n• Reunión con SAAS\n• Canales alternativos', t30:'• Plan de acción en campañas activas\n• Activación de campaña de Encuestas\n• Insignias y Registro Fotográfico', t90:'• Evaluación de resultados\n• Reunión de cierre' }, '3-4':{ t14:'• Reportería profunda\n• Quick wins\n• Encuesta de percepción', t30:'• Rediseñar campañas\n• Reactivación\n• Beneficios diferenciados', t90:'• Evaluación comparativa\n• Definir evolución' }, '5+':{ t14:'• Reportería histórica\n• Encuesta profunda', t30:'• Nueva dinámica\n• Reenganche emocional\n• Gamificación avanzada', t90:'• Reunión para escalar o relanzar' } },
+      rojo:{ '1-2':{ t14:'• Reportería básica\n• Fricción inicial\n• 3 quick wins\n• Campaña express\n• Comunicación multicanal', t30:'• Micro-retos semanales\n• Ranking visible\n• Recordatorios automáticos', t90:'• Evaluación de reactivación\n• Definición de siguiente plan' }, '3-4':{ t14:'• Reportería comparativa\n• 3 acciones inmediatas\n• Encuesta de percepción', t30:'• Rediseñar campañas\n• Reactivación con incentivo fuerte\n• Dinámicas nuevas', t90:'• Evaluación comparativa\n• Ajustar estructura' }, '5+':{ t14:'• Reportería histórica\n• Evolución planteada\n• Encuesta profunda', t30:'• Nueva dinámica\n• Reenganche emocional\n• Gamificación avanzada', t90:'• Evaluación de impacto\n• Escalar o relanzar' } }
+    }
   },
 };
 
 var driverActivo = null;
 
+// Funciones de utilidad para acciones
+function getSemaforoKey(sem) {
+  if (!sem) return 'rojo';
+  if (sem.includes('Saludable') || sem === '🟢') return 'verde';
+  if (sem.includes('desarrollo') || sem === '🟠') return 'amarillo';
+  return 'rojo';
+}
+
+function getTiempoKey(fechaInicio) {
+  if (!fechaInicio || fechaInicio === '—') return '1-2';
+  var m = (fechaInicio + '').match(/(\d{4})/);
+  if (!m) return '1-2';
+  var diff = 2025 - parseInt(m[1]);
+  if (diff <= 2) return '1-2';
+  if (diff <= 4) return '3-4';
+  return '5+';
+}
+
+function matchDriver(clienteDriver, accionKey) {
+  var d = (clienteDriver || '').toLowerCase();
+  var k = accionKey.toLowerCase();
+  // Match exacto primero
+  if (d === k) return true;
+  // Match por palabras clave principales
+  if (k.includes('performance') && d.includes('performance')) return true;
+  if (k.includes('engagement') && (d.includes('engagement') || d.includes('sentido de pertenencia'))) return true;
+  if (k.includes('capacitar') && d.includes('capacitar')) return true;
+  if (k.includes('conexión emocional') && d.includes('emocional')) return true;
+  if (k.includes('productividad') && d.includes('productividad')) return true;
+  if (k.includes('gobernar') && d.includes('gobernar')) return true;
+  if (k.includes('rotación') && d.includes('rotación')) return true;
+  if (k.includes('reconocimientos e incentivos') && d.includes('reconocimientos')) return true;
+  if (k.includes('automatizar') && d.includes('automatizar')) return true;
+  if (k.includes('transformar datos') && d.includes('transformar')) return true;
+  if (k.includes('trazabilidad') && d.includes('trazabilidad')) return true;
+  return false;
+}
+
 function buildAccionesTab() {
-  // Obtener drivers únicos de los clientes activos
-  var drivers = [...new Set(ACTIVOS.map(function(c){
-    // Simplificar el driver para matchear con ACCIONES_DATA
+  // Obtener drivers únicos de los clientes activos que tengan entrada en ACCIONES_DATA
+  var driversEnData = Object.keys(ACCIONES_DATA);
+  var driversActivos = [...new Set(ACTIVOS.map(function(c){
     var d = c.driver || '';
-    if (d.includes('Performance')) return 'Incrementar Performance Comercial';
-    if (d.includes('Capacitar')) return 'Capacitar stakeholders';
-    if (d.includes('emocional') || d.includes('Engagement')) return d.includes('Engagement') ? 'Aumentar Engagement' : 'Conexión emocional';
-    if (d.includes('Productividad')) return 'Mejorar Productividad';
-    return d;
+    return driversEnData.find(function(k){ return matchDriver(d, k); }) || null;
   }))].filter(Boolean);
 
-  // Construir filtros
   var bar = document.getElementById('driver-filter-bar');
   var btns = '<span style="font-size:11px;font-weight:700;color:var(--gray-400);text-transform:uppercase;align-self:center;">Driver:</span>';
   btns += '<button class="driver-tag active" onclick="filterDriver(null,this)">Todos</button>';
-  drivers.forEach(function(d){
-    btns += '<button class="driver-tag" onclick="filterDriver(''+d.replace(/'/g,"\'")+ '',this)">'+d.split('(')[0].trim()+'</button>';
+  driversActivos.forEach(function(d){
+    var data = ACCIONES_DATA[d];
+    btns += '<button class="driver-tag" onclick="filterDriver(''+d.replace(/'/g,"\'")+ '',this)">'+(data?data.emoji:'')+ ' '+d.split('(')[0].trim().slice(0,30)+'</button>';
   });
   bar.innerHTML = btns;
-
   renderAcciones(null);
 }
 
@@ -1584,42 +1681,68 @@ function renderAcciones(driver) {
   var tbody = document.getElementById('tb-acciones-clientes');
   var title = document.getElementById('acciones-clientes-title');
 
-  // Determinar qué acciones mostrar
-  var keysToShow = driver ? [driver] : Object.keys(ACCIONES_DATA);
-  var html = '';
-
-  keysToShow.forEach(function(key){
-    var data = ACCIONES_DATA[key];
-    if (!data) return;
-    var colores = {rojo:'var(--red)', amarillo:'var(--amber)', verde:'var(--green)'};
-    var bgColores = {rojo:'var(--red-light)', amarillo:'var(--amber-light)', verde:'var(--green-light)'};
-
-    data.acciones.forEach(function(a){
-      var col = colores[a.salud] || 'var(--gray-600)';
-      var bg  = bgColores[a.salud] || 'var(--gray-100)';
-      html += '<div class="accion-card">'
-        +'<div class="accion-card-header">'
-        +'<span class="accion-badge" style="background:'+bg+';color:'+col+'">'+data.emoji+' '+key.split('(')[0].trim()+'</span>'
-        +'<span class="accion-plazo" style="background:var(--gray-100);border-radius:20px;padding:3px 10px;font-size:11px;font-weight:600;">⏱ '+a.plazo+'</span>'
-        +'</div>'
-        +'<div class="accion-title">'+a.titulo+'</div>'
-        +'<div class="accion-desc">'+a.desc+'</div>'
-        +'</div>';
-    });
-  });
-
-  grid.innerHTML = html || '<div style="padding:20px;color:var(--gray-400);">No hay acciones definidas para este driver.</div>';
-
-  // Tabla de clientes con ese driver
+  // Clientes filtrados por driver
   var clientes = driver
-    ? ACTIVOS.filter(function(c){return (c.driver||'').includes(driver.split('(')[0].trim().split(' ')[0]);})
+    ? ACTIVOS.filter(function(c){ return matchDriver(c.driver||'', driver); })
     : ACTIVOS;
 
+  // Generar cards de acciones por cliente
+  var html = '';
+  clientes.slice(0,6).forEach(function(c){
+    var driverKey = driver || Object.keys(ACCIONES_DATA).find(function(k){ return matchDriver(c.driver||'', k); });
+    if (!driverKey) return;
+    var data = ACCIONES_DATA[driverKey];
+    if (!data) return;
+
+    var semKey = getSemaforoKey(c.semaforo);
+    var tiempoKey = getTiempoKey(c.fechaInicio);
+    var acc = data.acciones_salud && data.acciones_salud[semKey] && data.acciones_salud[semKey][tiempoKey];
+    if (!acc) return;
+
+    var semColors = {verde:'var(--green)',amarillo:'var(--amber)',rojo:'var(--red-dark)'};
+    var semBg    = {verde:'var(--green-light)',amarillo:'var(--amber-light)',rojo:'var(--red-light)'};
+    var semLabel = {verde:'🟢 Saludable',amarillo:'🟠 En desarrollo',rojo:'🔴 En riesgo'};
+
+    html += '<div class="accion-card">'
+      +'<div class="accion-card-header">'
+      +'<span class="accion-badge" style="background:'+semBg[semKey]+';color:'+semColors[semKey]+'">'+semLabel[semKey]+'</span>'
+      +'<span class="accion-plazo">'+c.empresa.slice(0,18)+'</span>'
+      +'</div>'
+      +'<div class="accion-driver-label">Driver: '+driverKey.split('(')[0].trim().slice(0,40)+'</div>'
+      +'<div style="margin:10px 0;">'
+      +'<div style="font-size:11px;font-weight:700;color:var(--red);margin-bottom:4px;">⏱ T+14 días</div>'
+      +'<div style="font-size:12px;color:var(--gray-600);line-height:1.6;white-space:pre-line;">'+acc.t14+'</div>'
+      +'</div>'
+      +'<div style="margin:10px 0;">'
+      +'<div style="font-size:11px;font-weight:700;color:var(--amber);margin-bottom:4px;">⏱ T+30 días</div>'
+      +'<div style="font-size:12px;color:var(--gray-600);line-height:1.6;white-space:pre-line;">'+acc.t30+'</div>'
+      +'</div>'
+      +'<div style="margin:10px 0;">'
+      +'<div style="font-size:11px;font-weight:700;color:var(--green);margin-bottom:4px;">⏱ T+90 días</div>'
+      +'<div style="font-size:12px;color:var(--gray-600);line-height:1.6;white-space:pre-line;">'+acc.t90+'</div>'
+      +'</div>'
+      +'<div class="expand-actions" style="margin-top:10px;">'
+      +'<button class="btn-ia" onclick="genNotif('+c.id+')">📧 Notificar KAM</button>'
+      +' <button class="btn-action" onclick="openIACliente('+c.id+')">🤖 Análisis IA</button>'
+      +'</div>'
+      +'</div>';
+  });
+
+  grid.innerHTML = html || '<div style="padding:20px;color:var(--gray-400);">No hay acciones disponibles para este filtro.</div>';
+  if (clientes.length > 6) {
+    grid.innerHTML += '<div style="padding:12px 0;font-size:12px;color:var(--gray-400);text-align:center;">Mostrando 6 de '+clientes.length+' clientes. Usa el filtro por driver para ver todos.</div>';
+  }
+
+  // Tabla de todos los clientes con ese driver
   title.textContent = driver ? 'Clientes con driver: '+driver.split('(')[0].trim()+' ('+clientes.length+')' : 'Todos los clientes activos ('+clientes.length+')';
 
   tbody.innerHTML = clientes.sort(function(a,b){return a.healthScore-b.healthScore;}).map(function(c){
-    return '<tr><td><strong>'+c.empresa+'</strong></td><td>'+c.kam.split(' ')[0]+'</td><td>'+c.pais+'</td>'
-      +'<td>'+hbar(c.healthScore)+'</td><td>'+semBadge(c.semaforo)+'</td><td>'+roiBadge(c.roi)+'</td>'
+    var dKey = driver || Object.keys(ACCIONES_DATA).find(function(k){ return matchDriver(c.driver||'', k); });
+    var tiempoKey = getTiempoKey(c.fechaInicio);
+    return '<tr><td><strong>'+c.empresa+'</strong><br><span style="font-size:11px;color:var(--gray-400)">'+c.driver.slice(0,35)+'...</span></td>'
+      +'<td>'+c.kam.split(' ')[0]+'</td><td>'+c.pais+'</td>'
+      +'<td>'+hbar(c.healthScore)+'</td><td>'+semBadge(c.semaforo)+'</td>'
+      +'<td><span class="badge badge-gray">'+tiempoKey+' años</span></td>'
       +'<td><button class="btn-ia" onclick="genNotif('+c.id+')">📧</button> <button class="btn-action" onclick="openIACliente('+c.id+')">🤖</button></td>'
       +'</tr>';
   }).join('');
