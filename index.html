@@ -920,130 +920,85 @@ tr:hover td{background:var(--gray-50);}
      SCRIPT
 ══════════════════════════════════════════ -->
 <script>
-/* ── TEST MODE — no auth ── */
-window.addEventListener('load', () => {
-  document.getElementById('fab-ia').style.display = 'flex';
-  document.getElementById('user-name').textContent = 'KAM Demo';
-  document.getElementById('user-avatar').src = 'https://ui-avatars.com/api/?name=KAM+Demo&background=FA345E&color=fff&size=64';
-  document.getElementById('ia-context-count').textContent = CLIENTES.filter(c=>c.estado==='Activo').length;
-  initDashboard();
-});
-
+<script>
 /* ══════════════════════════════════════════
-   CONFIGURACIÓN — cambia solo esta línea
+   CONFIG — solo cambia esta línea
 ══════════════════════════════════════════ */
 const N8N_WEBHOOK = "https://n8n.openip.cl/webhook/ia-salud-cliente";
 
-/* ── DATOS ── */
+/* ══════════════════════════════════════════
+   DATOS
+══════════════════════════════════════════ */
 const CLIENTES = [
-  {id:755,empresa:"Blue Express",loginsM2:1.61,loginsM1:1.42,loginsM:0,fechaInicio:"01 Ago 2019",tiempoProg:6,link:"https://blueexpress.apprecio.cl/#/login",,programa:"Blue Express",tipo:"Teams Motivation",admin:"In House",pais:"Chile",estado:"Activo",segmento:"A",usuarios:44,kam:"Camilo Figueroa",fee:1.5,feeMensual:1067.96,driver:"Capacitar stakeholders",adopcion:0.547,adherencia:0.075,performance:0,healthScore:0.186,semaforo:"🟠",roi:0.483,desc:"Blue Express utiliza la plataforma principalmente para carga de Entrenamientos para sus courrier."},
-  {id:44,empresa:"Global Hitss",programa:"Honor Hitss",tipo:"Teams Motivation",admin:"Convenience",pais:"México",estado:"Activo",segmento:"A+",usuarios:4603,kam:"Colombina Trujillo",fee:1.5,feeMensual:1806,driver:"Conexión emocional",adopcion:0.085,adherencia:0,performance:0,healthScore:0.026,semaforo:"🔴",roi:1.508,desc:"Global Hitss usa SSO con Microsoft. Enfocado en engagement con insignias, aniversario laboral y banners."},
-  {id:233,empresa:"Autofin",programa:"Autofin",tipo:"Force Manager",admin:"Full Administration",pais:"Chile",estado:"Activo",segmento:"A+",usuarios:0,kam:"Johana Calzada",fee:0,feeMensual:0,driver:"Incrementar Performance Comercial",adopcion:0.313,adherencia:0,performance:0,healthScore:0.094,semaforo:"🔴",roi:-1,desc:"Módulo legal. En proceso de implementación."},
-  {id:990,empresa:"Entel Inbound Chile",programa:"Ser más",tipo:"Force Manager",admin:"Full Administration",pais:"Chile",estado:"Activo",segmento:"A+",usuarios:434,kam:"Benjamin Gonzales",fee:11.81,feeMensual:4152.48,driver:"Incrementar Performance Comercial",adopcion:0.704,adherencia:0,performance:0,healthScore:0.211,semaforo:"🟠",roi:4.767,desc:"Programa de ventas Entel Chile, uso de metas y KPIs para fuerza de venta."},
-  {id:14353,empresa:"Entel Impulsa GGTT",programa:"Impulsa GGTT",tipo:"Force Manager",admin:"Full Administration",pais:"Chile",estado:"Activo",segmento:"A",usuarios:116,kam:"Lorenzo Jamasmie",fee:4.62,feeMensual:433.91,driver:"Incrementar Performance Comercial",adopcion:0.643,adherencia:0.012,performance:0,healthScore:0.197,semaforo:"🔴",roi:-0.397,desc:"Canal de GGTT enfocado en vendedores en grandes tiendas y retail para incentivar venta de fibra."},
-  {id:14352,empresa:"Entel Impulsa Terreno",programa:"Impulsa Terreno",tipo:"Force Manager",admin:"Full Administration",pais:"Chile",estado:"Activo",segmento:"A+",usuarios:155,kam:"Benjamin Gonzales",fee:8.11,feeMensual:1018.30,driver:"Incrementar Performance Comercial",adopcion:0.569,adherencia:0.004,performance:0,healthScore:0.171,semaforo:"🟠",roi:0.414,desc:"Vendedores de terreno con foco en adherencia y días trabajados."},
-  {id:14351,empresa:"Entel Impulsa Tiendas",programa:"Impulsa Tiendas",tipo:"Force Manager",admin:"Full Administration",pais:"Chile",estado:"Activo",segmento:"A+",usuarios:760,kam:"Lorenzo Jamasmie",fee:5.74,feeMensual:3534.30,driver:"Incrementar Performance Comercial",adopcion:0.766,adherencia:0.073,performance:0.261,healthScore:0.356,semaforo:"🟢",roi:3.909,desc:"Canal de tiendas Entel con marcas externas (Samsung, Xiaomi, etc). Bien alineado con metas."},
-  {id:102,empresa:"Hino",programa:"Hino",tipo:"Force Manager",admin:"Full Administration",pais:"Chile",estado:"Activo",segmento:"B",usuarios:226,kam:"Benjamín Castro",fee:2.90,feeMensual:530.20,driver:"Capacitar stakeholders",adopcion:0.673,adherencia:0,performance:0,healthScore:0.202,semaforo:"🟠",roi:0.105,desc:"Programa autoadministrado, uso ocasional del módulo de entrenamiento."},
-  {id:1342,empresa:"Nualart",programa:"Nualart",tipo:"Force Manager",admin:"Full Administration",pais:"Chile",estado:"Activo",segmento:"C",usuarios:0,kam:"Johana Calzada",fee:0,feeMensual:0,driver:"Mejorar Productividad",adopcion:0.188,adherencia:0,performance:0,healthScore:0.056,semaforo:"🔴",roi:-1,desc:"Programa activo pero sin usuarios registrados. Requiere intervención."},
-  {id:1614,empresa:"StockSur",programa:"Stocksur",tipo:"Force Manager",admin:"Full Administration",pais:"Chile",estado:"Activo",segmento:"C",usuarios:87,kam:"Camilo Figueroa",fee:6.02,feeMensual:424.16,driver:"Incrementar Performance Comercial",adopcion:0.257,adherencia:0.091,performance:0.163,healthScore:0.170,semaforo:"🟠",roi:0,desc:"Usa módulo de metas y ocasionalmente registro fotográfico. Autoadministrado con apoyo Apprecio."},
-  {id:1784,empresa:"Ford Chile",programa:"Escuderia Ford",tipo:"Force Manager",admin:"Full Administration",pais:"Chile",estado:"Activo",segmento:"A",usuarios:411,kam:"Lorenzo Jamasmie",fee:3.12,feeMensual:1039.19,driver:"Incrementar Performance Comercial",adopcion:0.361,adherencia:0,performance:0,healthScore:0.108,semaforo:"🔴",roi:0.443,desc:"Uso del módulo de metas y ranking de vendedores. Actualmente en declive de uso."},
-  {id:314,empresa:"Loreal Colombia",programa:"Loreal Consumo Masivo",tipo:"Force Manager",admin:"Full Administration",pais:"Colombia",estado:"Activo",segmento:"B",usuarios:382,kam:"Sharon Hernandez",fee:2.8,feeMensual:341.29,driver:"Incrementar Performance Comercial",adopcion:0.525,adherencia:0,performance:0,healthScore:0.158,semaforo:"🔴",roi:-0.289,desc:"Venta de productos en supermercados, salones de belleza y retail. Uso esporádico de registro fotográfico."},
-  {id:629,empresa:"Loreal Mayorista",programa:"Loreal",tipo:"Force Manager",admin:"Convenience",pais:"Colombia",estado:"Activo",segmento:"A",usuarios:0,kam:"Sharon Hernandez",fee:1,feeMensual:0,driver:"Capacitar stakeholders",adopcion:0.188,adherencia:0,performance:0,healthScore:0.056,semaforo:"🔴",roi:-1,desc:"Canal mayorista Loreal Colombia. Sin usuarios activos registrados."},
-  {id:593,empresa:"Entel Outbound Colombia",programa:"Ser más",tipo:"Force Manager",admin:"Full Administration",pais:"Colombia",estado:"Activo",segmento:"A",usuarios:227,kam:"Benjamin Gonzales",fee:2.18,feeMensual:400.99,driver:"Incrementar Performance Comercial",adopcion:0.526,adherencia:0,performance:0,healthScore:0.158,semaforo:"🔴",roi:-0.443,desc:"Canal outbound Entel Colombia. Uso de metas y cumplimiento."},
-  {id:165,empresa:"Entel Inbound Colombia",programa:"Ser más",tipo:"Force Manager",admin:"Full Administration",pais:"Colombia",estado:"Activo",segmento:"A+",usuarios:446,kam:"Benjamin Gonzales",fee:2.55,feeMensual:922.28,driver:"Incrementar Performance Comercial",adopcion:0.721,adherencia:0,performance:0,healthScore:0.216,semaforo:"🟠",roi:0.281,desc:"Canal inbound Entel Colombia. Buena adopción relativa, sin métricas de performance cargadas."},
-  {id:751,empresa:"Loreal Droguerías",programa:"Loreal Drog. Tradicionales",tipo:"Force Manager",admin:"Full Administration",pais:"Colombia",estado:"Activo",segmento:"B",usuarios:39,kam:"Darling Allendes",fee:4.68,feeMensual:147.92,driver:"Incrementar Performance Comercial",adopcion:0.329,adherencia:0,performance:0,healthScore:0.099,semaforo:"🔴",roi:-0.692,desc:"Similar a Loreal consumo masivo pero enfocado en droguerías."},
-  {id:687,empresa:"Auna Perú",programa:"Héroes de la salud",tipo:"Force Manager",admin:"Full Administration",pais:"Perú",estado:"Activo",segmento:"A",usuarios:150,kam:"Magda Sernaqué",fee:16.35,feeMensual:1987.13,driver:"Incrementar Performance Comercial",adopcion:1.0,adherencia:0,performance:0,healthScore:0.330,semaforo:"🟠",roi:1.760,desc:"Red de clínicas. Carga de metas para vendedores de seguros oncológicos."},
-  {id:529,empresa:"Brother Perú",programa:"Brother",tipo:"Force Manager",admin:"Full Administration",pais:"Perú",estado:"Activo",segmento:"B",usuarios:115,kam:"Joao Guerra",fee:5.23,feeMensual:487.27,driver:"Incrementar Performance Comercial",adopcion:0.575,adherencia:0.043,performance:0.315,healthScore:0.312,semaforo:"🟠",roi:0.015,desc:"Venta de impresoras con carga de fotos de boletas para ganar puntos."},
-  {id:354,empresa:"Epson Perú",programa:"Epson",tipo:"Force Manager",admin:"Full Administration",pais:"Perú",estado:"Activo",segmento:"C",usuarios:82,kam:"Magda Sernaqué",fee:6,feeMensual:294.06,driver:"Incrementar Performance Comercial",adopcion:0.319,adherencia:0,performance:0,healthScore:0.096,semaforo:"🔴",roi:0,desc:"Competencia de Brother. Registro fotográfico de ventas."},
-  {id:343,empresa:"Entel Inbound Perú",programa:"Ser más",tipo:"Force Manager",admin:"Full Administration",pais:"Perú",estado:"Activo",segmento:"A+",usuarios:0,kam:"Benjamin Gonzales",fee:1.96,feeMensual:4152.48,driver:"Incrementar Performance Comercial",adopcion:0.207,adherencia:0,performance:0,healthScore:0.062,semaforo:"🔴",roi:4.767,desc:"Canal inbound Entel Perú."},
-  {id:434,empresa:"Entel Outbound Perú",programa:"Ser más",tipo:"Force Manager",admin:"Full Administration",pais:"Perú",estado:"Activo",segmento:"A+",usuarios:0,kam:"Benjamin Gonzales",fee:5.81,feeMensual:3625.84,driver:"Incrementar Performance Comercial",adopcion:0.300,adherencia:0.016,performance:0,healthScore:0.095,semaforo:"🔴",roi:4.036,desc:"Canal outbound Entel Perú."},
-  {id:811,empresa:"Grupo Bios",programa:"Club Huellas",tipo:"Force Manager",admin:"Full Administration",pais:"Colombia",estado:"Activo",segmento:"C",usuarios:2,kam:"Roberto Molina",fee:3,feeMensual:534.65,driver:"Conexión emocional",adopcion:1.0,adherencia:0,performance:0,healthScore:0.300,semaforo:"🟠",roi:0,desc:"Uso del módulo de registro fotográfico para determinar ganadores."},
-  {id:413,empresa:"Enel Colombia",programa:"Impulsa",tipo:"Force Manager",admin:"Full Administration",pais:"Colombia",estado:"Activo",segmento:"B",usuarios:0,kam:"Roberto Molina",fee:0,feeMensual:687,driver:"Capacitar stakeholders",adopcion:0.438,adherencia:0,performance:0,healthScore:0.131,semaforo:"🔴",roi:0.431,desc:"Capacitación y canal informativo para colaboradores."},
-  {id:1870,empresa:"Energizer Chile",programa:"Club Eveready",tipo:"Force Manager",admin:"Full Administration",pais:"Chile",estado:"Activo por lanzar",segmento:"A+",usuarios:0,kam:"Benjamín Castro",fee:0,feeMensual:0,driver:"Incrementar Performance Comercial",adopcion:0.313,adherencia:0.503,performance:0,healthScore:0.245,semaforo:"🔴",roi:-1,desc:"Por lanzar."},
-  {id:297,empresa:"Botero Soto",programa:"Botero Soto",tipo:"Force Manager",admin:"In House",pais:"Colombia",estado:"Activo por lanzar",segmento:"A+",usuarios:0,kam:"Aura Avila",fee:0,feeMensual:0,driver:"Aumentar Engagement",adopcion:0.313,adherencia:0,performance:0,healthScore:0.094,semaforo:"🔴",roi:-1,desc:"Por lanzar."},
+  {id:755,empresa:"Blue Express",programa:"Blue Express",tipo:"Teams Motivation",admin:"In House",pais:"Chile",estado:"Activo",segmento:"A",usuarios:44,kam:"Camilo Figueroa",fee:1.5,feeMensual:1067.96,driver:"Capacitar stakeholders",adopcion:0.547,adherencia:0.075,performance:0,healthScore:0.186,semaforo:"🟠",roi:0.483,desc:"Blue Express utiliza la plataforma principalmente para carga de Entrenamientos para sus courrier.",link:"https://blueexpress.apprecio.cl/#/login",fechaInicio:"01 Ago 2019",tiempoProg:6,loginsM2:1.61,loginsM1:1.42,loginsM:0},
+  {id:44,empresa:"Global Hitss",programa:"Honor Hitss",tipo:"Teams Motivation",admin:"Convenience",pais:"México",estado:"Activo",segmento:"A+",usuarios:4603,kam:"Colombina Trujillo",fee:1.5,feeMensual:1806,driver:"Conexión emocional",adopcion:0.085,adherencia:0,performance:0,healthScore:0.026,semaforo:"🔴",roi:1.508,desc:"Global Hitss usa SSO con Microsoft. Enfocado en engagement con insignias, aniversario laboral y banners.",link:"https://myrewards.globalhitss.com/#/login",fechaInicio:"01 Ago 2019",tiempoProg:6,loginsM2:1.04,loginsM1:1.0,loginsM:0},
+  {id:233,empresa:"Autofin",programa:"Autofin",tipo:"Force Manager",admin:"Full Administration",pais:"Chile",estado:"Activo",segmento:"A+",usuarios:0,kam:"Johana Calzada",fee:0,feeMensual:0,driver:"Incrementar Performance Comercial",adopcion:0.313,adherencia:0,performance:0,healthScore:0.094,semaforo:"🔴",roi:-1,desc:"Módulo legal. En proceso de implementación.",link:null,fechaInicio:"—",tiempoProg:"—",loginsM2:null,loginsM1:null,loginsM:null},
+  {id:990,empresa:"Entel Inbound Chile",programa:"Ser más",tipo:"Force Manager",admin:"Full Administration",pais:"Chile",estado:"Activo",segmento:"A+",usuarios:434,kam:"Benjamin Gonzales",fee:11.81,feeMensual:4152.48,driver:"Incrementar Performance Comercial",adopcion:0.704,adherencia:0,performance:0,healthScore:0.211,semaforo:"🟠",roi:4.767,desc:"Programa de ventas Entel Chile, uso de metas y KPIs para fuerza de venta.",link:"https://sermas.dcanje.cl/#/login",fechaInicio:"01 Ago 2019",tiempoProg:6,loginsM2:2.90,loginsM1:2.0,loginsM:0},
+  {id:14353,empresa:"Entel Impulsa GGTT",programa:"Impulsa GGTT",tipo:"Force Manager",admin:"Full Administration",pais:"Chile",estado:"Activo",segmento:"A",usuarios:116,kam:"Lorenzo Jamasmie",fee:4.62,feeMensual:433.91,driver:"Incrementar Performance Comercial",adopcion:0.643,adherencia:0.012,performance:0,healthScore:0.197,semaforo:"🔴",roi:-0.397,desc:"Canal de GGTT enfocado en vendedores en grandes tiendas y retail para incentivar venta de fibra.",link:"https://impulsa.apprecio.cl",fechaInicio:"15 Ene 2024",tiempoProg:2,loginsM2:3.36,loginsM1:1.74,loginsM:0},
+  {id:14352,empresa:"Entel Impulsa Terreno",programa:"Impulsa Terreno",tipo:"Force Manager",admin:"Full Administration",pais:"Chile",estado:"Activo",segmento:"A+",usuarios:155,kam:"Benjamin Gonzales",fee:8.11,feeMensual:1018.30,driver:"Incrementar Performance Comercial",adopcion:0.569,adherencia:0.004,performance:0,healthScore:0.171,semaforo:"🟠",roi:0.414,desc:"Vendedores de terreno con foco en adherencia y días trabajados.",link:"https://impulsa.apprecio.cl",fechaInicio:"15 Ene 2024",tiempoProg:2,loginsM2:2.79,loginsM1:2.88,loginsM:0},
+  {id:14351,empresa:"Entel Impulsa Tiendas",programa:"Impulsa Tiendas",tipo:"Force Manager",admin:"Full Administration",pais:"Chile",estado:"Activo",segmento:"A+",usuarios:760,kam:"Lorenzo Jamasmie",fee:5.74,feeMensual:3534.30,driver:"Incrementar Performance Comercial",adopcion:0.766,adherencia:0.073,performance:0.261,healthScore:0.356,semaforo:"🟢",roi:3.909,desc:"Canal de tiendas Entel con marcas externas (Samsung, Xiaomi, etc). Bien alineado con metas.",link:"https://impulsa.apprecio.cl",fechaInicio:"15 Ene 2024",tiempoProg:2,loginsM2:4.34,loginsM1:2.46,loginsM:0},
+  {id:102,empresa:"Hino",programa:"Hino",tipo:"Force Manager",admin:"Full Administration",pais:"Chile",estado:"Activo",segmento:"B",usuarios:226,kam:"Benjamín Castro",fee:2.90,feeMensual:530.20,driver:"Capacitar stakeholders",adopcion:0.673,adherencia:0,performance:0,healthScore:0.202,semaforo:"🟠",roi:0.105,desc:"Programa autoadministrado, uso ocasional del módulo de entrenamiento.",link:"https://hinosmarteam.apprecio.cl/#",fechaInicio:"01 Mar 2020",tiempoProg:6,loginsM2:null,loginsM1:null,loginsM:4.0},
+  {id:1342,empresa:"Nualart",programa:"Nualart",tipo:"Force Manager",admin:"Full Administration",pais:"Chile",estado:"Activo",segmento:"C",usuarios:0,kam:"Johana Calzada",fee:0,feeMensual:0,driver:"Mejorar Productividad",adopcion:0.188,adherencia:0,performance:0,healthScore:0.056,semaforo:"🔴",roi:-1,desc:"Programa activo pero sin usuarios registrados. Requiere intervención.",link:null,fechaInicio:"—",tiempoProg:"—",loginsM2:null,loginsM1:null,loginsM:null},
+  {id:1614,empresa:"StockSur",programa:"Stocksur",tipo:"Force Manager",admin:"Full Administration",pais:"Chile",estado:"Activo",segmento:"C",usuarios:87,kam:"Camilo Figueroa",fee:6.02,feeMensual:424.16,driver:"Incrementar Performance Comercial",adopcion:0.257,adherencia:0.091,performance:0.163,healthScore:0.170,semaforo:"🟠",roi:0,desc:"Usa módulo de metas y ocasionalmente registro fotográfico.",link:null,fechaInicio:"—",tiempoProg:"—",loginsM2:null,loginsM1:null,loginsM:null},
+  {id:1784,empresa:"Ford Chile",programa:"Escuderia Ford",tipo:"Force Manager",admin:"Full Administration",pais:"Chile",estado:"Activo",segmento:"A",usuarios:411,kam:"Lorenzo Jamasmie",fee:3.12,feeMensual:1039.19,driver:"Incrementar Performance Comercial",adopcion:0.361,adherencia:0,performance:0,healthScore:0.108,semaforo:"🔴",roi:0.443,desc:"Uso del módulo de metas y ranking de vendedores. Actualmente en declive de uso.",link:"https://escuderiaford.apprecio.cl/#/login",fechaInicio:"01 Abr 2025",tiempoProg:0,loginsM2:2.53,loginsM1:1.0,loginsM:0},
+  {id:314,empresa:"Loreal Colombia",programa:"Loreal Consumo Masivo",tipo:"Force Manager",admin:"Full Administration",pais:"Colombia",estado:"Activo",segmento:"B",usuarios:382,kam:"Sharon Hernandez",fee:2.8,feeMensual:341.29,driver:"Incrementar Performance Comercial",adopcion:0.525,adherencia:0,performance:0,healthScore:0.158,semaforo:"🔴",roi:-0.289,desc:"Venta de productos en supermercados, salones de belleza y retail.",link:"https://redimeyganaconloreal.dcanje.co/#/login",fechaInicio:"01 Ene 2025",tiempoProg:1,loginsM2:1.82,loginsM1:4.0,loginsM:0},
+  {id:629,empresa:"Loreal Mayorista",programa:"Loreal",tipo:"Force Manager",admin:"Convenience",pais:"Colombia",estado:"Activo",segmento:"A",usuarios:0,kam:"Sharon Hernandez",fee:1,feeMensual:0,driver:"Capacitar stakeholders",adopcion:0.188,adherencia:0,performance:0,healthScore:0.056,semaforo:"🔴",roi:-1,desc:"Canal mayorista Loreal Colombia. Sin usuarios activos registrados.",link:null,fechaInicio:"—",tiempoProg:"—",loginsM2:null,loginsM1:null,loginsM:null},
+  {id:593,empresa:"Entel Outbound Colombia",programa:"Ser más",tipo:"Force Manager",admin:"Full Administration",pais:"Colombia",estado:"Activo",segmento:"A",usuarios:227,kam:"Benjamin Gonzales",fee:2.18,feeMensual:400.99,driver:"Incrementar Performance Comercial",adopcion:0.526,adherencia:0,performance:0,healthScore:0.158,semaforo:"🔴",roi:-0.443,desc:"Canal outbound Entel Colombia. Uso de metas y cumplimiento.",link:"https://sermas.apprecio.com.co/#",fechaInicio:"01 Ago 2019",tiempoProg:6,loginsM2:4.56,loginsM1:2.25,loginsM:0},
+  {id:165,empresa:"Entel Inbound Colombia",programa:"Ser más",tipo:"Force Manager",admin:"Full Administration",pais:"Colombia",estado:"Activo",segmento:"A+",usuarios:446,kam:"Benjamin Gonzales",fee:2.55,feeMensual:922.28,driver:"Incrementar Performance Comercial",adopcion:0.721,adherencia:0,performance:0,healthScore:0.216,semaforo:"🟠",roi:0.281,desc:"Canal inbound Entel Colombia. Buena adopción relativa.",link:"https://sermas.dcanje.co/#/login",fechaInicio:"01 Ago 2019",tiempoProg:6,loginsM2:2.75,loginsM1:2.55,loginsM:0},
+  {id:751,empresa:"Loreal Droguerías",programa:"Loreal Drog. Tradicionales",tipo:"Force Manager",admin:"Full Administration",pais:"Colombia",estado:"Activo",segmento:"B",usuarios:39,kam:"Darling Allendes",fee:4.68,feeMensual:147.92,driver:"Incrementar Performance Comercial",adopcion:0.329,adherencia:0,performance:0,healthScore:0.099,semaforo:"🔴",roi:-0.692,desc:"Similar a Loreal consumo masivo pero enfocado en droguerías.",link:null,fechaInicio:"—",tiempoProg:"—",loginsM2:null,loginsM1:null,loginsM:null},
+  {id:687,empresa:"Auna Perú",programa:"Héroes de la salud",tipo:"Force Manager",admin:"Full Administration",pais:"Perú",estado:"Activo",segmento:"A",usuarios:150,kam:"Magda Sernaqué",fee:16.35,feeMensual:1987.13,driver:"Incrementar Performance Comercial",adopcion:1.0,adherencia:0,performance:0,healthScore:0.330,semaforo:"🟠",roi:1.760,desc:"Red de clínicas. Carga de metas para vendedores de seguros oncológicos.",link:"https://heroesdelasalud.apprecio.pe/",fechaInicio:"01 Mar 2025",tiempoProg:0,loginsM2:9.53,loginsM1:4.51,loginsM:0},
+  {id:529,empresa:"Brother Perú",programa:"Brother",tipo:"Force Manager",admin:"Full Administration",pais:"Perú",estado:"Activo",segmento:"B",usuarios:115,kam:"Joao Guerra",fee:5.23,feeMensual:487.27,driver:"Incrementar Performance Comercial",adopcion:0.575,adherencia:0.043,performance:0.315,healthScore:0.312,semaforo:"🟠",roi:0.015,desc:"Venta de impresoras con carga de fotos de boletas para ganar puntos.",link:"https://www.brotherepp.com/#/login",fechaInicio:"01 Feb 2024",tiempoProg:2,loginsM2:null,loginsM1:null,loginsM:6.0},
+  {id:354,empresa:"Epson Perú",programa:"Epson",tipo:"Force Manager",admin:"Full Administration",pais:"Perú",estado:"Activo",segmento:"C",usuarios:82,kam:"Magda Sernaqué",fee:6,feeMensual:294.06,driver:"Incrementar Performance Comercial",adopcion:0.319,adherencia:0,performance:0,healthScore:0.096,semaforo:"🔴",roi:0,desc:"Competencia de Brother. Registro fotográfico de ventas.",link:"https://epsonpremiatusventas.dcanje.pe/#/login",fechaInicio:"01 Feb 2025",tiempoProg:1,loginsM2:2.35,loginsM1:3.3,loginsM:0},
+  {id:343,empresa:"Entel Inbound Perú",programa:"Ser más",tipo:"Force Manager",admin:"Full Administration",pais:"Perú",estado:"Activo",segmento:"A+",usuarios:0,kam:"Benjamin Gonzales",fee:1.96,feeMensual:4152.48,driver:"Incrementar Performance Comercial",adopcion:0.207,adherencia:0,performance:0,healthScore:0.062,semaforo:"🔴",roi:4.767,desc:"Canal inbound Entel Perú.",link:"https://sermas.dcanje.pe/#/login",fechaInicio:"01 Jul 2022",tiempoProg:3,loginsM2:3.43,loginsM1:1.55,loginsM:0},
+  {id:434,empresa:"Entel Outbound Perú",programa:"Ser más",tipo:"Force Manager",admin:"Full Administration",pais:"Perú",estado:"Activo",segmento:"A+",usuarios:0,kam:"Benjamin Gonzales",fee:5.81,feeMensual:3625.84,driver:"Incrementar Performance Comercial",adopcion:0.300,adherencia:0.016,performance:0,healthScore:0.095,semaforo:"🔴",roi:4.036,desc:"Canal outbound Entel Perú.",link:"https://sermas.apprecio.pe/#/login",fechaInicio:"01 Jul 2022",tiempoProg:3,loginsM2:4.49,loginsM1:2.71,loginsM:0},
+  {id:811,empresa:"Grupo Bios",programa:"Club Huellas",tipo:"Force Manager",admin:"Full Administration",pais:"Colombia",estado:"Activo",segmento:"C",usuarios:2,kam:"Roberto Molina",fee:3,feeMensual:534.65,driver:"Conexión emocional",adopcion:1.0,adherencia:0,performance:0,healthScore:0.300,semaforo:"🟠",roi:0,desc:"Uso del módulo de registro fotográfico para determinar ganadores.",link:null,fechaInicio:"—",tiempoProg:"—",loginsM2:null,loginsM1:null,loginsM:null},
+  {id:413,empresa:"Enel Colombia",programa:"Impulsa",tipo:"Force Manager",admin:"Full Administration",pais:"Colombia",estado:"Activo",segmento:"B",usuarios:0,kam:"Roberto Molina",fee:0,feeMensual:687,driver:"Capacitar stakeholders",adopcion:0.438,adherencia:0,performance:0,healthScore:0.131,semaforo:"🔴",roi:0.431,desc:"Capacitación y canal informativo para colaboradores.",link:null,fechaInicio:"—",tiempoProg:"—",loginsM2:null,loginsM1:null,loginsM:null},
+  {id:1870,empresa:"Energizer Chile",programa:"Club Eveready",tipo:"Force Manager",admin:"Full Administration",pais:"Chile",estado:"Activo por lanzar",segmento:"A+",usuarios:0,kam:"Benjamín Castro",fee:0,feeMensual:0,driver:"Incrementar Performance Comercial",adopcion:0.313,adherencia:0.503,performance:0,healthScore:0.245,semaforo:"🔴",roi:-1,desc:"Por lanzar.",link:null,fechaInicio:"—",tiempoProg:"—",loginsM2:null,loginsM1:null,loginsM:null},
+  {id:297,empresa:"Botero Soto",programa:"Botero Soto",tipo:"Force Manager",admin:"In House",pais:"Colombia",estado:"Activo por lanzar",segmento:"A+",usuarios:0,kam:"Aura Avila",fee:0,feeMensual:0,driver:"Aumentar Engagement",adopcion:0.313,adherencia:0,performance:0,healthScore:0.094,semaforo:"🔴",roi:-1,desc:"Por lanzar.",link:null,fechaInicio:"—",tiempoProg:"—",loginsM2:null,loginsM1:null,loginsM:null},
 ];
 
-const ACTIVOS = CLIENTES.filter(c=>c.estado==="Activo");
+const ACTIVOS = CLIENTES.filter(c => c.estado === "Activo");
 
-// Enrich data with extra fields
-const LOGINS_DATA = {
-  755:{m2:1.61,m1:1.42,m:0,link:"https://blueexpress.apprecio.cl/#/login",fi:"01 Ago 2019",tp:6},
-  44:{m2:1.04,m1:1.0,m:0,link:"https://myrewards.globalhitss.com/#/login",fi:"01 Ago 2019",tp:6},
-  990:{m2:2.90,m1:2.0,m:0,link:"https://sermas.dcanje.cl/#/login",fi:"01 Ago 2019",tp:6},
-  14353:{m2:3.36,m1:1.74,m:0,link:"https://impulsa.apprecio.cl",fi:"15 Ene 2024",tp:2},
-  14352:{m2:2.79,m1:2.88,m:0,link:"https://impulsa.apprecio.cl",fi:"15 Ene 2024",tp:2},
-  14351:{m2:4.34,m1:2.46,m:0,link:"https://impulsa.apprecio.cl",fi:"15 Ene 2024",tp:2},
-  102:{m2:null,m1:null,m:4.0,link:"https://hinosmarteam.apprecio.cl/#",fi:"01 Mar 2020",tp:6},
-  1784:{m2:2.53,m1:1.0,m:0,link:"https://escuderiaford.apprecio.cl/#/login",fi:"01 Abr 2025",tp:0},
-  314:{m2:1.82,m1:4.0,m:0,link:"https://redimeyganaconloreal.dcanje.co/#/login",fi:"01 Ene 2025",tp:1},
-  593:{m2:4.56,m1:2.25,m:0,link:"https://sermas.apprecio.com.co/#",fi:"01 Ago 2019",tp:6},
-  165:{m2:2.75,m1:2.55,m:0,link:"https://sermas.dcanje.co/#/login",fi:"01 Ago 2019",tp:6},
-  687:{m2:9.53,m1:4.51,m:0,link:"https://heroesdelasalud.apprecio.pe/",fi:"01 Mar 2025",tp:0},
-  529:{m2:null,m1:null,m:6.0,link:"https://www.brotherepp.com/#/login",fi:"01 Feb 2024",tp:2},
-  354:{m2:2.35,m1:3.3,m:0,link:"https://epsonpremiatusventas.dcanje.pe/#/login",fi:"01 Feb 2025",tp:1},
-  343:{m2:3.43,m1:1.55,m:0,link:"https://sermas.dcanje.pe/#/login",fi:"01 Jul 2022",tp:3},
-  434:{m2:4.49,m1:2.71,m:0,link:"https://sermas.apprecio.pe/#/login",fi:"01 Jul 2022",tp:3},
-};
-CLIENTES.forEach(c=>{
-  const d=LOGINS_DATA[c.id];
-  if(d){c.loginsM2=d.m2;c.loginsM1=d.m1;c.loginsM=d.m;c.link=d.link;c.fechaInicio=d.fi;c.tiempoProg=d.tp;}
-  else{c.loginsM2=null;c.loginsM1=null;c.loginsM=null;c.link=null;c.fechaInicio='—';c.tiempoProg='—';}
-});
-
-
-let filteredData = [...ACTIVOS];
+/* ══════════════════════════════════════════
+   ESTADO
+══════════════════════════════════════════ */
+let filteredData = [...CLIENTES];
 let currentPage = 1;
 const PAGE_SIZE = 15;
-let currentNotifCliente = null;
 let chartsInitialized = false;
 
 /* ══════════════════════════════════════════
-   GOOGLE AUTH
+   INIT — se ejecuta cuando el DOM está listo
 ══════════════════════════════════════════ */
-function handleCredential(response) { return; /* disabled in test mode */
-  const payload = JSON.parse(atob(response.credential.split('.')[1]));
-  const email = payload.email || '';
-  const allowed = email.endsWith('@apprecio.com') || email.endsWith('@dcanje.com');
-  if (!allowed) {
-    document.getElementById('login-error').style.display = 'block';
-    return;
-  }
-  // Guardar sesión
-  sessionStorage.setItem('user', JSON.stringify({
-    name: payload.name,
-    email: payload.email,
-    picture: payload.picture
-  }));
-  showApp(payload);
-}
-
-function showApp(user) {
+document.addEventListener('DOMContentLoaded', () => {
+  // Modo sin login: mostrar app directo
   document.getElementById('login-screen').style.display = 'none';
   document.getElementById('app-screen').style.display = 'block';
-  
-  document.getElementById('user-name').textContent = user.name.split(' ')[0];
-  document.getElementById('user-avatar').src = user.picture || '';
+  document.getElementById('fab-ia').style.display = 'flex';
+  document.getElementById('user-name').textContent = 'KAM Demo';
+  document.getElementById('user-avatar').src = 'https://ui-avatars.com/api/?name=KAM+Demo&background=FA345E&color=fff&size=64';
   document.getElementById('ia-context-count').textContent = ACTIVOS.length;
   initDashboard();
-}
+});
 
 function logout() { location.reload(); }
-
-
 
 /* ══════════════════════════════════════════
    NAVIGATION
 ══════════════════════════════════════════ */
 function showSection(name, btn) {
-  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
-  document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
-  document.getElementById('section-'+name).classList.add('active');
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('section-' + name).classList.add('active');
   btn.classList.add('active');
-  if (name==='graficos' && !chartsInitialized) { chartsInitialized=true; initCharts(); }
+  if (name === 'graficos' && !chartsInitialized) {
+    chartsInitialized = true;
+    initCharts();
+  }
 }
 
 /* ══════════════════════════════════════════
-   INIT
+   INIT DASHBOARD
 ══════════════════════════════════════════ */
 function initDashboard() {
   buildKPIs();
@@ -1059,23 +1014,23 @@ function initDashboard() {
 ══════════════════════════════════════════ */
 function buildKPIs() {
   const activos = ACTIVOS.length;
-  const verdes = ACTIVOS.filter(c=>c.semaforo==="🟢").length;
-  const rojos = ACTIVOS.filter(c=>c.semaforo==="🔴").length;
-  const amarillos = ACTIVOS.filter(c=>c.semaforo==="🟠").length;
-  const avgHealth = (ACTIVOS.reduce((s,c)=>s+c.healthScore,0)/activos*100).toFixed(1);
-  const roiPos = ACTIVOS.filter(c=>c.roi>0).length;
-  const totalFee = ACTIVOS.reduce((s,c)=>s+c.feeMensual,0);
+  const verdes = ACTIVOS.filter(c => c.semaforo === "🟢").length;
+  const rojos = ACTIVOS.filter(c => c.semaforo === "🔴").length;
+  const amarillos = ACTIVOS.filter(c => c.semaforo === "🟠").length;
+  const avgHealth = (ACTIVOS.reduce((s, c) => s + c.healthScore, 0) / activos * 100).toFixed(1);
+  const roiPos = ACTIVOS.filter(c => c.roi > 0).length;
+  const totalFee = ACTIVOS.reduce((s, c) => s + c.feeMensual, 0);
 
   const kpis = [
-    {label:"Clientes Activos",val:activos,sub:"Total cartera activa",cls:"kpi-gray"},
-    {label:"Saludables 🟢",val:verdes,sub:`${(verdes/activos*100).toFixed(0)}% del total`,cls:"kpi-green"},
-    {label:"En Riesgo 🔴",val:rojos,sub:`${(rojos/activos*100).toFixed(0)}% del total`,cls:"kpi-red"},
-    {label:"En Desarrollo 🟠",val:amarillos,sub:`${(amarillos/activos*100).toFixed(0)}% del total`,cls:"kpi-amber"},
-    {label:"Health Score Avg",val:avgHealth+"%",sub:"Promedio ponderado",cls:"kpi-gray"},
-    {label:"ROI Positivo",val:roiPos,sub:`${(roiPos/activos*100).toFixed(0)}% rentables`,cls:"kpi-green"},
-    {label:"MRR Total",val:"$"+fmt(totalFee),sub:"Fee mensual cartera",cls:"kpi-gray"},
+    {label:"Clientes Activos", val:activos, sub:"Total cartera activa", cls:"kpi-gray"},
+    {label:"Saludables 🟢", val:verdes, sub:`${(verdes/activos*100).toFixed(0)}% del total`, cls:"kpi-green"},
+    {label:"En Riesgo 🔴", val:rojos, sub:`${(rojos/activos*100).toFixed(0)}% del total`, cls:"kpi-red"},
+    {label:"En Desarrollo 🟠", val:amarillos, sub:`${(amarillos/activos*100).toFixed(0)}% del total`, cls:"kpi-amber"},
+    {label:"Health Score Avg", val:avgHealth+"%", sub:"Promedio ponderado", cls:"kpi-gray"},
+    {label:"ROI Positivo", val:roiPos, sub:`${(roiPos/activos*100).toFixed(0)}% rentables`, cls:"kpi-green"},
+    {label:"MRR Total", val:"$"+fmt(totalFee), sub:"Fee mensual cartera", cls:"kpi-gray"},
   ];
-  document.getElementById('kpi-grid').innerHTML = kpis.map(k=>`
+  document.getElementById('kpi-grid').innerHTML = kpis.map(k => `
     <div class="kpi-card ${k.cls}">
       <div class="kpi-label">${k.label}</div>
       <div class="kpi-value">${k.val}</div>
@@ -1083,112 +1038,103 @@ function buildKPIs() {
     </div>`).join('');
 }
 
-function fmt(n){return Math.round(n).toLocaleString('es-CL');}
+function fmt(n) { return Math.round(n).toLocaleString('es-CL'); }
 
 /* ══════════════════════════════════════════
    RESUMEN CHARTS
 ══════════════════════════════════════════ */
 function buildResumenCharts() {
-  // Semaforo donut
-  const sem = {verde:0,amarillo:0,rojo:0};
-  ACTIVOS.forEach(c=>{
-    if(c.semaforo==="🟢") sem.verde++;
-    else if(c.semaforo==="🟠") sem.amarillo++;
+  const sem = {verde:0, amarillo:0, rojo:0};
+  ACTIVOS.forEach(c => {
+    if (c.semaforo === "🟢") sem.verde++;
+    else if (c.semaforo === "🟠") sem.amarillo++;
     else sem.rojo++;
   });
-  new Chart(document.getElementById('cSemaforo'),{
+  new Chart(document.getElementById('cSemaforo'), {
     type:'doughnut',
     data:{
       labels:['🟢 Saludable','🟠 En desarrollo','🔴 En riesgo'],
-      datasets:[{data:[sem.verde,sem.amarillo,sem.rojo],
-        backgroundColor:['#065F46','#B45309','#FA345E'],
-        borderWidth:0,hoverOffset:4}]
+      datasets:[{data:[sem.verde, sem.amarillo, sem.rojo],
+        backgroundColor:['#065F46','#B45309','#FA345E'], borderWidth:0, hoverOffset:4}]
     },
-    options:{responsive:true,maintainAspectRatio:false,
-      plugins:{legend:{position:'bottom',labels:{font:{family:'Montserrat',size:12},padding:16}}}}
+    options:{responsive:true, maintainAspectRatio:false,
+      plugins:{legend:{position:'bottom', labels:{font:{family:'Montserrat',size:12}, padding:16}}}}
   });
 
-  // País donut
-  const paises={};
-  ACTIVOS.forEach(c=>{paises[c.pais]=(paises[c.pais]||0)+1;});
-  new Chart(document.getElementById('cPais'),{
+  const paises = {};
+  ACTIVOS.forEach(c => { paises[c.pais] = (paises[c.pais]||0)+1; });
+  new Chart(document.getElementById('cPais'), {
     type:'doughnut',
     data:{
       labels:Object.keys(paises),
       datasets:[{data:Object.values(paises),
-        backgroundColor:['#FA345E','#667eea','#f59e0b','#10b981','#06b6d4'],
-        borderWidth:0,hoverOffset:4}]
+        backgroundColor:['#FA345E','#667eea','#f59e0b','#10b981','#06b6d4'], borderWidth:0, hoverOffset:4}]
     },
-    options:{responsive:true,maintainAspectRatio:false,
-      plugins:{legend:{position:'bottom',labels:{font:{family:'Montserrat',size:12},padding:16}}}}
+    options:{responsive:true, maintainAspectRatio:false,
+      plugins:{legend:{position:'bottom', labels:{font:{family:'Montserrat',size:12}, padding:16}}}}
   });
 
-  // KAM Health
-  const kamData={};
-  ACTIVOS.forEach(c=>{
-    if(!kamData[c.kam]) kamData[c.kam]={sum:0,count:0};
-    kamData[c.kam].sum+=c.healthScore*100;
+  const kamData = {};
+  ACTIVOS.forEach(c => {
+    if (!kamData[c.kam]) kamData[c.kam] = {sum:0, count:0};
+    kamData[c.kam].sum += c.healthScore * 100;
     kamData[c.kam].count++;
   });
-  const kamNames=Object.keys(kamData).map(k=>k.split(' ')[0]+'.');
-  const kamVals=Object.keys(kamData).map(k=>(kamData[k].sum/kamData[k].count).toFixed(1));
-  new Chart(document.getElementById('cKamHealth'),{
+  new Chart(document.getElementById('cKamHealth'), {
     type:'bar',
     data:{
-      labels:Object.keys(kamData).map(k=>k.split(' ')[0]),
-      datasets:[{label:'Health Score Avg %',data:kamVals,
-        backgroundColor:'#FA345E',borderRadius:6}]
+      labels:Object.keys(kamData).map(k => k.split(' ')[0]),
+      datasets:[{label:'Health Score Avg %',
+        data:Object.keys(kamData).map(k => (kamData[k].sum/kamData[k].count).toFixed(1)),
+        backgroundColor:'#FA345E', borderRadius:6}]
     },
-    options:{responsive:true,maintainAspectRatio:false,
+    options:{responsive:true, maintainAspectRatio:false,
       plugins:{legend:{display:false}},
       scales:{
         x:{ticks:{font:{family:'Montserrat',size:11}}},
-        y:{min:0,max:50,ticks:{font:{family:'Montserrat',size:11},callback:v=>v+'%'}}
+        y:{min:0, max:50, ticks:{font:{family:'Montserrat',size:11}, callback:v=>v+'%'}}
       }}
   });
 
-  // Scatter Adopcion vs Adherencia
-  const scatterData = ACTIVOS.map(c=>({
+  const scatterData = ACTIVOS.map(c => ({
     x: +(c.adopcion*100).toFixed(1),
     y: +(c.adherencia*100).toFixed(1),
     r: Math.max(4, Math.min(16, (c.usuarios||20)/60)),
     label: c.empresa,
-    color: c.semaforo==="🟢"?"#065F46":c.semaforo==="🟠"?"#B45309":"#FA345E"
+    color: c.semaforo==="🟢" ? "#065F46" : c.semaforo==="🟠" ? "#B45309" : "#FA345E"
   }));
-  new Chart(document.getElementById('cScatter'),{
+  new Chart(document.getElementById('cScatter'), {
     type:'bubble',
-    data:{
-      datasets:[{
-        label:'Clientes',
-        data:scatterData.map(d=>({x:d.x,y:d.y,r:d.r})),
-        backgroundColor:scatterData.map(d=>d.color+'99'),
-        borderColor:scatterData.map(d=>d.color),
-        borderWidth:1.5
-      }]
-    },
-    options:{responsive:true,maintainAspectRatio:false,
+    data:{datasets:[{
+      label:'Clientes',
+      data: scatterData.map(d => ({x:d.x, y:d.y, r:d.r})),
+      backgroundColor: scatterData.map(d => d.color+'99'),
+      borderColor: scatterData.map(d => d.color),
+      borderWidth:1.5
+    }]},
+    options:{responsive:true, maintainAspectRatio:false,
       plugins:{legend:{display:false},
-        tooltip:{callbacks:{label:ctx=>{
-          const d=scatterData[ctx.dataIndex];
+        tooltip:{callbacks:{label:ctx => {
+          const d = scatterData[ctx.dataIndex];
           return `${d.label}: Adop ${d.x}% | Adh ${d.y}%`;
         }}}},
       scales:{
-        x:{title:{display:true,text:'Adopción %',font:{family:'Montserrat',size:11}},min:0,max:110},
-        y:{title:{display:true,text:'Adherencia %',font:{family:'Montserrat',size:11}},min:0,max:50}
+        x:{title:{display:true, text:'Adopción %', font:{family:'Montserrat',size:11}}, min:0, max:110},
+        y:{title:{display:true, text:'Adherencia %', font:{family:'Montserrat',size:11}}, min:0, max:50}
       }}
   });
 }
 
 /* ══════════════════════════════════════════
-   URGENTES TABLE
+   URGENTES
 ══════════════════════════════════════════ */
 function buildUrgentes() {
   const urgentes = ACTIVOS
-    .filter(c=>c.semaforo==="🔴"||c.healthScore<0.15)
-    .sort((a,b)=>a.healthScore-b.healthScore)
-    .slice(0,8);
+    .filter(c => c.semaforo === "🔴" || c.healthScore < 0.15)
+    .sort((a,b) => a.healthScore - b.healthScore)
+    .slice(0, 8);
 
-  document.getElementById('tb-urgentes').innerHTML = urgentes.map(c=>`
+  document.getElementById('tb-urgentes').innerHTML = urgentes.map(c => `
     <tr>
       <td><strong>${c.empresa}</strong><br><span style="font-size:11px;color:var(--gray-400)">${c.programa}</span></td>
       <td>${c.kam.split(' ')[0]}</td>
@@ -1198,99 +1144,103 @@ function buildUrgentes() {
       <td>${roiBadge(c.roi)}</td>
       <td>
         <button class="btn-ia" onclick="genNotif(${c.id})">📧 Notificar</button>
-        <button class="btn-action" style="margin-left:4px;" onclick="openIaPanel('Analiza el cliente ${c.empresa} (Health Score: ${(c.healthScore*100).toFixed(0)}%, semáforo ${c.semaforo}, ROI ${c.roi.toFixed(2)}) y genera un plan de acción concreto para el KAM ${c.kam}')">🤖 IA</button>
+        <button class="btn-action" style="margin-left:4px;" onclick="openIaPanel('Analiza el cliente ${c.empresa.replace(/'/g,"\\'")} (Health Score: ${(c.healthScore*100).toFixed(0)}%, semáforo ${c.semaforo}, ROI ${c.roi.toFixed(2)}) y genera un plan de acción concreto para el KAM ${c.kam.replace(/'/g,"\\'")}')">🤖 IA</button>
       </td>
     </tr>`).join('');
 }
 
 /* ══════════════════════════════════════════
-   CLIENTES TABLE
+   TABLA CLIENTES CON EXPAND
 ══════════════════════════════════════════ */
 function buildKamFilter() {
-  const kams=[...new Set(CLIENTES.map(c=>c.kam))].sort();
-  const sel=document.getElementById('f-kam');
-  kams.forEach(k=>{const o=document.createElement('option');o.value=k;o.textContent=k.split(' ')[0]+' '+k.split(' ').slice(-1)[0];sel.appendChild(o);});
+  const kams = [...new Set(CLIENTES.map(c => c.kam))].sort();
+  const sel = document.getElementById('f-kam');
+  kams.forEach(k => {
+    const o = document.createElement('option');
+    o.value = k;
+    o.textContent = k.split(' ')[0] + ' ' + (k.split(' ')[1]||'');
+    sel.appendChild(o);
+  });
 }
 
 function applyFilters() {
-  const pais=document.getElementById('f-pais').value;
-  const estado=document.getElementById('f-estado').value;
-  const sem=document.getElementById('f-semaforo').value;
-  const kam=document.getElementById('f-kam').value;
-  const q=document.getElementById('f-search').value.toLowerCase();
+  const pais = document.getElementById('f-pais').value;
+  const estado = document.getElementById('f-estado').value;
+  const sem = document.getElementById('f-semaforo').value;
+  const kam = document.getElementById('f-kam').value;
+  const q = document.getElementById('f-search').value.toLowerCase();
+  const semMap = {verde:"🟢", amarillo:"🟠", rojo:"🔴"};
 
-  filteredData = CLIENTES.filter(c=>{
-    if(pais&&c.pais!==pais) return false;
-    if(estado&&c.estado!==estado) return false;
-    if(sem){
-      const map={verde:"🟢",amarillo:"🟠",rojo:"🔴"};
-      if(c.semaforo!==map[sem]) return false;
-    }
-    if(kam&&c.kam!==kam) return false;
-    if(q&&!c.empresa.toLowerCase().includes(q)&&!c.programa.toLowerCase().includes(q)) return false;
+  filteredData = CLIENTES.filter(c => {
+    if (pais && c.pais !== pais) return false;
+    if (estado && c.estado !== estado) return false;
+    if (sem && c.semaforo !== semMap[sem]) return false;
+    if (kam && c.kam !== kam) return false;
+    if (q && !c.empresa.toLowerCase().includes(q) && !c.programa.toLowerCase().includes(q)) return false;
     return true;
   });
-  currentPage=1;
+  currentPage = 1;
   renderTable();
 }
 
-function resetFilters(){
-  document.getElementById('f-pais').value='';
-  document.getElementById('f-estado').value='';
-  document.getElementById('f-semaforo').value='';
-  document.getElementById('f-kam').value='';
-  document.getElementById('f-search').value='';
-  filteredData=[...CLIENTES];
-  currentPage=1;
+function resetFilters() {
+  ['f-pais','f-estado','f-semaforo','f-kam'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('f-search').value = '';
+  filteredData = [...CLIENTES];
+  currentPage = 1;
   renderTable();
 }
 
-function buildClientesTable(){filteredData=[...CLIENTES];renderTable();}
+function buildClientesTable() { filteredData = [...CLIENTES]; renderTable(); }
 
-function loginTrend(c){
-  const m2=c.loginsM2,m1=c.loginsM1,m=c.loginsM;
-  const val=(v,prev)=>{
-    if(!v&&v!==0) return '<span class="login-val">—</span>';
-    const cls=prev!==undefined&&v>0&&v<prev?'red':prev!==undefined&&v>prev?'green':'';
+function loginTrend(c) {
+  const fmt = (v, prev) => {
+    if (v === null || v === undefined) return '<span class="login-val">—</span>';
+    const cls = prev !== null && prev !== undefined && v < prev && v === 0 ? 'red'
+               : prev !== null && prev !== undefined && v > prev ? 'green' : '';
     return `<span class="login-val ${cls}">${v.toFixed(1)}</span>`;
   };
   return `<div class="expand-logins">
-    ${val(m2)} <span class="login-arrow">→</span>
-    ${val(m1,m2)} <span class="login-arrow">→</span>
-    ${val(m,m1)}
+    ${fmt(c.loginsM2)} <span class="login-arrow">→</span>
+    ${fmt(c.loginsM1, c.loginsM2)} <span class="login-arrow">→</span>
+    ${fmt(c.loginsM, c.loginsM1)}
   </div>`;
 }
 
-function expandRow(id){
-  const mainRow=document.getElementById('tr-main-'+id);
-  const expRow=document.getElementById('tr-exp-'+id);
-  if(!mainRow||!expRow) return;
-  const isOpen=expRow.classList.contains('open');
-  // Close all others
-  document.querySelectorAll('.tr-expand.open').forEach(r=>{
+function expandRow(id) {
+  const mainRow = document.getElementById('tr-main-' + id);
+  const expRow = document.getElementById('tr-exp-' + id);
+  if (!mainRow || !expRow) return;
+  const isOpen = expRow.classList.contains('open');
+  document.querySelectorAll('.tr-expand.open').forEach(r => {
     r.classList.remove('open');
-    document.getElementById('tr-main-'+r.dataset.id)?.classList.remove('expanded');
+    const mid = r.dataset.id;
+    const mr = document.getElementById('tr-main-' + mid);
+    if (mr) mr.classList.remove('expanded');
   });
-  if(!isOpen){
+  if (!isOpen) {
     expRow.classList.add('open');
     mainRow.classList.add('expanded');
   }
 }
 
-function renderTable(){
-  const total=filteredData.length;
-  const pages=Math.ceil(total/PAGE_SIZE);
-  const start=(currentPage-1)*PAGE_SIZE;
-  const slice=filteredData.slice(start,start+PAGE_SIZE);
+function renderTable() {
+  const total = filteredData.length;
+  const pages = Math.ceil(total / PAGE_SIZE) || 1;
+  const start = (currentPage - 1) * PAGE_SIZE;
+  const slice = filteredData.slice(start, start + PAGE_SIZE);
+  const flagMap = {Chile:'🇨🇱', Colombia:'🇨🇴', Perú:'🇵🇪', México:'🇲🇽', Ecuador:'🇪🇨'};
 
-  document.getElementById('table-count').textContent=`${total} clientes`;
-  document.getElementById('pg-info').textContent=`Mostrando ${start+1}–${Math.min(start+PAGE_SIZE,total)} de ${total}`;
+  document.getElementById('table-count').textContent = `${total} clientes`;
+  document.getElementById('pg-info').textContent = `Mostrando ${start+1}–${Math.min(start+PAGE_SIZE,total)} de ${total}`;
 
-  const rows = slice.map(c=>{
-    const flagMap={Chile:'🇨🇱',Colombia:'🇨🇴',Perú:'🇵🇪',México:'🇲🇽',Ecuador:'🇪🇨'};
-    const flag=flagMap[c.pais]||'🌎';
-    const mainRow=`
-    <tr class="tr-main" id="tr-main-${c.id}" onclick="expandRow(${c.id})">
+  document.getElementById('tb-clientes').innerHTML = slice.map(c => {
+    const flag = flagMap[c.pais] || '🌎';
+    const desc = (c.desc||'').replace(/'/g, "\\'");
+    const emp = c.empresa.replace(/'/g, "\\'");
+    const kamn = c.kam.replace(/'/g, "\\'");
+
+    const mainRow = `<tr class="tr-main" id="tr-main-${c.id}" onclick="expandRow(${c.id})">
       <td><strong>${c.empresa}</strong><br><span style="font-size:11px;color:var(--gray-400)">${c.programa}</span></td>
       <td>${flag} ${c.pais}</td>
       <td>${estadoBadge(c.estado)}</td>
@@ -1298,14 +1248,13 @@ function renderTable(){
       <td style="font-size:12px;">${c.admin}</td>
       <td style="font-size:12px;">${c.kam.split(' ')[0]+' '+c.kam.split(' ').slice(-1)[0]}</td>
       <td style="text-align:center;font-weight:600;">${c.usuarios||'—'}</td>
-      <td style="font-weight:600;">$${c.feeMensual>0?Math.round(c.feeMensual).toLocaleString('es-CL'):'—'}</td>
+      <td style="font-weight:600;">${c.feeMensual>0?'$'+Math.round(c.feeMensual).toLocaleString('es-CL'):'—'}</td>
       <td>${healthBar(c.healthScore)}</td>
       <td>${semBadge(c.semaforo)}</td>
       <td>${roiBadge(c.roi)}</td>
     </tr>`;
 
-    const expPanel=`
-    <tr class="tr-expand" id="tr-exp-${c.id}" data-id="${c.id}">
+    const expPanel = `<tr class="tr-expand" id="tr-exp-${c.id}" data-id="${c.id}">
       <td colspan="11" style="padding:0;">
         <div class="expand-panel">
           <div class="expand-grid">
@@ -1315,12 +1264,12 @@ function renderTable(){
             </div>
             <div class="expand-cell">
               <div class="expand-cell-label">Fecha de inicio</div>
-              <div class="expand-cell-val">${c.fechaInicio||'—'}</div>
-              <div class="expand-cell-sub">Tiempo: ${c.tiempoProg||'—'} meses</div>
+              <div class="expand-cell-val">${c.fechaInicio}</div>
+              <div class="expand-cell-sub">Tiempo en plataforma: ${c.tiempoProg !== '—' ? c.tiempoProg+' meses' : '—'}</div>
             </div>
             <div class="expand-cell">
               <div class="expand-cell-label">Fee por usuario</div>
-              <div class="expand-cell-val">$${c.fee>0?c.fee.toFixed(2):'—'}</div>
+              <div class="expand-cell-val">${c.fee > 0 ? '$'+c.fee.toFixed(2) : '—'}</div>
             </div>
             <div class="expand-cell">
               <div class="expand-cell-label">Logins M-2 → M-1 → M</div>
@@ -1345,11 +1294,11 @@ function renderTable(){
               <div class="expand-cell-val"><span class="badge badge-gray">${c.segmento||'—'}</span></div>
             </div>
           </div>
-          ${c.desc?`<div class="expand-desc">📝 ${c.desc}</div>`:''}
+          ${c.desc ? `<div class="expand-desc">📝 ${c.desc}</div>` : ''}
           <div class="expand-actions">
-            ${c.link?`<a href="${c.link}" target="_blank" class="btn-action expand-link">🔗 Abrir plataforma</a>`:''}
+            ${c.link ? `<a href="${c.link}" target="_blank" class="btn-action" onclick="event.stopPropagation()" style="text-decoration:none;display:inline-flex;align-items:center;">🔗 Abrir plataforma</a>` : ''}
             <button class="btn-ia" onclick="event.stopPropagation();genNotif(${c.id})">📧 Notificar KAM</button>
-            <button class="btn-action" onclick="event.stopPropagation();openIaPanel('Dame un análisis detallado y plan de acción para ${c.empresa}: HS ${(c.healthScore*100).toFixed(0)}%, semáforo ${c.semaforo}, KAM ${c.kam}, país ${c.pais}, driver: ${c.driver}, ROI: ${c.roi.toFixed(2)}. ${c.desc}')">🤖 Análisis IA</button>
+            <button class="btn-action" onclick="event.stopPropagation();openIaPanel('Dame un análisis detallado y plan de acción para ${emp}: HS ${(c.healthScore*100).toFixed(0)}%, semáforo ${c.semaforo}, KAM ${kamn}, país ${c.pais}, driver: ${c.driver}, ROI: ${c.roi.toFixed(2)}. ${desc}')">🤖 Análisis IA</button>
             <span class="expand-tag">${c.tipo}</span>
             <span class="expand-tag">${c.admin}</span>
           </div>
@@ -1357,54 +1306,56 @@ function renderTable(){
       </td>
     </tr>`;
 
-    return mainRow+expPanel;
+    return mainRow + expPanel;
   }).join('');
 
-  document.getElementById('tb-clientes').innerHTML = rows;
-
-  // Pagination buttons
-  const btns=document.getElementById('pg-btns');
-  btns.innerHTML='';
-  const b=(label,page,dis,act)=>{
-    const btn=document.createElement('button');
-    btn.className='pg-btn'+(act?' active':'');
-    btn.textContent=label;btn.disabled=dis;
-    btn.onclick=()=>{currentPage=page;renderTable();};
+  // Paginación
+  const btns = document.getElementById('pg-btns');
+  btns.innerHTML = '';
+  const mkBtn = (label, page, dis, act) => {
+    const btn = document.createElement('button');
+    btn.className = 'pg-btn' + (act ? ' active' : '');
+    btn.textContent = label;
+    btn.disabled = dis;
+    btn.onclick = () => { currentPage = page; renderTable(); };
     btns.appendChild(btn);
   };
-  b('‹',currentPage-1,currentPage===1,false);
-  for(let i=Math.max(1,currentPage-2);i<=Math.min(pages,currentPage+2);i++) b(i,i,false,i===currentPage);
-  b('›',currentPage+1,currentPage===pages,false);
+  mkBtn('‹', currentPage-1, currentPage===1, false);
+  for (let i = Math.max(1, currentPage-2); i <= Math.min(pages, currentPage+2); i++) mkBtn(i, i, false, i===currentPage);
+  mkBtn('›', currentPage+1, currentPage===pages, false);
 }
 
-function pctBar(val,color){
-  if(!val||val<=0) return '<span style="font-size:11px;color:var(--gray-400)">—</span>';
-  const pct=Math.min(val*100,100).toFixed(0);
+/* ══════════════════════════════════════════
+   HELPERS UI
+══════════════════════════════════════════ */
+function pctBar(val, color) {
+  if (!val || val <= 0) return '<span style="font-size:11px;color:var(--gray-400)">—</span>';
+  const pct = Math.min(val*100, 100).toFixed(0);
   return `<div class="health-bar-wrap"><div class="health-bar-bg"><div class="health-bar-fill" style="width:${pct}%;background:${color};"></div></div><span class="health-val" style="color:${color}">${pct}%</span></div>`;
 }
 
-function healthBar(val){
-  const pct=Math.min(val*100,100);
-  const color=pct>=35?"#065F46":pct>=15?"#B45309":"#FA345E";
+function healthBar(val) {
+  const pct = Math.min(val*100, 100);
+  const color = pct >= 35 ? "#065F46" : pct >= 15 ? "#B45309" : "#FA345E";
   return `<div class="health-bar-wrap"><div class="health-bar-bg"><div class="health-bar-fill" style="width:${pct.toFixed(0)}%;background:${color};"></div></div><span class="health-val" style="color:${color}">${pct.toFixed(0)}%</span></div>`;
 }
 
-function semBadge(s){
-  if(s==="🟢") return '<span class="badge badge-green">🟢 Saludable</span>';
-  if(s==="🟠") return '<span class="badge badge-amber">🟠 En desarrollo</span>';
+function semBadge(s) {
+  if (s === "🟢") return '<span class="badge badge-green">🟢 Saludable</span>';
+  if (s === "🟠") return '<span class="badge badge-amber">🟠 En desarrollo</span>';
   return '<span class="badge badge-red">🔴 En riesgo</span>';
 }
 
-function roiBadge(r){
-  if(r===undefined||r===null||r===-1) return '<span style="color:var(--gray-400);font-size:12px;">—</span>';
-  const cls=r>0?"badge-green":"badge-red";
+function roiBadge(r) {
+  if (r === undefined || r === null || r === -1) return '<span style="color:var(--gray-400);font-size:12px;">—</span>';
+  const cls = r > 0 ? "badge-green" : "badge-red";
   return `<span class="badge ${cls}">${r>0?'+':''}${r.toFixed(2)}x</span>`;
 }
 
-function estadoBadge(e){
-  if(e==="Activo") return '<span class="badge badge-green">Activo</span>';
-  if(e==="Activo por lanzar") return '<span class="badge badge-amber">Por lanzar</span>';
-  if(e==="Inactivo") return '<span class="badge badge-gray">Inactivo</span>';
+function estadoBadge(e) {
+  if (e === "Activo") return '<span class="badge badge-green">Activo</span>';
+  if (e === "Activo por lanzar") return '<span class="badge badge-amber">Por lanzar</span>';
+  if (e === "Inactivo") return '<span class="badge badge-gray">Inactivo</span>';
   return `<span class="badge badge-gray">${e}</span>`;
 }
 
@@ -1412,17 +1363,17 @@ function estadoBadge(e){
    KAM SECTION
 ══════════════════════════════════════════ */
 function buildKamSection() {
-  const kamMap={};
-  CLIENTES.filter(c=>c.estado==="Activo").forEach(c=>{
-    if(!kamMap[c.kam]) kamMap[c.kam]={clientes:[],verde:0,amarillo:0,rojo:0};
+  const kamMap = {};
+  ACTIVOS.forEach(c => {
+    if (!kamMap[c.kam]) kamMap[c.kam] = {clientes:[], verde:0, amarillo:0, rojo:0};
     kamMap[c.kam].clientes.push(c);
-    if(c.semaforo==="🟢") kamMap[c.kam].verde++;
-    else if(c.semaforo==="🟠") kamMap[c.kam].amarillo++;
+    if (c.semaforo === "🟢") kamMap[c.kam].verde++;
+    else if (c.semaforo === "🟠") kamMap[c.kam].amarillo++;
     else kamMap[c.kam].rojo++;
   });
 
-  document.getElementById('kam-grid').innerHTML = Object.entries(kamMap).map(([kam,d])=>`
-    <div class="kam-card" onclick="showKamDetail('${kam}')">
+  document.getElementById('kam-grid').innerHTML = Object.entries(kamMap).map(([kam, d]) => `
+    <div class="kam-card" onclick="showKamDetail('${kam.replace(/'/g,"\\'")}')">
       <div class="kam-card-header">
         <div class="kam-avatar">${kam.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase()}</div>
         <div>
@@ -1439,18 +1390,19 @@ function buildKamSection() {
 }
 
 function showKamDetail(kam) {
-  const clientes = CLIENTES.filter(c=>c.kam===kam&&c.estado==="Activo").sort((a,b)=>a.healthScore-b.healthScore);
-  const avg = (clientes.reduce((s,c)=>s+c.healthScore*100,0)/clientes.length).toFixed(1);
+  const clientes = ACTIVOS.filter(c => c.kam === kam).sort((a,b) => a.healthScore - b.healthScore);
+  const avg = (clientes.reduce((s,c) => s+c.healthScore*100, 0) / clientes.length).toFixed(1);
+  const kamEsc = kam.replace(/'/g, "\\'");
   document.getElementById('kam-detail').innerHTML = `
-    <div class="table-card">
+    <div class="table-card" style="margin-top:16px;">
       <div class="table-header">
         <div class="table-header-title">Cartera de ${kam} — Health Score promedio: ${avg}%</div>
-        <button class="btn-ia" onclick="openIaPanel('Analiza la cartera completa del KAM ${kam}: tiene ${clientes.length} clientes activos con health score promedio de ${avg}%. Genera recomendaciones priorizadas por cliente y un plan de acción semanal.')">🤖 Análisis IA completo</button>
+        <button class="btn-ia" onclick="openIaPanel('Analiza la cartera del KAM ${kamEsc}: ${clientes.length} clientes activos, health score promedio ${avg}%. Genera recomendaciones priorizadas y un plan semanal de acción.')">🤖 Análisis completo</button>
       </div>
       <div class="table-scroll">
         <table>
           <thead><tr><th>Cliente</th><th>País</th><th>Health</th><th>Semáforo</th><th>ROI</th><th>Acción</th></tr></thead>
-          <tbody>${clientes.map(c=>`
+          <tbody>${clientes.map(c => `
             <tr>
               <td><strong>${c.empresa}</strong></td>
               <td>${c.pais}</td>
@@ -1466,219 +1418,198 @@ function showKamDetail(kam) {
 }
 
 /* ══════════════════════════════════════════
-   GRAFICOS DETALLADOS
+   GRÁFICOS DETALLADOS
 ══════════════════════════════════════════ */
-function initCharts(){
-  const paises=[...new Set(ACTIVOS.map(c=>c.pais))];
-  const colors=['#FA345E','#667eea','#f59e0b','#10b981','#06b6d4'];
+function initCharts() {
+  const paises = [...new Set(ACTIVOS.map(c => c.pais))];
+  const colors = ['#FA345E','#667eea','#f59e0b','#10b981','#06b6d4'];
 
-  const byPais=(field)=>paises.map(p=>{
-    const cs=ACTIVOS.filter(c=>c.pais===p);
-    return cs.length?(cs.reduce((s,c)=>s+c[field],0)/cs.length*100).toFixed(1):0;
+  const byPais = field => paises.map(p => {
+    const cs = ACTIVOS.filter(c => c.pais === p);
+    return cs.length ? (cs.reduce((s,c) => s+c[field], 0) / cs.length * 100).toFixed(1) : 0;
   });
 
-  ['cAdopPais','cAdherPais','cPerfPais'].forEach((id,i)=>{
-    const fields=['adopcion','adherencia','performance'];
-    new Chart(document.getElementById(id),{
+  ['cAdopPais','cAdherPais','cPerfPais'].forEach((id, i) => {
+    new Chart(document.getElementById(id), {
       type:'bar',
-      data:{labels:paises,datasets:[{data:byPais(fields[i]),backgroundColor:colors,borderRadius:6}]},
-      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
-        scales:{x:{ticks:{font:{family:'Montserrat',size:10}}},
-          y:{ticks:{callback:v=>v+'%',font:{family:'Montserrat',size:10}},max:100}}}
+      data:{labels:paises, datasets:[{data:byPais(['adopcion','adherencia','performance'][i]), backgroundColor:colors, borderRadius:6}]},
+      options:{responsive:true, maintainAspectRatio:false,
+        plugins:{legend:{display:false}},
+        scales:{
+          x:{ticks:{font:{family:'Montserrat',size:10}}},
+          y:{ticks:{callback:v=>v+'%', font:{family:'Montserrat',size:10}}, max:100}
+        }}
     });
   });
 
-  // ROI
-  const roiPos=ACTIVOS.filter(c=>c.roi>0).length;
-  const roiNeg=ACTIVOS.filter(c=>c.roi<0).length;
-  const roiCero=ACTIVOS.filter(c=>c.roi===0).length;
-  new Chart(document.getElementById('cROI'),{
+  const roiPos = ACTIVOS.filter(c=>c.roi>0).length;
+  const roiNeg = ACTIVOS.filter(c=>c.roi<0).length;
+  const roiCero = ACTIVOS.filter(c=>c.roi===0).length;
+  new Chart(document.getElementById('cROI'), {
     type:'pie',
     data:{labels:['ROI Positivo','ROI Negativo','ROI Neutro'],
-      datasets:[{data:[roiPos,roiNeg,roiCero],backgroundColor:['#065F46','#FA345E','#9CA3AF'],borderWidth:0}]},
-    options:{responsive:true,maintainAspectRatio:false,
-      plugins:{legend:{position:'bottom',labels:{font:{family:'Montserrat',size:12}}}}}
+      datasets:[{data:[roiPos,roiNeg,roiCero], backgroundColor:['#065F46','#FA345E','#9CA3AF'], borderWidth:0}]},
+    options:{responsive:true, maintainAspectRatio:false,
+      plugins:{legend:{position:'bottom', labels:{font:{family:'Montserrat',size:12}}}}}
   });
 
-  // Segmento
-  const segs={};
-  ACTIVOS.forEach(c=>{const s=c.segmento||'N/A';segs[s]=(segs[s]||0)+1;});
-  new Chart(document.getElementById('cSegmento'),{
+  const segs = {};
+  ACTIVOS.forEach(c => { const s=c.segmento||'N/A'; segs[s]=(segs[s]||0)+1; });
+  new Chart(document.getElementById('cSegmento'), {
     type:'bar',
-    data:{labels:Object.keys(segs),datasets:[{data:Object.values(segs),backgroundColor:'#667eea',borderRadius:6}]},
-    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
-      scales:{x:{ticks:{font:{family:'Montserrat',size:12}}},
-        y:{ticks:{font:{family:'Montserrat',size:11}}}}}
+    data:{labels:Object.keys(segs), datasets:[{data:Object.values(segs), backgroundColor:'#667eea', borderRadius:6}]},
+    options:{responsive:true, maintainAspectRatio:false,
+      plugins:{legend:{display:false}},
+      scales:{x:{ticks:{font:{family:'Montserrat',size:12}}}, y:{ticks:{font:{family:'Montserrat',size:11}}}}}
   });
 
-  // Health score por cliente
-  const sorted=ACTIVOS.filter(c=>c.healthScore>0).sort((a,b)=>b.healthScore-a.healthScore).slice(0,20);
-  new Chart(document.getElementById('cHealthBar'),{
+  const sorted = ACTIVOS.filter(c=>c.healthScore>0).sort((a,b)=>b.healthScore-a.healthScore).slice(0,20);
+  new Chart(document.getElementById('cHealthBar'), {
     type:'bar',
     data:{
-      labels:sorted.map(c=>c.empresa.slice(0,16)),
-      datasets:[{data:sorted.map(c=>+(c.healthScore*100).toFixed(1)),
-        backgroundColor:sorted.map(c=>c.semaforo==="🟢"?"#065F46":c.semaforo==="🟠"?"#B45309":"#FA345E"),
+      labels: sorted.map(c => c.empresa.slice(0,16)),
+      datasets:[{data: sorted.map(c => +(c.healthScore*100).toFixed(1)),
+        backgroundColor: sorted.map(c => c.semaforo==="🟢"?"#065F46":c.semaforo==="🟠"?"#B45309":"#FA345E"),
         borderRadius:5}]
     },
-    options:{responsive:true,maintainAspectRatio:false,
+    options:{responsive:true, maintainAspectRatio:false,
       plugins:{legend:{display:false}},
       scales:{
-        x:{ticks:{font:{family:'Montserrat',size:10},maxRotation:40}},
-        y:{ticks:{callback:v=>v+'%',font:{family:'Montserrat',size:11}},max:50}
+        x:{ticks:{font:{family:'Montserrat',size:10}, maxRotation:40}},
+        y:{ticks:{callback:v=>v+'%', font:{family:'Montserrat',size:11}}, max:50}
       }}
   });
 }
 
 /* ══════════════════════════════════════════
-   IA PANEL
+   IA — CONTEXTO
 ══════════════════════════════════════════ */
 function buildContext() {
   const activos = ACTIVOS;
-  const verdes=activos.filter(c=>c.semaforo==="🟢").length;
-  const rojos=activos.filter(c=>c.semaforo==="🔴").length;
-  const amarillos=activos.filter(c=>c.semaforo==="🟠").length;
-  const avgHealth=(activos.reduce((s,c)=>s+c.healthScore*100,0)/activos.length).toFixed(1);
-  const criticos=activos.filter(c=>c.semaforo==="🔴").map(c=>`${c.empresa}(${c.pais},KAM:${c.kam.split(' ')[0]},HS:${(c.healthScore*100).toFixed(0)}%,ROI:${c.roi.toFixed(1)})`).join('; ');
-  const saludables=activos.filter(c=>c.semaforo==="🟢").map(c=>c.empresa).join(', ');
+  const verdes = activos.filter(c=>c.semaforo==="🟢").length;
+  const rojos = activos.filter(c=>c.semaforo==="🔴").length;
+  const amarillos = activos.filter(c=>c.semaforo==="🟠").length;
+  const avgHealth = (activos.reduce((s,c)=>s+c.healthScore*100,0)/activos.length).toFixed(1);
 
-  return `Eres Apprecio IA Health, un asistente especializado en Customer Success para la plataforma SaaS de Reward & Recognition Apprecio. Analiza los datos reales de la cartera y genera recomendaciones accionables.
+  return `Eres Apprecio IA Health, asistente de Customer Success para la plataforma SaaS Apprecio (Reward & Recognition). Analiza los datos reales y genera recomendaciones accionables.
 
-CONTEXTO DE LA CARTERA (${activos.length} clientes activos):
-- 🟢 Saludables: ${verdes} | 🟠 En desarrollo: ${amarillos} | 🔴 En riesgo: ${rojos}
-- Health Score promedio: ${avgHealth}%
-- Clientes en riesgo crítico: ${criticos}
-- Clientes saludables: ${saludables}
+CARTERA (${activos.length} clientes activos):
+🟢 Saludables: ${verdes} | 🟠 En desarrollo: ${amarillos} | 🔴 En riesgo: ${rojos}
+Health Score promedio: ${avgHealth}%
 
-TODOS LOS CLIENTES ACTIVOS:
-${activos.map(c=>`- ${c.empresa} | ${c.pais} | KAM:${c.kam.split(' ')[0]} | HS:${(c.healthScore*100).toFixed(0)}% | ${c.semaforo} | Adopción:${(c.adopcion*100).toFixed(0)}% | Adherencia:${(c.adherencia*100).toFixed(0)}% | ROI:${c.roi.toFixed(2)} | Driver:${c.driver}`).join('\n')}
+CLIENTES ACTIVOS:
+${activos.map(c=>`- ${c.empresa} | ${c.pais} | KAM:${c.kam.split(' ')[0]} | HS:${(c.healthScore*100).toFixed(0)}% | ${c.semaforo} | Adop:${(c.adopcion*100).toFixed(0)}% | Adh:${(c.adherencia*100).toFixed(0)}% | ROI:${c.roi.toFixed(2)} | Driver:${c.driver}`).join('\n')}
 
-INSTRUCCIONES:
-- Responde en español, tono profesional pero cercano
-- Sé específico con nombres de clientes y KAMs
-- Para clientes en riesgo, sugiere acciones concretas según su driver principal
-- Usa emojis para mejorar legibilidad (✅, ⚠️, 🚨, 💡, etc.)
-- Máximo 400 palabras por respuesta
-- Si generas un plan, organízalo por prioridad (alta/media/baja)`;
+INSTRUCCIONES: Responde en español, tono profesional. Sé específico con nombres. Para clientes en riesgo sugiere acciones concretas. Usa emojis para legibilidad. Máximo 400 palabras.`;
 }
 
+/* ══════════════════════════════════════════
+   IA — PANEL LATERAL
+══════════════════════════════════════════ */
 function openIaPanel(pregunta) {
   document.getElementById('ia-panel').classList.add('open');
   document.getElementById('ia-overlay').classList.add('open');
-  if(pregunta) {
-    document.getElementById('ia-input').value=pregunta;
-    setTimeout(()=>sendIaMessage(),200);
+  if (pregunta) {
+    document.getElementById('ia-input').value = pregunta;
+    setTimeout(() => sendIaMessage(), 200);
   }
 }
 
-function openIaPanelFull(pregunta){openIaPanel(pregunta);}
+function openIaPanelFull(pregunta) { openIaPanel(pregunta); }
 
-function closeIaPanel(){
+function closeIaPanel() {
   document.getElementById('ia-panel').classList.remove('open');
   document.getElementById('ia-overlay').classList.remove('open');
 }
 
-function sendQuick(q){
-  document.getElementById('ia-input').value=q;
+function sendQuick(q) {
+  document.getElementById('ia-input').value = q;
   sendIaMessage();
 }
 
-function iaKeydown(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendIaMessage();}}
+function iaKeydown(e) {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendIaMessage(); }
+}
 
-async function sendIaMessage(){
-  const input=document.getElementById('ia-input');
-  const q=input.value.trim();
-  if(!q) return;
-  input.value='';
+async function sendIaMessage() {
+  const input = document.getElementById('ia-input');
+  const q = input.value.trim();
+  if (!q) return;
+  input.value = '';
 
-  const msgs=document.getElementById('ia-messages');
-  msgs.innerHTML+=`<div class="msg msg-user">${q}</div>`;
-  msgs.innerHTML+=`<div class="msg msg-ai loading" id="ai-typing">⏳ Analizando cartera...</div>`;
-  msgs.scrollTop=msgs.scrollHeight;
+  const msgs = document.getElementById('ia-messages');
+  msgs.innerHTML += `<div class="msg msg-user">${q}</div>`;
+  msgs.innerHTML += `<div class="msg msg-ai loading" id="ai-typing">⏳ Consultando Ollama...</div>`;
+  msgs.scrollTop = msgs.scrollHeight;
 
   try {
-    const res=await fetch(N8N_WEBHOOK,{
+    const res = await fetch(N8N_WEBHOOK, {
       method:"POST",
       headers:{"Content-Type":"application/json"},
-      body:JSON.stringify({pregunta:q, contexto:buildContext()})
+      body: JSON.stringify({pregunta: q, contexto: buildContext()})
     });
-    const data=await res.json();
-    const text=data.respuesta||"No pude procesar la consulta.";
+    const data = await res.json();
+    const text = data.respuesta || "No pude procesar la consulta.";
     document.getElementById('ai-typing').remove();
-    msgs.innerHTML+=`<div class="msg msg-ai">${text.replace(/\n/g,'<br>')}</div>`;
-    msgs.scrollTop=msgs.scrollHeight;
-  } catch(e){
+    msgs.innerHTML += `<div class="msg msg-ai">${text.replace(/\n/g,'<br>')}</div>`;
+    msgs.scrollTop = msgs.scrollHeight;
+  } catch(e) {
     document.getElementById('ai-typing').remove();
-    msgs.innerHTML+=`<div class="msg msg-ai">❌ Error al conectar con la IA. Intenta nuevamente.</div>`;
+    msgs.innerHTML += `<div class="msg msg-ai">❌ No se pudo conectar con n8n. Verifica que el workflow esté activo.</div>`;
   }
 }
 
-async function sendFromSection(){
-  const q=document.getElementById('ia-section-input').value.trim();
-  if(!q) return;
-  const result=document.getElementById('ia-section-result');
-  const content=document.getElementById('ia-section-content');
-  result.style.display='block';
-  content.innerHTML='<div class="spinner"></div> Analizando...';
+async function sendFromSection() {
+  const q = document.getElementById('ia-section-input').value.trim();
+  if (!q) return;
+  const result = document.getElementById('ia-section-result');
+  const content = document.getElementById('ia-section-content');
+  result.style.display = 'block';
+  content.innerHTML = '<div class="spinner"></div> Consultando Ollama...';
   try {
-    const res=await fetch(N8N_WEBHOOK,{
+    const res = await fetch(N8N_WEBHOOK, {
       method:"POST",
       headers:{"Content-Type":"application/json"},
-      body:JSON.stringify({pregunta:q, contexto:buildContext()})
+      body: JSON.stringify({pregunta: q, contexto: buildContext()})
     });
-    const data=await res.json();
-    const text=data.respuesta||"Sin respuesta.";
-    content.innerHTML=text.replace(/\n/g,'<br>');
-  } catch(e){
-    content.innerHTML='❌ Error al conectar. Reintenta.';
+    const data = await res.json();
+    content.innerHTML = (data.respuesta || "Sin respuesta.").replace(/\n/g,'<br>');
+  } catch(e) {
+    content.innerHTML = '❌ No se pudo conectar con n8n. Verifica que el workflow esté activo.';
   }
 }
 
 /* ══════════════════════════════════════════
    NOTIFICACIONES IA
 ══════════════════════════════════════════ */
-async function genNotif(id){
-  const c=CLIENTES.find(x=>x.id===id);
-  if(!c) return;
-  currentNotifCliente=c;
-  document.getElementById('notif-empresa-name').textContent=`${c.empresa} — KAM: ${c.kam}`;
-  document.getElementById('notif-content').value='⏳ Generando mensaje con IA...';
+async function genNotif(id) {
+  const c = CLIENTES.find(x => x.id === id);
+  if (!c) return;
+  document.getElementById('notif-empresa-name').textContent = `${c.empresa} — KAM: ${c.kam}`;
+  document.getElementById('notif-content').value = '⏳ Generando mensaje con Ollama...';
   document.getElementById('notif-modal').classList.add('open');
 
-  const prompt=`Redacta un mensaje de notificación para el KAM ${c.kam} sobre el cliente ${c.empresa} (${c.pais}).
+  const prompt = `Redacta un mensaje de notificación para el KAM ${c.kam} sobre el cliente ${c.empresa} (${c.pais}).
+Datos: Health Score ${(c.healthScore*100).toFixed(0)}%, semáforo ${c.semaforo}, adopción ${(c.adopcion*100).toFixed(0)}%, adherencia ${(c.adherencia*100).toFixed(0)}%, ROI ${c.roi.toFixed(2)}, driver: ${c.driver}.
+${c.desc}
+El mensaje debe: resumir el estado actual (2-3 líneas), proponer 3 acciones concretas según el driver, indicar urgencia, tono Customer Success. Máximo 200 palabras.`;
 
-Datos del cliente:
-- Health Score: ${(c.healthScore*100).toFixed(0)}%
-- Semáforo: ${c.semaforo}
-- Adopción: ${(c.adopcion*100).toFixed(0)}%
-- Adherencia: ${(c.adherencia*100).toFixed(0)}%
-- Performance: ${(c.performance*100).toFixed(0)}%
-- ROI Apprecio: ${c.roi.toFixed(2)}
-- Driver principal: ${c.driver}
-- Descripción: ${c.desc}
-
-El mensaje debe:
-1. Ser profesional pero directo
-2. Resumir el estado actual en 2-3 líneas
-3. Proponer 3 acciones concretas y específicas según el driver
-4. Incluir un indicador de urgencia
-5. Tener un tono de Customer Success, no de alarma excesiva
-Máximo 200 palabras.`;
-
-  try{
-    const res=await fetch(N8N_WEBHOOK,{
-      method:"POST",headers:{"Content-Type":"application/json"},
-      body:JSON.stringify({pregunta:prompt, contexto:buildContext()})
+  try {
+    const res = await fetch(N8N_WEBHOOK, {
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body: JSON.stringify({pregunta: prompt, contexto: buildContext()})
     });
-    const data=await res.json();
-    document.getElementById('notif-content').value=data.respuesta||"Error generando mensaje.";
-  } catch(e){
-    document.getElementById('notif-content').value="❌ Error al generar. Reintenta.";
+    const data = await res.json();
+    document.getElementById('notif-content').value = data.respuesta || "Error generando mensaje.";
+  } catch(e) {
+    document.getElementById('notif-content').value = "❌ Error al conectar con n8n.";
   }
 }
 
-function closeNotif(){document.getElementById('notif-modal').classList.remove('open');}
-function copyNotif(){
+function closeNotif() { document.getElementById('notif-modal').classList.remove('open'); }
+
+function copyNotif() {
   navigator.clipboard.writeText(document.getElementById('notif-content').value);
   showToast("Mensaje copiado ✓");
 }
@@ -1686,13 +1617,15 @@ function copyNotif(){
 /* ══════════════════════════════════════════
    EXPORT CSV
 ══════════════════════════════════════════ */
-function exportCSV(){
-  const headers=["ID","Empresa","KAM","País","Estado","Segmento","Usuarios","Adopción","Adherencia","Performance","Health Score","Semáforo","ROI"];
-  const rows=filteredData.map(c=>[c.id,c.empresa,c.kam,c.pais,c.estado,c.segmento,c.usuarios,(c.adopcion*100).toFixed(1),(c.adherencia*100).toFixed(1),(c.performance*100).toFixed(1),(c.healthScore*100).toFixed(1),c.semaforo,c.roi.toFixed(2)]);
-  const csv=[headers,...rows].map(r=>r.join(',')).join('\n');
-  const a=document.createElement('a');
-  a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(csv);
-  a.download='salud_clientes_apprecio.csv';
+function exportCSV() {
+  const headers = ["ID","Empresa","KAM","País","Estado","Segmento","Usuarios","Adopción","Adherencia","Performance","Health Score","Semáforo","ROI"];
+  const rows = filteredData.map(c => [c.id,c.empresa,c.kam,c.pais,c.estado,c.segmento,c.usuarios,
+    (c.adopcion*100).toFixed(1),(c.adherencia*100).toFixed(1),(c.performance*100).toFixed(1),
+    (c.healthScore*100).toFixed(1),c.semaforo,c.roi.toFixed(2)]);
+  const csv = [headers, ...rows].map(r => r.join(',')).join('\n');
+  const a = document.createElement('a');
+  a.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv);
+  a.download = 'salud_clientes_apprecio.csv';
   a.click();
   showToast("CSV exportado ✓");
 }
@@ -1700,10 +1633,11 @@ function exportCSV(){
 /* ══════════════════════════════════════════
    UTILS
 ══════════════════════════════════════════ */
-function showToast(msg){
-  const t=document.getElementById('toast');
-  t.textContent=msg;t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'),2200);
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2200);
 }
 </script>
 </body>
