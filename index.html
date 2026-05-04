@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Salud del Cliente — Apprecio</title>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+<script src="https://accounts.google.com/gsi/client" async defer></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <style>
 :root {
@@ -650,7 +651,7 @@ tr:last-child td{border-bottom:none;}
 <div id="toast"></div>
 
 <!-- Google Sign-In SDK (se carga al final para no bloquear render) -->
-<script src="https://accounts.google.com/gsi/client" async defer></script>
+
 
 <script>
 /* ════════════════════════════════════════
@@ -720,31 +721,50 @@ function isSessionValid(loginTs) {
 
 function handleGoogleLogin(response) {
   try {
-    const payload = JSON.parse(atob(response.credential.split('.')[1]));
-    const email = payload.email || '';
-    const domain = email.split('@')[1] || '';
+    // Decode JWT payload con padding correcto
+    var parts = response.credential.split('.');
+    if (parts.length < 2) throw new Error('Invalid JWT');
+    var b64 = parts[1].replace(/-/g, '+').replace(/_/g, '/');
+    while (b64.length % 4) b64 += '=';
+    var payload = JSON.parse(decodeURIComponent(atob(b64).split('').map(function(c){
+      return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+    }).join('')));
+    
+    var email = payload.email || '';
+    var domain = email.split('@')[1] || '';
+    
     if (!ALLOWED_DOMAINS.includes(domain)) {
       document.getElementById('login-error').style.display = 'block';
       return;
     }
+    
     localStorage.setItem('appr_user', JSON.stringify({
       name: payload.name, email: payload.email, picture: payload.picture,
       loginTs: Date.now()
     }));
     bootApp(payload);
   } catch(e) {
-    document.getElementById('login-error').style.display = 'block';
+    console.error('Login error:', e);
+    // Intentar mostrar el error pero no bloquear
+    var errEl = document.getElementById('login-error');
+    if (errEl) errEl.style.display = 'block';
   }
 }
 
 function bootApp(user) {
-  document.getElementById('login-screen').style.display = 'none';
-  document.getElementById('app-screen').style.display = 'block';
-  document.getElementById('fab-ia').style.display = 'flex';
-  document.getElementById('user-name').textContent = (user.name || '').split(' ')[0];
-  document.getElementById('user-avatar').src = user.picture || '';
-  document.getElementById('ia-ctx-count').textContent = ACTIVOS.length;
-  buildDashboard();
+  try {
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('app-screen').style.display = 'block';
+    document.getElementById('fab-ia').style.display = 'flex';
+    document.getElementById('user-name').textContent = (user.name || '').split(' ')[0];
+    var avatar = document.getElementById('user-avatar');
+    if (avatar && user.picture) avatar.src = user.picture;
+    var ctxCount = document.getElementById('ia-ctx-count');
+    if (ctxCount) ctxCount.textContent = ACTIVOS.length;
+    buildDashboard();
+  } catch(e) {
+    console.error('bootApp error:', e);
+  }
 }
 
 function doLogout() {
