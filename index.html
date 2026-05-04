@@ -51,7 +51,7 @@ input,select,textarea{font-family:inherit;}
 }
 
 /* ── APP ── */
-#app-screen{display:none;}
+#app-screen{display:block;} /* LOGIN DESACTIVADO */
 
 /* Topbar */
 #topbar{
@@ -292,6 +292,7 @@ tr:last-child td{border-bottom:none;}
 <body>
 
 <!-- LOGIN -->
+<!-- LOGIN SCREEN DESACTIVADO TEMPORALMENTE
 <div id="login-screen">
   <div class="login-card">
     <img src="https://estudios.apprecio.com/hubfs/logos/Apprecio-logo-rojo.png" alt="Apprecio" class="login-logo"/>
@@ -316,6 +317,8 @@ tr:last-child td{border-bottom:none;}
       <div class="login-footer">Sistema interno · Uso exclusivo Apprecio</div>
     </div>
   </div>
+
+-->
 </div>
 
 <!-- APP -->
@@ -331,11 +334,11 @@ tr:last-child td{border-bottom:none;}
       </div>
     </div>
     <div class="topbar-right">
-      <div id="user-chip">
+      <div id="user-chip" style="display:none;">
         <img id="user-avatar" src="" alt=""/>
         <span id="user-name">—</span>
       </div>
-      <button id="btn-logout" onclick="doLogout()">Cerrar sesión</button>
+      <!-- <button id="btn-logout" onclick="doLogout()">Cerrar sesión</button> -->
     </div>
   </div>
 
@@ -645,7 +648,9 @@ tr:last-child td{border-bottom:none;}
 <div id="toast"></div>
 
 <!-- Google Sign-In SDK (se carga al final para no bloquear render) -->
+<!-- GOOGLE AUTH DESACTIVADO TEMPORALMENTE
 <script src="https://accounts.google.com/gsi/client" async defer></script>
+-->
 
 <script>
 /* ════════════════════════════════════════
@@ -783,6 +788,7 @@ function doLogout() {
 /* ════════════════════════════════════════
    INIT — esperamos que el DOM esté listo
 ════════════════════════════════════════ */
+/* LOGIN DESACTIVADO TEMPORALMENTE — restaurar cuando se solucione COOP
 document.addEventListener('DOMContentLoaded', function() {
   const raw = localStorage.getItem('appr_user');
   if (raw) {
@@ -791,12 +797,19 @@ document.addEventListener('DOMContentLoaded', function() {
       if (isSessionValid(u.loginTs)) {
         bootApp(u); return;
       } else {
-        // Sesión expiró (es lunes nuevo) → forzar relogin
         localStorage.removeItem('appr_user');
       }
     } catch(e) { localStorage.removeItem('appr_user'); }
   }
-  // Sin sesión válida → mostrar login
+});
+*/
+document.addEventListener('DOMContentLoaded', function() {
+  // Acceso directo sin login — temporal hasta resolver COOP
+  document.getElementById('app-screen').style.display = 'block';
+  document.getElementById('fab-ia').style.display = 'flex';
+  var ctxCount = document.getElementById('ia-ctx-count');
+  if (ctxCount) ctxCount.textContent = ACTIVOS.length;
+  buildDashboard();
 });
 
 /* ════════════════════════════════════════
