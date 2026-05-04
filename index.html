@@ -258,6 +258,35 @@ tr:last-child td{border-bottom:none;}
   #main-content{padding:14px;}
   #topbar{padding:0 12px;}
 }
+
+/* ── Chart selector ── */
+.chart-selector{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px;}
+.cs-btn{background:var(--white);border:1px solid var(--gray-200);border-radius:20px;padding:4px 12px;font-size:11px;font-weight:600;color:var(--gray-600);cursor:pointer;transition:all .2s;font-family:inherit;}
+.cs-btn.active{background:var(--red);color:#fff;border-color:var(--red);}
+.cs-btn:hover:not(.active){background:var(--red-light);color:var(--red);border-color:var(--red-mid);}
+
+/* ── Acciones tab ── */
+.acciones-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px;margin-bottom:24px;}
+.accion-card{background:var(--white);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow-sm);border:1px solid var(--gray-200);}
+.accion-card-header{display:flex;align-items:center;gap:10px;margin-bottom:12px;}
+.accion-badge{display:inline-block;border-radius:20px;padding:3px 12px;font-size:11px;font-weight:700;}
+.accion-plazo{font-size:12px;color:var(--gray-400);font-weight:500;margin-left:auto;}
+.accion-title{font-size:13px;font-weight:700;color:var(--gray-800);margin-bottom:6px;}
+.accion-desc{font-size:12px;color:var(--gray-600);line-height:1.6;}
+.accion-driver-label{font-size:10px;font-weight:700;color:var(--gray-400);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;}
+.driver-filter-bar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px;padding:14px 16px;background:var(--white);border-radius:var(--radius);border:1px solid var(--gray-200);box-shadow:var(--shadow-sm);}
+.driver-tag{background:var(--gray-100);border:1px solid var(--gray-200);border-radius:20px;padding:4px 12px;font-size:11px;font-weight:600;color:var(--gray-600);cursor:pointer;transition:all .2s;}
+.driver-tag.active{background:var(--red);color:#fff;border-color:var(--red);}
+.driver-tag:hover:not(.active){background:var(--red-light);color:var(--red);border-color:var(--red-mid);}
+
+/* ── Tabla tiempo ── */
+.tiempo-table{width:100%;border-collapse:collapse;}
+.tiempo-table th{padding:10px 14px;text-align:left;font-size:11px;font-weight:700;color:var(--gray-400);text-transform:uppercase;letter-spacing:.5px;border-bottom:1px solid var(--gray-200);background:var(--gray-50);}
+.tiempo-table td{padding:11px 14px;border-bottom:1px solid var(--gray-100);font-size:13px;}
+.tiempo-table tr:last-child td{border-bottom:none;}
+.tiempo-rango{font-weight:700;color:var(--gray-800);}
+.tiempo-count{font-size:22px;font-weight:800;color:var(--red);}
+
 </style>
 </head>
 <body>
@@ -321,6 +350,7 @@ tr:last-child td{border-bottom:none;}
     <button class="nav-tab" onclick="showTab('kams',this)">👤 Por KAM</button>
     <button class="nav-tab" onclick="showTab('graficos',this)">📈 Gráficos</button>
     <button class="nav-tab" onclick="showTab('ia',this)">🤖 IA Análisis</button>
+    <button class="nav-tab" onclick="showTab('acciones',this)">⚡ Acciones</button>
   </div>
 
   <div id="main-content">
@@ -463,22 +493,52 @@ tr:last-child td{border-bottom:none;}
     <!-- GRAFICOS -->
     <div id="tab-graficos" class="section">
       <div class="section-header">
-        <div><h2>Análisis Visual</h2><p>Métricas detalladas de adopción, adherencia y performance</p></div>
+        <div><h2>Análisis Visual</h2><p>Métricas detalladas — selecciona una opción para ver solo esa variable</p></div>
         <button class="btn-ia" onclick="openIA('Analiza todos los gráficos de la cartera y genera un informe ejecutivo con principales tendencias, oportunidades y riesgos.')">🤖 Interpretar con IA</button>
       </div>
-      <div class="charts-row-3">
-        <div class="chart-card"><div class="chart-title">Adopción por País</div><div class="chart-sub">Promedio %</div><div class="chart-wrap-sm"><canvas id="cAdop"></canvas></div></div>
-        <div class="chart-card"><div class="chart-title">Adherencia por País</div><div class="chart-sub">Promedio %</div><div class="chart-wrap-sm"><canvas id="cAdher"></canvas></div></div>
-        <div class="chart-card"><div class="chart-title">Performance por País</div><div class="chart-sub">Promedio %</div><div class="chart-wrap-sm"><canvas id="cPerf"></canvas></div></div>
+
+      <!-- Métricas por País con selector -->
+      <div class="chart-card" style="margin-bottom:16px;">
+        <div class="chart-title">Métricas por País</div>
+        <div class="chart-sub">Selecciona la métrica a visualizar</div>
+        <div class="chart-selector" id="metrica-selector">
+          <button class="cs-btn active" onclick="switchMetrica('adopcion',this)">Adopción</button>
+          <button class="cs-btn" onclick="switchMetrica('adherencia',this)">Adherencia</button>
+          <button class="cs-btn" onclick="switchMetrica('performance',this)">Performance</button>
+          <button class="cs-btn" onclick="switchMetrica('healthScore',this)">Health Score</button>
+          <button class="cs-btn" onclick="switchMetrica('registro',this)">% Registro</button>
+        </div>
+        <div style="position:relative;height:240px;"><canvas id="cMetricaPais"></canvas></div>
       </div>
+
+      <!-- Logins por País - línea de tiempo -->
+      <div class="chart-card" style="margin-bottom:16px;">
+        <div class="chart-title">Evolución de Logins por País</div>
+        <div class="chart-sub">Promedio de logins M-2 → M-1 → M actual</div>
+        <div style="position:relative;height:260px;"><canvas id="cLoginsPais"></canvas></div>
+      </div>
+
       <div class="charts-row">
         <div class="chart-card"><div class="chart-title">Distribución ROI</div><div class="chart-sub">Rentabilidad de la cartera</div><div class="chart-wrap"><canvas id="cROI"></canvas></div></div>
         <div class="chart-card"><div class="chart-title">Clientes por Segmento</div><div class="chart-sub">Distribución A+, A, B, C</div><div class="chart-wrap"><canvas id="cSeg"></canvas></div></div>
       </div>
-      <div class="chart-card">
+
+      <!-- Health Score por cliente -->
+      <div class="chart-card" style="margin-bottom:16px;">
         <div class="chart-title">Health Score por Cliente (Top 20 activos)</div>
         <div class="chart-sub">Coloreado por semáforo</div>
         <div style="position:relative;height:320px;"><canvas id="cHealthBar"></canvas></div>
+      </div>
+
+      <!-- Tabla tiempo en el programa -->
+      <div class="table-card">
+        <div class="table-header">
+          <div class="table-header-title">⏱ Clientes por Tiempo en el Programa</div>
+          <div class="table-count">Activos + Por lanzar</div>
+        </div>
+        <div style="padding:20px;">
+          <table class="tiempo-table" id="t-tiempo"></table>
+        </div>
       </div>
     </div>
 
@@ -512,6 +572,34 @@ tr:last-child td{border-bottom:none;}
       <div class="chart-card" id="ia-result-card" style="display:none;">
         <div class="chart-title">Resultado del Análisis</div>
         <div id="ia-result-body" style="margin-top:12px;font-size:13px;line-height:1.8;"></div>
+      </div>
+    </div>
+
+    <!-- ACCIONES -->
+    <div id="tab-acciones" class="section">
+      <div class="section-header">
+        <div><h2>⚡ Acciones por Driver</h2><p>Acciones recomendadas según el driver y salud del cliente — input para el KAM</p></div>
+        <button class="btn-ia" onclick="openIA('Basándote en los drivers de los clientes en riesgo, genera un plan de acciones priorizado por KAM para esta semana.')">🤖 Plan IA</button>
+      </div>
+
+      <!-- Filtro por driver -->
+      <div class="driver-filter-bar" id="driver-filter-bar">
+        <span style="font-size:11px;font-weight:700;color:var(--gray-400);text-transform:uppercase;align-self:center;">Driver:</span>
+      </div>
+
+      <div class="acciones-grid" id="acciones-grid"></div>
+
+      <!-- Clientes por driver -->
+      <div class="table-card">
+        <div class="table-header">
+          <div class="table-header-title" id="acciones-clientes-title">Clientes con este driver</div>
+        </div>
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th>Cliente</th><th>KAM</th><th>País</th><th>Health</th><th>Semáforo</th><th>ROI</th><th>Acción</th></tr></thead>
+            <tbody id="tb-acciones-clientes"></tbody>
+          </table>
+        </div>
       </div>
     </div>
 
@@ -686,24 +774,25 @@ document.addEventListener('DOMContentLoaded', function() {
 /* ════════════════════════════════════════
    NAVEGACIÓN DE PESTAÑAS
 ════════════════════════════════════════ */
+var accionesBuilt = false;
+
 function showTab(name, btn) {
-  // Ocultar todas las secciones
   document.querySelectorAll('.section').forEach(function(s) {
     s.classList.remove('active');
   });
-  // Desactivar todos los tabs
   document.querySelectorAll('.nav-tab').forEach(function(t) {
     t.classList.remove('active');
   });
-  // Mostrar sección seleccionada
   var sec = document.getElementById('tab-' + name);
   if (sec) sec.classList.add('active');
-  // Activar tab
   if (btn) btn.classList.add('active');
-  // Cargar gráficos detallados solo al entrar a esa pestaña
   if (name === 'graficos' && !chartsBuilt) {
     chartsBuilt = true;
     buildDetailCharts();
+  }
+  if (name === 'acciones' && !accionesBuilt) {
+    accionesBuilt = true;
+    buildAccionesTab();
   }
 }
 
@@ -1011,27 +1100,92 @@ function showKamDetail(kam) {
 /* ════════════════════════════════════════
    GRÁFICOS DETALLADOS
 ════════════════════════════════════════ */
+// Instancia del gráfico de métrica por país (para poder destruirlo y recrearlo)
+var chartMetricaPais = null;
+
 function buildDetailCharts() {
-  var paises=[...new Set(ACTIVOS.map(function(c){return c.pais;}))];
-  var colors=['#FA345E','#667eea','#f59e0b','#10b981','#06b6d4'];
+  buildMetricaPais('adopcion');
+  buildLoginsPais();
+  buildROIChart();
+  buildSegChart();
+  buildHealthBarChart();
+  buildTiempoTable();
+}
 
-  function byPais(field) {
-    return paises.map(function(p){
-      var cs=ACTIVOS.filter(function(c){return c.pais===p;});
-      return cs.length?(cs.reduce(function(s,c){return s+c[field];},0)/cs.length*100).toFixed(1):0;
-    });
-  }
+// ── Métrica por País con selector ──────────────────────────────────
+var METRICA_MAP = {
+  adopcion:    {label:'Adopción %',   field:'adopcion',    factor:100, max:100},
+  adherencia:  {label:'Adherencia %', field:'adherencia',  factor:100, max:100},
+  performance: {label:'Performance %',field:'performance', factor:100, max:100},
+  healthScore: {label:'Health Score %',field:'healthScore',factor:100, max:50},
+  registro:    {label:'% Registro',   field:'adopcion',    factor:100, max:100},
+};
 
-  [['cAdop','adopcion'],['cAdher','adherencia'],['cPerf','performance']].forEach(function(pair){
-    new Chart(document.getElementById(pair[0]),{
-      type:'bar',
-      data:{labels:paises,datasets:[{data:byPais(pair[1]),backgroundColor:colors,borderRadius:6}]},
-      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
-        scales:{x:{ticks:{font:{family:'Montserrat',size:10}}},
-          y:{ticks:{callback:function(v){return v+'%';},font:{family:'Montserrat',size:10}},max:100}}}
-    });
+function switchMetrica(key, btn) {
+  document.querySelectorAll('#metrica-selector .cs-btn').forEach(function(b){b.classList.remove('active');});
+  btn.classList.add('active');
+  buildMetricaPais(key);
+}
+
+function buildMetricaPais(key) {
+  var cfg = METRICA_MAP[key] || METRICA_MAP.adopcion;
+  var paises = [...new Set(ACTIVOS.map(function(c){return c.pais;}))];
+  var colors = ['#FA345E','#667eea','#f59e0b','#10b981','#06b6d4'];
+  var vals = paises.map(function(p){
+    var cs = ACTIVOS.filter(function(c){return c.pais===p;});
+    return cs.length ? (cs.reduce(function(s,c){return s+c[cfg.field];},0)/cs.length*cfg.factor).toFixed(1) : 0;
   });
+  if (chartMetricaPais) chartMetricaPais.destroy();
+  chartMetricaPais = new Chart(document.getElementById('cMetricaPais'),{
+    type:'bar',
+    data:{labels:paises,datasets:[{label:cfg.label,data:vals,backgroundColor:colors,borderRadius:8}]},
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},
+        tooltip:{callbacks:{label:function(ctx){return ctx.parsed.y+'%';}}}},
+      scales:{
+        x:{ticks:{font:{family:'Montserrat',size:12}}},
+        y:{max:cfg.max,ticks:{callback:function(v){return v+'%';},font:{family:'Montserrat',size:11}}}
+      }}
+  });
+}
 
+// ── Logins por País - línea de tiempo ──────────────────────────────
+function buildLoginsPais() {
+  var paises = [...new Set(ACTIVOS.map(function(c){return c.pais;}))];
+  var paleta = ['#FA345E','#667eea','#f59e0b','#10b981','#06b6d4'];
+  var datasets = paises.map(function(p, i){
+    var cs = ACTIVOS.filter(function(c){return c.pais===p;});
+    function avg(field){
+      var vals = cs.filter(function(c){return c[field]!==null&&c[field]!==undefined;}).map(function(c){return c[field];});
+      return vals.length ? (vals.reduce(function(a,b){return a+b;},0)/vals.length).toFixed(2) : null;
+    }
+    return {
+      label: p,
+      data: [avg('loginsM2'), avg('loginsM1'), avg('loginsM')],
+      borderColor: paleta[i % paleta.length],
+      backgroundColor: paleta[i % paleta.length]+'22',
+      tension: 0.3,
+      pointRadius: 5,
+      pointHoverRadius: 7,
+      fill: false,
+      borderWidth: 2.5
+    };
+  });
+  new Chart(document.getElementById('cLoginsPais'),{
+    type:'line',
+    data:{labels:['Mes -2','Mes -1','Mes actual'],datasets:datasets},
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{position:'bottom',labels:{font:{family:'Montserrat',size:12},padding:16,usePointStyle:true}}},
+      scales:{
+        x:{ticks:{font:{family:'Montserrat',size:12}}},
+        y:{title:{display:true,text:'Promedio logins',font:{family:'Montserrat',size:11}},
+          ticks:{font:{family:'Montserrat',size:11}},min:0}
+      }}
+  });
+}
+
+// ── ROI ────────────────────────────────────────────────────────────
+function buildROIChart() {
   var rp=ACTIVOS.filter(function(c){return c.roi>0;}).length;
   var rn=ACTIVOS.filter(function(c){return c.roi<0;}).length;
   var rz=ACTIVOS.filter(function(c){return c.roi===0;}).length;
@@ -1042,7 +1196,10 @@ function buildDetailCharts() {
     options:{responsive:true,maintainAspectRatio:false,
       plugins:{legend:{position:'bottom',labels:{font:{family:'Montserrat',size:12}}}}}
   });
+}
 
+// ── Segmentos ──────────────────────────────────────────────────────
+function buildSegChart() {
   var segs={};
   ACTIVOS.forEach(function(c){var s=c.segmento||'N/A';segs[s]=(segs[s]||0)+1;});
   new Chart(document.getElementById('cSeg'),{
@@ -1051,7 +1208,10 @@ function buildDetailCharts() {
     options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
       scales:{x:{ticks:{font:{family:'Montserrat',size:12}}},y:{ticks:{font:{family:'Montserrat',size:11}}}}}
   });
+}
 
+// ── Health Score bar ───────────────────────────────────────────────
+function buildHealthBarChart() {
   var sorted=ACTIVOS.filter(function(c){return c.healthScore>0;})
     .sort(function(a,b){return b.healthScore-a.healthScore;}).slice(0,20);
   new Chart(document.getElementById('cHealthBar'),{
@@ -1059,13 +1219,61 @@ function buildDetailCharts() {
     data:{
       labels:sorted.map(function(c){return c.empresa.slice(0,16);}),
       datasets:[{data:sorted.map(function(c){return +(c.healthScore*100).toFixed(1);}),
-        backgroundColor:sorted.map(function(c){return c.semaforo==="🟢"?"#065F46":c.semaforo==="🟠"?"#B45309":"#FA345E";}),
+        backgroundColor:sorted.map(function(c){return c.semaforo==='🟢'?'#065F46':c.semaforo==='🟠'?'#B45309':'#FA345E';}),
         borderRadius:5}]
     },
     options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
       scales:{x:{ticks:{font:{family:'Montserrat',size:10},maxRotation:40}},
         y:{ticks:{callback:function(v){return v+'%';},font:{family:'Montserrat',size:11}},max:50}}}
   });
+}
+
+// ── Tabla Tiempo en el Programa ────────────────────────────────────
+function buildTiempoTable() {
+  var base = CLIENTES.filter(function(c){return c.estado==='Activo'||c.estado==='Activo por lanzar';});
+
+  function parseAnios(fi) {
+    if (!fi || fi === '—') return null;
+    var match = fi.match(/(\d{4})/);
+    if (!match) return null;
+    var anio = parseInt(match[1]);
+    var diff = 2025 - anio;
+    return diff;
+  }
+
+  var rangos = [
+    {label:'0 – 2 años', min:0, max:2, color:'var(--green)'},
+    {label:'3 – 4 años', min:3, max:4, color:'var(--amber)'},
+    {label:'5 o más años', min:5, max:99, color:'var(--red)'},
+    {label:'Sin fecha', min:-99, max:-1, color:'var(--gray-400)'},
+  ];
+
+  var rows = rangos.map(function(r){
+    var clientes;
+    if (r.min < 0) {
+      clientes = base.filter(function(c){ return parseAnios(c.fechaInicio) === null; });
+    } else {
+      clientes = base.filter(function(c){
+        var a = parseAnios(c.fechaInicio);
+        return a !== null && a >= r.min && a <= r.max;
+      });
+    }
+    var avgHS = clientes.length ? (clientes.reduce(function(s,c){return s+c.healthScore*100;},0)/clientes.length).toFixed(1) : '—';
+    var verdes = clientes.filter(function(c){return c.semaforo==='🟢';}).length;
+    var rojos  = clientes.filter(function(c){return c.semaforo==='🔴';}).length;
+    var ambar  = clientes.filter(function(c){return c.semaforo==='🟠';}).length;
+    return '<tr>'
+      +'<td><span class="tiempo-rango" style="color:'+r.color+'">'+r.label+'</span></td>'
+      +'<td><span class="tiempo-count">'+clientes.length+'</span></td>'
+      +'<td>'+avgHS+(avgHS!=='—'?'%':'')+'</td>'
+      +'<td>🟢 '+verdes+' &nbsp;🟠 '+ambar+' &nbsp;🔴 '+rojos+'</td>'
+      +'<td style="font-size:12px;color:var(--gray-600);">'+clientes.slice(0,4).map(function(c){return c.empresa.split(' ')[0];}).join(', ')+(clientes.length>4?' +'+( clientes.length-4)+' más':'')+'</td>'
+      +'</tr>';
+  });
+
+  document.getElementById('t-tiempo').innerHTML =
+    '<thead><tr><th>Rango</th><th>N° Clientes</th><th>HS Promedio</th><th>Semáforo</th><th>Ejemplos</th></tr></thead>'
+    +'<tbody>'+rows.join('')+'</tbody>';
 }
 
 /* ════════════════════════════════════════
@@ -1111,12 +1319,15 @@ function buildClienteDatos(c) {
     +'\n  Fecha inicio: '+c.fechaInicio+' | Tiempo: '+(c.tiempoProg!=='—'?c.tiempoProg+' meses':'—');
 }
 
-async function callIA(tipo, pregunta, datos, onSuccess, onError) {
+async function callIA(tipo, pregunta, clienteId, onSuccess, onError) {
+  // Los datos los lee n8n directo desde Google Sheets
+  var payload = { tipo: tipo, pregunta: pregunta };
+  if (clienteId) payload.clienteId = clienteId;
   try {
     var res = await fetch(N8N_WEBHOOK, {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({ tipo: tipo, pregunta: pregunta, datos: datos })
+      body: JSON.stringify(payload)
     });
     var data = await res.json();
     onSuccess(data.respuesta || 'Sin respuesta del modelo.');
@@ -1149,8 +1360,7 @@ function openIACliente(id) {
   msgs.innerHTML += '<div class="msg msg-ai" id="ai-loading"><span class="spinner"></span> Analizando ' + c.empresa + '...</div>';
   msgs.scrollTop = msgs.scrollHeight;
   callIA(
-    'cliente', pregunta,
-    { clientes: buildClienteDatos(c) },
+    'cliente', pregunta, c.id,
     function(text) {
       document.getElementById('ai-loading').remove();
       msgs.innerHTML += '<div class="msg msg-ai">' + text.replace(/\n/g,'<br>') + '</div>';
@@ -1186,8 +1396,7 @@ async function sendIA() {
   msgs.innerHTML+='<div class="msg msg-ai" id="ai-loading"><span class="spinner"></span> Consultando Ollama...</div>';
   msgs.scrollTop=msgs.scrollHeight;
   await callIA(
-    'cartera', q,
-    { resumen: buildResumen(), clientes: buildListaClientes() },
+    'cartera', q, null,
     function(text) {
       document.getElementById('ai-loading').remove();
       msgs.innerHTML+='<div class="msg msg-ai">'+text.replace(/\n/g,'<br>')+'</div>';
@@ -1208,8 +1417,7 @@ async function sendFromPage() {
   card.style.display='block';
   body.innerHTML='<span class="spinner"></span> Consultando Ollama...';
   await callIA(
-    'cartera', q,
-    { resumen: buildResumen(), clientes: buildListaClientes() },
+    'cartera', q, null,
     function(text){ body.innerHTML=text.replace(/\n/g,'<br>'); },
     function(){ body.innerHTML='❌ No se pudo conectar con n8n.'; }
   );
@@ -1226,8 +1434,7 @@ async function genNotif(id) {
   document.getElementById('notif-modal').classList.add('open');
   var pregunta='Redacta la notificación semanal para el KAM '+c.kam+' sobre el cliente '+c.empresa+'.';
   await callIA(
-    'notif', pregunta,
-    { clientes: buildClienteDatos(c) },
+    'notif', pregunta, c.id,
     function(text){ document.getElementById('notif-ta').value=text; },
     function(){ document.getElementById('notif-ta').value='❌ Error al conectar con n8n.'; }
   );
@@ -1284,6 +1491,140 @@ function showToast(msg){
   t.textContent=msg; t.classList.add('show');
   setTimeout(function(){t.classList.remove('show');},2200);
 }
+
+/* ════════════════════════════════════════
+   ACCIONES POR DRIVER
+════════════════════════════════════════ */
+
+// Datos de acciones por driver y salud — se actualizará con GIDs reales
+// GID 555420292: acciones por salud | GID 593648111: acciones 14-30-90 días
+// GID 1183417501: drivers
+var ACCIONES_DATA = {
+  'Incrementar Performance Comercial': {
+    color:'#667eea', emoji:'💰',
+    acciones:[
+      {plazo:'14 días', titulo:'Revisar carga de metas', desc:'Verificar que los KPIs del mes estén cargados y sean visibles para todos los usuarios. Validar que las metas sean alcanzables y estén actualizadas.', salud:'rojo'},
+      {plazo:'14 días', titulo:'Activar campaña de activación', desc:'Diseñar una dinámica de corto plazo (concurso o reto) vinculada al principal KPI comercial del cliente para reactivar el uso de la plataforma.', salud:'rojo'},
+      {plazo:'30 días', titulo:'Análisis de cumplimiento', desc:'Revisar el % de cumplimiento individual y total. Identificar a los usuarios que no han cumplido y contactar al administrador con un informe.', salud:'amarillo'},
+      {plazo:'30 días', titulo:'Optimizar notificaciones', desc:'Configurar recordatorios automáticos para usuarios con bajo cumplimiento. Revisar la frecuencia y el mensaje de las notificaciones actuales.', salud:'amarillo'},
+      {plazo:'90 días', titulo:'Evaluación de ROI', desc:'Realizar análisis de retorno de inversión comparando el fee mensual con el incremento en ventas atribuible al programa. Preparar informe para renovación.', salud:'verde'},
+    ]
+  },
+  'Capacitar stakeholders': {
+    color:'#10b981', emoji:'📚',
+    acciones:[
+      {plazo:'14 días', titulo:'Auditoría de entrenamientos activos', desc:'Revisar qué entrenamientos están publicados, cuáles tienen mayor completación y cuáles están pendientes. Identificar gaps de contenido.', salud:'rojo'},
+      {plazo:'14 días', titulo:'Recordatorio masivo de quizzes', desc:'Enviar comunicación a usuarios con entrenamientos pendientes. Coordinar con el administrador para activar recordatorios desde la plataforma.', salud:'rojo'},
+      {plazo:'30 días', titulo:'Revisar % aprobación', desc:'Analizar el porcentaje de aprobados en entrenamientos. Si es bajo, revisar la dificultad del contenido o la comprensión del material.', salud:'amarillo'},
+      {plazo:'90 días', titulo:'Plan de contenido trimestral', desc:'Definir junto al cliente un calendario de entrenamientos para el próximo trimestre, alineado con sus necesidades de capacitación y temporalidad.', salud:'verde'},
+    ]
+  },
+  'Conexión emocional': {
+    color:'#f59e0b', emoji:'❤️',
+    acciones:[
+      {plazo:'14 días', titulo:'Revisar uso de insignias', desc:'Verificar si se están otorgando insignias con regularidad. Si no, plantear una campaña de reconocimiento con motivo específico (aniversario, logro, etc).', salud:'rojo'},
+      {plazo:'30 días', titulo:'Activar campaña cultural', desc:'Diseñar una dinámica de reconocimiento entre pares (peer-to-peer) alineada con los valores de la empresa. Puede ser digitalizada en la plataforma.', salud:'amarillo'},
+      {plazo:'30 días', titulo:'Encuesta de engagement', desc:'Lanzar una encuesta breve para medir el nivel de conexión de los colaboradores con la empresa y el programa. Usar los resultados para definir próximas acciones.', salud:'amarillo'},
+      {plazo:'90 días', titulo:'Revisión de estrategia de engagement', desc:'Analizar métricas de participación en insignias, encuestas y entrenamientos. Proponer un plan de engagement para el siguiente periodo.', salud:'verde'},
+    ]
+  },
+  'Mejorar Productividad': {
+    color:'#06b6d4', emoji:'⚡',
+    acciones:[
+      {plazo:'14 días', titulo:'Diagnóstico de uso operativo', desc:'Revisar qué módulos están siendo utilizados y cuáles no. Identificar procesos manuales que podrían automatizarse con la plataforma.', salud:'rojo'},
+      {plazo:'30 días', titulo:'Taller de adopción con admin', desc:'Coordinar sesión de trabajo con el administrador del programa para revisar el setup actual y proponer mejoras en los flujos de uso.', salud:'amarillo'},
+      {plazo:'90 días', titulo:'Medición de impacto en productividad', desc:'Comparar métricas de eficiencia antes y después de la implementación. Preparar caso de éxito para presentar al cliente.', salud:'verde'},
+    ]
+  },
+  'Aumentar Engagement': {
+    color:'#8b5cf6', emoji:'🚀',
+    acciones:[
+      {plazo:'14 días', titulo:'Revisar participación en módulos', desc:'Analizar qué módulos tienen mayor y menor participación. Identificar barreras de acceso o uso que puedan estar afectando el engagement.', salud:'rojo'},
+      {plazo:'30 días', titulo:'Diseñar campaña de reactivación', desc:'Crear una campaña con mecánica atractiva (retos, rankings, premios) para reactivar usuarios inactivos y aumentar la frecuencia de logins.', salud:'amarillo'},
+      {plazo:'90 días', titulo:'Programa de embajadores', desc:'Identificar a los usuarios más activos y convertirlos en embajadores internos del programa. Darles reconocimiento especial y utilizarlos como promotores.', salud:'verde'},
+    ]
+  },
+};
+
+var driverActivo = null;
+
+function buildAccionesTab() {
+  // Obtener drivers únicos de los clientes activos
+  var drivers = [...new Set(ACTIVOS.map(function(c){
+    // Simplificar el driver para matchear con ACCIONES_DATA
+    var d = c.driver || '';
+    if (d.includes('Performance')) return 'Incrementar Performance Comercial';
+    if (d.includes('Capacitar')) return 'Capacitar stakeholders';
+    if (d.includes('emocional') || d.includes('Engagement')) return d.includes('Engagement') ? 'Aumentar Engagement' : 'Conexión emocional';
+    if (d.includes('Productividad')) return 'Mejorar Productividad';
+    return d;
+  }))].filter(Boolean);
+
+  // Construir filtros
+  var bar = document.getElementById('driver-filter-bar');
+  var btns = '<span style="font-size:11px;font-weight:700;color:var(--gray-400);text-transform:uppercase;align-self:center;">Driver:</span>';
+  btns += '<button class="driver-tag active" onclick="filterDriver(null,this)">Todos</button>';
+  drivers.forEach(function(d){
+    btns += '<button class="driver-tag" onclick="filterDriver(''+d.replace(/'/g,"\'")+ '',this)">'+d.split('(')[0].trim()+'</button>';
+  });
+  bar.innerHTML = btns;
+
+  renderAcciones(null);
+}
+
+function filterDriver(driver, btn) {
+  document.querySelectorAll('.driver-tag').forEach(function(b){b.classList.remove('active');});
+  btn.classList.add('active');
+  driverActivo = driver;
+  renderAcciones(driver);
+}
+
+function renderAcciones(driver) {
+  var grid = document.getElementById('acciones-grid');
+  var tbody = document.getElementById('tb-acciones-clientes');
+  var title = document.getElementById('acciones-clientes-title');
+
+  // Determinar qué acciones mostrar
+  var keysToShow = driver ? [driver] : Object.keys(ACCIONES_DATA);
+  var html = '';
+
+  keysToShow.forEach(function(key){
+    var data = ACCIONES_DATA[key];
+    if (!data) return;
+    var colores = {rojo:'var(--red)', amarillo:'var(--amber)', verde:'var(--green)'};
+    var bgColores = {rojo:'var(--red-light)', amarillo:'var(--amber-light)', verde:'var(--green-light)'};
+
+    data.acciones.forEach(function(a){
+      var col = colores[a.salud] || 'var(--gray-600)';
+      var bg  = bgColores[a.salud] || 'var(--gray-100)';
+      html += '<div class="accion-card">'
+        +'<div class="accion-card-header">'
+        +'<span class="accion-badge" style="background:'+bg+';color:'+col+'">'+data.emoji+' '+key.split('(')[0].trim()+'</span>'
+        +'<span class="accion-plazo" style="background:var(--gray-100);border-radius:20px;padding:3px 10px;font-size:11px;font-weight:600;">⏱ '+a.plazo+'</span>'
+        +'</div>'
+        +'<div class="accion-title">'+a.titulo+'</div>'
+        +'<div class="accion-desc">'+a.desc+'</div>'
+        +'</div>';
+    });
+  });
+
+  grid.innerHTML = html || '<div style="padding:20px;color:var(--gray-400);">No hay acciones definidas para este driver.</div>';
+
+  // Tabla de clientes con ese driver
+  var clientes = driver
+    ? ACTIVOS.filter(function(c){return (c.driver||'').includes(driver.split('(')[0].trim().split(' ')[0]);})
+    : ACTIVOS;
+
+  title.textContent = driver ? 'Clientes con driver: '+driver.split('(')[0].trim()+' ('+clientes.length+')' : 'Todos los clientes activos ('+clientes.length+')';
+
+  tbody.innerHTML = clientes.sort(function(a,b){return a.healthScore-b.healthScore;}).map(function(c){
+    return '<tr><td><strong>'+c.empresa+'</strong></td><td>'+c.kam.split(' ')[0]+'</td><td>'+c.pais+'</td>'
+      +'<td>'+hbar(c.healthScore)+'</td><td>'+semBadge(c.semaforo)+'</td><td>'+roiBadge(c.roi)+'</td>'
+      +'<td><button class="btn-ia" onclick="genNotif('+c.id+')">📧</button> <button class="btn-action" onclick="openIACliente('+c.id+')">🤖</button></td>'
+      +'</tr>';
+  }).join('');
+}
+
 </script>
 </body>
 </html>
