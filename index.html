@@ -202,7 +202,7 @@ tr:last-child td{border-bottom:none;}
 .ia-icon{width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,#667eea,#764ba2);display:flex;align-items:center;justify-content:center;color:#fff;font-size:18px;flex-shrink:0;}
 .ia-head-text h3{font-size:15px;font-weight:700;color:var(--gray-800);}
 .ia-head-text p{font-size:11px;color:var(--gray-400);margin-top:2px;}
-#btn-close-ia{margin-left:auto;background:none;border:none;color:var(--gray-400);font-size:20px;padding:4px;border-radius:6px;cursor:pointer;transition:all .2s;}
+#btn-close-ia{background:none;border:none;color:var(--gray-400);font-size:20px;padding:4px;border-radius:6px;cursor:pointer;transition:all .2s;}
 #btn-close-ia:hover{background:var(--gray-100);color:var(--gray-800);}
 .ia-ctx{padding:8px 16px;background:var(--gray-50);border-bottom:1px solid var(--gray-200);font-size:11px;color:var(--gray-600);}
 .ia-ctx strong{color:var(--red);}
@@ -407,7 +407,27 @@ tr:last-child td{border-bottom:none;}
           <div class="filter-label">Buscar</div>
           <input type="text" class="filter-search" id="f-q" placeholder="Nombre empresa o programa..." oninput="applyFilters()"/>
         </div>
-        <button class="btn-secondary" onclick="resetFilters()">✕</button>
+        <div class="filter-group">
+          <div class="filter-label">Año inicio</div>
+          <select class="filter-select" id="f-anio" onchange="applyFilters()">
+            <option value="">Todos</option>
+            <option>2019</option><option>2020</option><option>2021</option>
+            <option>2022</option><option>2023</option><option>2024</option><option>2025</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <div class="filter-label">Mes inicio</div>
+          <select class="filter-select" id="f-mes" onchange="applyFilters()">
+            <option value="">Todos</option>
+            <option value="Ene">Enero</option><option value="Feb">Febrero</option>
+            <option value="Mar">Marzo</option><option value="Abr">Abril</option>
+            <option value="May">Mayo</option><option value="Jun">Junio</option>
+            <option value="Jul">Julio</option><option value="Ago">Agosto</option>
+            <option value="Sep">Septiembre</option><option value="Oct">Octubre</option>
+            <option value="Nov">Noviembre</option><option value="Dic">Diciembre</option>
+          </select>
+        </div>
+        <button class="btn-secondary" onclick="resetFilters()">✕ Limpiar</button>
       </div>
       <div class="table-card">
         <div class="table-header">
@@ -507,7 +527,8 @@ tr:last-child td{border-bottom:none;}
       <h3>Apprecio IA Health</h3>
       <p>Powered by Ollama · llama3.3</p>
     </div>
-    <button id="btn-close-ia" onclick="closeIA()">✕</button>
+    <button id="btn-clear-ia" onclick="clearChat()" title="Limpiar conversación" style="margin-left:auto;background:none;border:1px solid var(--gray-200);color:var(--gray-400);font-size:11px;font-weight:600;padding:4px 10px;border-radius:6px;cursor:pointer;transition:all .2s;">🗑 Limpiar</button>
+    <button id="btn-close-ia" onclick="closeIA()" style="background:none;border:none;color:var(--gray-400);font-size:20px;padding:4px;border-radius:6px;cursor:pointer;margin-left:6px;transition:all .2s;">✕</button>
   </div>
   <div class="ia-ctx">Analizando <strong id="ia-ctx-count">—</strong> clientes activos en tiempo real</div>
   <div class="ia-msgs" id="ia-msgs"></div>
@@ -594,6 +615,21 @@ let chartsBuilt = false;
 /* ════════════════════════════════════════
    GOOGLE AUTH
 ════════════════════════════════════════ */
+// Devuelve timestamp del último lunes a 00:00:00 local
+function getLastMondayTs() {
+  var now = new Date();
+  var day = now.getDay();
+  var diff = (day === 0) ? 6 : day - 1;
+  var monday = new Date(now);
+  monday.setHours(0,0,0,0);
+  monday.setDate(now.getDate() - diff);
+  return monday.getTime();
+}
+
+function isSessionValid(loginTs) {
+  return loginTs && loginTs > getLastMondayTs();
+}
+
 function handleGoogleLogin(response) {
   try {
     const payload = JSON.parse(atob(response.credential.split('.')[1]));
@@ -603,8 +639,9 @@ function handleGoogleLogin(response) {
       document.getElementById('login-error').style.display = 'block';
       return;
     }
-    sessionStorage.setItem('appr_user', JSON.stringify({
-      name: payload.name, email: payload.email, picture: payload.picture
+    localStorage.setItem('appr_user', JSON.stringify({
+      name: payload.name, email: payload.email, picture: payload.picture,
+      loginTs: Date.now()
     }));
     bootApp(payload);
   } catch(e) {
@@ -623,7 +660,7 @@ function bootApp(user) {
 }
 
 function doLogout() {
-  sessionStorage.removeItem('appr_user');
+  localStorage.removeItem('appr_user');
   location.reload();
 }
 
@@ -631,13 +668,19 @@ function doLogout() {
    INIT — esperamos que el DOM esté listo
 ════════════════════════════════════════ */
 document.addEventListener('DOMContentLoaded', function() {
-  // Verificar sesión guardada
-  const saved = sessionStorage.getItem('appr_user');
-  if (saved) {
-    try { bootApp(JSON.parse(saved)); return; } catch(e) { sessionStorage.removeItem('appr_user'); }
+  const raw = localStorage.getItem('appr_user');
+  if (raw) {
+    try {
+      var u = JSON.parse(raw);
+      if (isSessionValid(u.loginTs)) {
+        bootApp(u); return;
+      } else {
+        // Sesión expiró (es lunes nuevo) → forzar relogin
+        localStorage.removeItem('appr_user');
+      }
+    } catch(e) { localStorage.removeItem('appr_user'); }
   }
-  // Sin sesión → mostrar login
-  // (login-screen ya está visible por defecto con display:flex en CSS)
+  // Sin sesión válida → mostrar login
 });
 
 /* ════════════════════════════════════════
@@ -808,19 +851,25 @@ function applyFilters() {
   var s=document.getElementById('f-sem').value;
   var k=document.getElementById('f-kam').value;
   var q=document.getElementById('f-q').value.toLowerCase();
+  var anio=document.getElementById('f-anio').value;
+  var mes=document.getElementById('f-mes').value;
   filteredData=CLIENTES.filter(function(c){
     if(p && c.pais!==p) return false;
     if(e && c.estado!==e) return false;
     if(s && c.semaforo!==s) return false;
     if(k && c.kam!==k) return false;
     if(q && !c.empresa.toLowerCase().includes(q) && !c.programa.toLowerCase().includes(q)) return false;
+    // Filtro por año de inicio del programa
+    if(anio && !(c.fechaInicio && c.fechaInicio.includes(anio))) return false;
+    // Filtro por mes de inicio del programa
+    if(mes && !(c.fechaInicio && c.fechaInicio.includes(mes))) return false;
     return true;
   });
   currentPage=1; renderTable();
 }
 
 function resetFilters(){
-  ['f-pais','f-estado','f-sem','f-kam'].forEach(function(id){document.getElementById(id).value='';});
+  ['f-pais','f-estado','f-sem','f-kam','f-anio','f-mes'].forEach(function(id){document.getElementById(id).value='';});
   document.getElementById('f-q').value='';
   filteredData=[...CLIENTES]; currentPage=1; renderTable();
 }
@@ -1054,6 +1103,10 @@ function openIA(pregunta) {
 function closeIA() {
   document.getElementById('ia-panel').classList.remove('open');
   document.getElementById('ia-overlay').classList.remove('open');
+}
+
+function clearChat() {
+  document.getElementById('ia-msgs').innerHTML = '';
 }
 
 function sendQuick(q) { document.getElementById('ia-input').value=q; sendIA(); }
