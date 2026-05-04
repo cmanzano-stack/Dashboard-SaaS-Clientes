@@ -827,7 +827,7 @@ function buildUrgentes() {
       +'<td>'+hbar(c.healthScore)+'</td><td>'+semBadge(c.semaforo)+'</td><td>'+roiBadge(c.roi)+'</td>'
       +'<td style="white-space:nowrap;">'
       +'<button class="btn-ia" onclick="genNotif('+c.id+')">📧 Notif.</button> '
-      +'<button class="btn-action" onclick="openIA(\'Analiza '+esc(c.empresa)+' (HS:'+Math.round(c.healthScore*100)+'%, '+c.semaforo+', ROI:'+c.roi.toFixed(2)+') y genera plan para KAM '+esc(c.kam)+'.\')">🤖 IA</button>'
+      +'<button class="btn-action" onclick="openIACliente('+c.id+')">🤖 Análisis</button>'
       +'</td></tr>';
   }).join('');
 }
@@ -944,7 +944,7 @@ function renderTable() {
       +'<div class="expand-actions">'
       +(c.link?'<a href="'+c.link+'" target="_blank" class="btn-action" onclick="event.stopPropagation()" style="text-decoration:none;">🔗 Abrir plataforma</a>':'')
       +' <button class="btn-ia" onclick="event.stopPropagation();genNotif('+c.id+')">📧 Notificar KAM</button>'
-      +' <button class="btn-action" onclick="event.stopPropagation();openIA(\'Análisis detallado de '+esc(c.empresa)+': HS '+Math.round(c.healthScore*100)+'%, '+c.semaforo+', ROI:'+c.roi.toFixed(2)+', driver:'+c.driver+'.\')">🤖 Análisis IA</button>'
+      +' <button class="btn-action" onclick="event.stopPropagation();openIACliente('+c.id+')">🤖 Análisis IA</button>'
       +' <span class="expand-tag">'+c.tipo+'</span>'
       +' <span class="expand-tag">'+c.admin+'</span>'
       +'</div>'
@@ -999,7 +999,7 @@ function showKamDetail(kam) {
   var avg=(lista.reduce(function(s,c){return s+c.healthScore*100;},0)/lista.length).toFixed(1);
   document.getElementById('kam-detail').innerHTML='<div class="table-card" style="margin-top:16px;">'
     +'<div class="table-header"><div class="table-header-title">Cartera de '+kam+' — HS Promedio: '+avg+'%</div>'
-    +'<button class="btn-ia" onclick="openIA(\'Analiza la cartera del KAM '+esc(kam)+': '+lista.length+' clientes, HS promedio '+avg+'%. Plan de acción semanal priorizado.\')">🤖 Análisis completo</button></div>'
+    +'<button class="btn-ia" onclick="openIA(\'Dame un análisis de la cartera del KAM '+esc(kam)+' con '+lista.length+' clientes y health score promedio de '+avg+'%.\')">🤖 Análisis cartera</button></div>'
     +'<div class="table-scroll"><table><thead><tr><th>Cliente</th><th>País</th><th>Health</th><th>Semáforo</th><th>ROI</th><th>Acción</th></tr></thead><tbody>'
     +lista.map(function(c){
       return '<tr><td><strong>'+c.empresa+'</strong></td><td>'+c.pais+'</td><td>'+hbar(c.healthScore)+'</td><td>'+semBadge(c.semaforo)+'</td><td>'+roiBadge(c.roi)+'</td>'
@@ -1071,21 +1071,58 @@ function buildDetailCharts() {
 /* ════════════════════════════════════════
    IA — CONTEXTO
 ════════════════════════════════════════ */
-function buildCtx() {
+/* ════════════════════════════════════════
+   IA — DATOS ESTRUCTURADOS
+════════════════════════════════════════ */
+function buildResumen() {
   var n=ACTIVOS.length;
-  var sv=ACTIVOS.filter(function(c){return c.semaforo==="🟢";}).length;
-  var sr=ACTIVOS.filter(function(c){return c.semaforo==="🔴";}).length;
-  var sa=ACTIVOS.filter(function(c){return c.semaforo==="🟠";}).length;
+  var sv=ACTIVOS.filter(function(c){return c.semaforo==='🟢';}).length;
+  var sr=ACTIVOS.filter(function(c){return c.semaforo==='🔴';}).length;
+  var sa=ACTIVOS.filter(function(c){return c.semaforo==='🟠';}).length;
   var avg=(ACTIVOS.reduce(function(s,c){return s+c.healthScore*100;},0)/n).toFixed(1);
-  return 'Eres Apprecio IA Health, asistente de Customer Success para la plataforma SaaS Apprecio (Reward & Recognition).\n\n'
-    +'CARTERA ('+n+' clientes activos):\n'
-    +'🟢 Saludables: '+sv+' | 🟠 En desarrollo: '+sa+' | 🔴 En riesgo: '+sr+'\n'
-    +'Health Score promedio: '+avg+'%\n\n'
-    +'CLIENTES ACTIVOS:\n'
-    +ACTIVOS.map(function(c){
-      return '- '+c.empresa+' | '+c.pais+' | KAM:'+c.kam.split(' ')[0]+' | HS:'+Math.round(c.healthScore*100)+'% | '+c.semaforo+' | Adop:'+Math.round(c.adopcion*100)+'% | Adh:'+Math.round(c.adherencia*100)+'% | ROI:'+c.roi.toFixed(2)+' | Driver:'+c.driver;
-    }).join('\n')
-    +'\n\nINSTRUCCIONES: Responde en español, tono profesional. Sé específico con nombres. Para clientes en riesgo sugiere acciones concretas. Usa emojis. Máximo 400 palabras.';
+  return 'RESUMEN EJECUTIVO DE CARTERA:\n'
+    +'Total clientes activos: '+n+'\n'
+    +'🟢 Saludables: '+sv+' ('+Math.round(sv/n*100)+'%) | 🟠 En desarrollo: '+sa+' ('+Math.round(sa/n*100)+'%) | 🔴 En riesgo: '+sr+' ('+Math.round(sr/n*100)+'%)\n'
+    +'Health Score promedio: '+avg+'%\n'
+    +'MRR total: $'+Math.round(ACTIVOS.reduce(function(s,c){return s+c.feeMensual;},0)).toLocaleString('es-CL');
+}
+
+function buildListaClientes() {
+  return ACTIVOS.map(function(c){
+    return 'CLIENTE: '+c.empresa
+      +'\n  País: '+c.pais+' | Segmento: '+(c.segmento||'—')+' | KAM: '+c.kam
+      +'\n  Health Score: '+Math.round(c.healthScore*100)+'% | Semáforo: '+c.semaforo
+      +'\n  Adopción: '+Math.round(c.adopcion*100)+'% | Adherencia: '+Math.round(c.adherencia*100)+'% | Performance: '+Math.round(c.performance*100)+'%'
+      +'\n  ROI: '+c.roi.toFixed(2)+'x | Fee mensual: $'+(c.feeMensual>0?Math.round(c.feeMensual).toLocaleString('es-CL'):'—')
+      +'\n  Logins M-2→M-1→M: '+(c.loginsM2!==null?c.loginsM2:'—')+'→'+(c.loginsM1!==null?c.loginsM1:'—')+'→'+(c.loginsM!==null?c.loginsM:'—')
+      +'\n  Driver: '+c.driver+' | Descripción: '+c.desc;
+  }).join('\n\n');
+}
+
+function buildClienteDatos(c) {
+  return 'CLIENTE: '+c.empresa
+    +'\n  País: '+c.pais+' | Segmento: '+(c.segmento||'—')+' | KAM: '+c.kam
+    +'\n  Health Score: '+Math.round(c.healthScore*100)+'% | Semáforo: '+c.semaforo
+    +'\n  Adopción: '+Math.round(c.adopcion*100)+'% | Adherencia: '+Math.round(c.adherencia*100)+'% | Performance: '+Math.round(c.performance*100)+'%'
+    +'\n  ROI: '+c.roi.toFixed(2)+'x | Usuarios: '+(c.usuarios||0)+' | Fee mensual: $'+(c.feeMensual>0?Math.round(c.feeMensual).toLocaleString('es-CL'):'—')
+    +'\n  Logins M-2→M-1→M: '+(c.loginsM2!==null?c.loginsM2:'—')+'→'+(c.loginsM1!==null?c.loginsM1:'—')+'→'+(c.loginsM!==null?c.loginsM:'—')
+    +'\n  Driver: '+c.driver+' | Tipo: '+c.tipo+' | Admin: '+c.admin
+    +'\n  Descripción: '+c.desc
+    +'\n  Fecha inicio: '+c.fechaInicio+' | Tiempo: '+(c.tiempoProg!=='—'?c.tiempoProg+' meses':'—');
+}
+
+async function callIA(tipo, pregunta, datos, onSuccess, onError) {
+  try {
+    var res = await fetch(N8N_WEBHOOK, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({ tipo: tipo, pregunta: pregunta, datos: datos })
+    });
+    var data = await res.json();
+    onSuccess(data.respuesta || 'Sin respuesta del modelo.');
+  } catch(e) {
+    onError();
+  }
 }
 
 /* ════════════════════════════════════════
@@ -1098,6 +1135,32 @@ function openIA(pregunta) {
     document.getElementById('ia-input').value = pregunta;
     setTimeout(sendIA, 200);
   }
+}
+
+// Análisis deep-dive de un cliente individual (tipo=cliente)
+function openIACliente(id) {
+  var c = CLIENTES.find(function(x){return x.id===id;});
+  if(!c) return;
+  document.getElementById('ia-panel').classList.add('open');
+  document.getElementById('ia-overlay').classList.add('open');
+  var msgs = document.getElementById('ia-msgs');
+  var pregunta = 'Realiza un diagnóstico completo del cliente ' + c.empresa + '.';
+  msgs.innerHTML += '<div class="msg msg-user">' + escHTML(pregunta) + '</div>';
+  msgs.innerHTML += '<div class="msg msg-ai" id="ai-loading"><span class="spinner"></span> Analizando ' + c.empresa + '...</div>';
+  msgs.scrollTop = msgs.scrollHeight;
+  callIA(
+    'cliente', pregunta,
+    { clientes: buildClienteDatos(c) },
+    function(text) {
+      document.getElementById('ai-loading').remove();
+      msgs.innerHTML += '<div class="msg msg-ai">' + text.replace(/\n/g,'<br>') + '</div>';
+      msgs.scrollTop = msgs.scrollHeight;
+    },
+    function() {
+      document.getElementById('ai-loading').remove();
+      msgs.innerHTML += '<div class="msg msg-ai">❌ No se pudo conectar con n8n.</div>';
+    }
+  );
 }
 
 function closeIA() {
@@ -1122,17 +1185,19 @@ async function sendIA() {
   msgs.innerHTML+='<div class="msg msg-user">'+escHTML(q)+'</div>';
   msgs.innerHTML+='<div class="msg msg-ai" id="ai-loading"><span class="spinner"></span> Consultando Ollama...</div>';
   msgs.scrollTop=msgs.scrollHeight;
-  try {
-    var res=await fetch(N8N_WEBHOOK,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({pregunta:q,contexto:buildCtx()})});
-    var data=await res.json();
-    var text=data.respuesta||'Sin respuesta del modelo.';
-    document.getElementById('ai-loading').remove();
-    msgs.innerHTML+='<div class="msg msg-ai">'+text.replace(/\n/g,'<br>')+'</div>';
-    msgs.scrollTop=msgs.scrollHeight;
-  } catch(e) {
-    document.getElementById('ai-loading').remove();
-    msgs.innerHTML+='<div class="msg msg-ai">❌ No se pudo conectar con n8n. Verifica que el workflow esté activo en <strong>'+N8N_WEBHOOK+'</strong></div>';
-  }
+  await callIA(
+    'cartera', q,
+    { resumen: buildResumen(), clientes: buildListaClientes() },
+    function(text) {
+      document.getElementById('ai-loading').remove();
+      msgs.innerHTML+='<div class="msg msg-ai">'+text.replace(/\n/g,'<br>')+'</div>';
+      msgs.scrollTop=msgs.scrollHeight;
+    },
+    function() {
+      document.getElementById('ai-loading').remove();
+      msgs.innerHTML+='<div class="msg msg-ai">❌ No se pudo conectar con n8n. Verifica que el workflow esté activo.</div>';
+    }
+  );
 }
 
 async function sendFromPage() {
@@ -1142,13 +1207,12 @@ async function sendFromPage() {
   var body=document.getElementById('ia-result-body');
   card.style.display='block';
   body.innerHTML='<span class="spinner"></span> Consultando Ollama...';
-  try {
-    var res=await fetch(N8N_WEBHOOK,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({pregunta:q,contexto:buildCtx()})});
-    var data=await res.json();
-    body.innerHTML=(data.respuesta||'Sin respuesta.').replace(/\n/g,'<br>');
-  } catch(e) {
-    body.innerHTML='❌ No se pudo conectar con n8n.';
-  }
+  await callIA(
+    'cartera', q,
+    { resumen: buildResumen(), clientes: buildListaClientes() },
+    function(text){ body.innerHTML=text.replace(/\n/g,'<br>'); },
+    function(){ body.innerHTML='❌ No se pudo conectar con n8n.'; }
+  );
 }
 
 /* ════════════════════════════════════════
@@ -1160,17 +1224,13 @@ async function genNotif(id) {
   document.getElementById('notif-sub').textContent=c.empresa+' — KAM: '+c.kam;
   document.getElementById('notif-ta').value='⏳ Generando con Ollama...';
   document.getElementById('notif-modal').classList.add('open');
-  var prompt='Redacta notificación para KAM '+c.kam+' sobre cliente '+c.empresa+' ('+c.pais+').\n'
-    +'Health Score: '+Math.round(c.healthScore*100)+'%, semáforo: '+c.semaforo+', ROI: '+c.roi.toFixed(2)+'.\n'
-    +'Driver: '+c.driver+'. '+c.desc+'\n'
-    +'Incluye: estado actual (2-3 líneas), 3 acciones concretas, nivel de urgencia. Tono CS. Máx 200 palabras.';
-  try {
-    var res=await fetch(N8N_WEBHOOK,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({pregunta:prompt,contexto:buildCtx()})});
-    var data=await res.json();
-    document.getElementById('notif-ta').value=data.respuesta||'Error generando mensaje.';
-  } catch(e) {
-    document.getElementById('notif-ta').value='❌ Error al conectar con n8n.';
-  }
+  var pregunta='Redacta la notificación semanal para el KAM '+c.kam+' sobre el cliente '+c.empresa+'.';
+  await callIA(
+    'notif', pregunta,
+    { clientes: buildClienteDatos(c) },
+    function(text){ document.getElementById('notif-ta').value=text; },
+    function(){ document.getElementById('notif-ta').value='❌ Error al conectar con n8n.'; }
+  );
 }
 
 function closeNotif(){ document.getElementById('notif-modal').classList.remove('open'); }
