@@ -593,22 +593,18 @@ tr:last-child td{border-bottom:none;}
         <div style="position:relative;height:260px;"><canvas id="cLoginsPais"></canvas></div>
       </div>
 
+<div class="chart-card" style="margin-bottom:16px;">
+        <div class="chart-title">Distribución ROI</div>
+        <div class="chart-sub">Rentabilidad de la cartera y detalle de clientes</div>
+        <div style="display:flex; gap:24px; align-items:flex-start; flex-wrap:wrap; margin-top:16px;">
+          <div class="chart-wrap" style="flex:1; min-width:250px;"><canvas id="cROI"></canvas></div>
+          <div id="roi-lists" style="flex:1.5; min-width:300px; max-height:220px; overflow-y:auto; font-size:12px; padding-right:8px;"></div>
+        </div>
+      </div>
+
       <div class="charts-row">
-        <div class="chart-card"><div class="chart-title">Distribución ROI</div><div class="chart-sub">Rentabilidad de la cartera</div><div class="chart-wrap"><canvas id="cROI"></canvas></div></div>
         <div class="chart-card"><div class="chart-title">Clientes por Segmento</div><div class="chart-sub">Distribución A+, A, B, C, S/D</div><div class="chart-wrap"><canvas id="cSeg"></canvas></div></div>
-      </div>
-
-      <div class="chart-card" style="margin-bottom:16px;">
-        <div class="chart-title">% Registro por País</div>
-        <div class="chart-sub">Promedio de adopción/registro por país — clientes activos</div>
-        <div style="position:relative;height:220px;"><canvas id="cRegistro"></canvas></div>
-      </div>
-
-      <div class="chart-card" style="margin-bottom:16px;">
-        <div class="chart-title">$ Impacto vs ROI por Segmento</div>
-        <div class="chart-sub">Fee mensual promedio (barras) vs ROI Apprecio (línea)</div>
-        <div id="impacto-kpis" style="display:flex;gap:24px;margin-bottom:12px;flex-wrap:wrap;"></div>
-        <div style="position:relative;height:280px;"><canvas id="cImpacto"></canvas></div>
+        <div class="chart-card"><div class="chart-title">% Registro por País</div><div class="chart-sub">Promedio de adopción por país</div><div class="chart-wrap"><canvas id="cRegistro"></canvas></div></div>
       </div>
 
       <div class="chart-card" style="margin-bottom:16px;">
@@ -1244,14 +1240,13 @@ function buildDetailCharts() {
   destroyChart('cMetricaPais'); destroyChart('cLoginsPais');
   destroyChart('cROI'); destroyChart('cSeg'); destroyChart('cHealthBar');
   destroyChart('cAdop'); destroyChart('cAdher'); destroyChart('cPerf');
-  destroyChart('cRegistro'); destroyChart('cImpacto');
+  destroyChart('cRegistro');
   buildMetricaPais('adopcion');
   buildLoginsPais();
   buildROIChart();
   buildSegChart();
   buildHealthBarChart();
   buildRegistroPais();
-  buildImpactoSegmento();
   buildTiempoTable();
 }
 
@@ -1334,16 +1329,39 @@ function buildLoginsPais() {
 // ── ROI ────────────────────────────────────────────────────────────
 function buildROIChart() {
   var view=getViewData();
-  var rp=view.filter(function(c){return c.roi>0;}).length;
-  var rn=view.filter(function(c){return c.roi<0;}).length;
-  var rz=view.filter(function(c){return c.roi===0;}).length;
+  var pos = view.filter(function(c){return c.roi>0;});
+  var neg = view.filter(function(c){return c.roi<0 && c.roi!==-1;}); // -1 suele ser sin datos
+  var neu = view.filter(function(c){return c.roi===0;});
+
+  // Dibujar el gráfico circular
+  destroyChart('cROI');
   new Chart(document.getElementById('cROI'),{
     type:'pie',
     data:{labels:['ROI Positivo','ROI Negativo','ROI Neutro'],
-      datasets:[{data:[rp,rn,rz],backgroundColor:['#065F46','#FA345E','#9CA3AF'],borderWidth:0}]},
+      datasets:[{data:[pos.length,neg.length,neu.length],backgroundColor:['#065F46','#FA345E','#9CA3AF'],borderWidth:0}]},
     options:{responsive:true,maintainAspectRatio:false,
       plugins:{legend:{position:'bottom',labels:{font:{family:'Montserrat',size:12}}}}}
   });
+
+  // Generar la lista de clientes al lado
+  var listHtml = '<div style="display:flex;flex-direction:column;gap:16px;">';
+  
+  // Positivos
+  listHtml += '<div><div style="font-size:11px;font-weight:700;color:#065F46;margin-bottom:6px;border-bottom:1px solid var(--gray-200);padding-bottom:4px;">POSITIVO ('+pos.length+')</div>';
+  listHtml += '<div style="color:var(--gray-600);line-height:1.6;">' + (pos.map(function(c){return '<strong>'+c.empresa+'</strong> ('+c.roi.toFixed(2)+'x)';}).join(', ') || 'Ninguno') + '</div></div>';
+
+  // Negativos
+  listHtml += '<div><div style="font-size:11px;font-weight:700;color:#FA345E;margin-bottom:6px;border-bottom:1px solid var(--gray-200);padding-bottom:4px;">NEGATIVO ('+neg.length+')</div>';
+  listHtml += '<div style="color:var(--gray-600);line-height:1.6;">' + (neg.map(function(c){return '<strong>'+c.empresa+'</strong> ('+c.roi.toFixed(2)+'x)';}).join(', ') || 'Ninguno') + '</div></div>';
+
+  // Neutros
+  listHtml += '<div><div style="font-size:11px;font-weight:700;color:#9CA3AF;margin-bottom:6px;border-bottom:1px solid var(--gray-200);padding-bottom:4px;">NEUTRO ('+neu.length+')</div>';
+  listHtml += '<div style="color:var(--gray-600);line-height:1.6;">' + (neu.map(function(c){return '<strong>'+c.empresa+'</strong>';}).join(', ') || 'Ninguno') + '</div></div>';
+
+  listHtml += '</div>';
+
+  var listContainer = document.getElementById('roi-lists');
+  if (listContainer) listContainer.innerHTML = listHtml;
 }
 
 // ── Segmentos ──────────────────────────────────────────────────────
@@ -1404,106 +1422,6 @@ function buildRegistroPais() {
         x:{ticks:{font:{family:'Montserrat',size:12}}},
         y:{max:100,ticks:{callback:function(v){return v+'%';},font:{family:'Montserrat',size:11}}}
       }}
-  });
-}
-
-function buildImpactoSegmento() {
-  destroyChart('cImpacto');
-  var view = getViewData();
-  var SEG_ORDER = ['A+','A','B','C','S/D'];
-  var segData = {};
-  SEG_ORDER.forEach(function(s){ segData[s]={fees:[],roisCliente:[],roisAppr:[]}; });
-  view.forEach(function(c){
-    var s = c.segmento || 'S/D';
-    if (!segData[s]) segData[s]={fees:[],roisCliente:[],roisAppr:[]};
-    if (c.feeMensual > 0) segData[s].fees.push(c.feeMensual);
-    if (c.roi !== -1) segData[s].roisAppr.push(c.roi);
-    // ROI cliente estimado como negativo cuando roi apprecio es negativo
-    segData[s].roisCliente.push(c.roi > 0 ? c.roi * 30 : c.roi * 30);
-  });
-
-  var labels = SEG_ORDER.filter(function(s){ return segData[s] && segData[s].fees.length > 0; });
-  var feeAvg = labels.map(function(s){
-    var f = segData[s].fees;
-    return f.length ? Math.round(f.reduce(function(a,b){return a+b;},0)/f.length) : 0;
-  });
-  var roiApprAvg = labels.map(function(s){
-    var r = segData[s].roisAppr;
-    return r.length ? (r.reduce(function(a,b){return a+b;},0)/r.length).toFixed(2) : 0;
-  });
-  var roiClientePct = labels.map(function(s){
-    var r = segData[s].roisAppr;
-    var avg = r.length ? r.reduce(function(a,b){return a+b;},0)/r.length : 0;
-    // ROI cliente % = (ROI apprecio - 1) * 100 como proxy
-    return ((avg - 1) * 100).toFixed(1);
-  });
-
-  // KPIs del gráfico
-  var allFees = view.filter(function(c){return c.feeMensual>0;}).map(function(c){return c.feeMensual;});
-  var feePromGlobal = allFees.length ? Math.round(allFees.reduce(function(a,b){return a+b;},0)/allFees.length) : 0;
-  var roisAll = view.filter(function(c){return c.roi!==-1;}).map(function(c){return c.roi;});
-  var roiCliProm = roisAll.length ? ((roisAll.reduce(function(a,b){return a+b;},0)/roisAll.length - 1)*100).toFixed(0) : 0;
-  var roiApprProm = roisAll.length ? (roisAll.reduce(function(a,b){return a+b;},0)/roisAll.length).toFixed(1) : 0;
-
-  // Header KPIs
-  var header = document.getElementById('impacto-kpis');
-  if (header) {
-    header.innerHTML = '<div class="imp-kpi"><div class="imp-kpi-val" style="color:var(--red)">$'+feePromGlobal.toLocaleString('es-CL')+'</div><div class="imp-kpi-lbl">IMP$ PROM.</div></div>'
-      +'<div class="imp-kpi"><div class="imp-kpi-val" style="color:var(--amber)">'+roiCliProm+'%</div><div class="imp-kpi-lbl">ROI CLIENTE PROM.</div></div>'
-      +'<div class="imp-kpi"><div class="imp-kpi-val" style="color:var(--green)">'+roiApprProm+'x</div><div class="imp-kpi-lbl">ROI APPRECIO PROM.</div></div>';
-  }
-
-  new Chart(document.getElementById('cImpacto'),{
-    type:'bar',
-    data:{
-      labels: labels,
-      datasets:[
-        {
-          type:'bar',
-          label:'Impacto $ prom.',
-          data: feeAvg,
-          backgroundColor:'#065F46',
-          borderRadius:6,
-          yAxisID:'y'
-        },
-        {
-          type:'line',
-          label:'ROI Cliente %',
-          data: roiClientePct,
-          borderColor:'#667eea',
-          backgroundColor:'#667eea',
-          pointRadius:5,
-          pointHoverRadius:7,
-          tension:0.3,
-          yAxisID:'y2'
-        },
-        {
-          type:'line',
-          label:'ROI Apprecio x',
-          data: roiApprAvg,
-          borderColor:'#FA345E',
-          backgroundColor:'#FA345E',
-          pointRadius:5,
-          pointHoverRadius:7,
-          tension:0.3,
-          yAxisID:'y2'
-        }
-      ]
-    },
-    options:{
-      responsive:true,maintainAspectRatio:false,
-      plugins:{
-        legend:{position:'bottom',labels:{font:{family:'Montserrat',size:11},usePointStyle:true,padding:16}},
-        tooltip:{mode:'index',intersect:false}
-      },
-      scales:{
-        y:{position:'left',title:{display:true,text:'Impacto $',font:{family:'Montserrat',size:11}},
-          ticks:{font:{family:'Montserrat',size:10},callback:function(v){return '$'+v.toLocaleString('es-CL');}}},
-        y2:{position:'right',title:{display:true,text:'ROI %',font:{family:'Montserrat',size:11}},
-          grid:{drawOnChartArea:false},
-          ticks:{font:{family:'Montserrat',size:10},callback:function(v){return v+'%';}}}
-      }
-    }
   });
 }
 
