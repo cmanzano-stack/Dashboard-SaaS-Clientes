@@ -25,11 +25,11 @@ button{cursor:pointer;font-family:inherit;}
 input,select,textarea{font-family:inherit;}
 
 /* ── LOGIN ── */
-#login-screen{
+#login-screen{display:none!important;/*
   display:flex;align-items:center;justify-content:center;
   min-height:100vh;padding:20px;
   background:linear-gradient(135deg,#fff5f7 0%,#fff 50%,#f0fff4 100%);
-}
+  */ }
 .login-card{
   background:var(--white);border-radius:20px;box-shadow:var(--shadow-lg);
   padding:48px 40px 40px;max-width:440px;width:100%;text-align:center;
@@ -51,7 +51,7 @@ input,select,textarea{font-family:inherit;}
 }
 
 /* ── APP ── */
-#app-screen{display:block;} /* LOGIN DESACTIVADO */
+#app-screen{display:block;}
 
 /* Topbar */
 #topbar{
@@ -292,7 +292,6 @@ tr:last-child td{border-bottom:none;}
 <body>
 
 <!-- LOGIN -->
-<!-- LOGIN SCREEN DESACTIVADO TEMPORALMENTE
 <div id="login-screen">
   <div class="login-card">
     <img src="https://estudios.apprecio.com/hubfs/logos/Apprecio-logo-rojo.png" alt="Apprecio" class="login-logo"/>
@@ -305,10 +304,15 @@ tr:last-child td{border-bottom:none;}
            data-callback="handleGoogleLogin"
            data-auto_prompt="false">
       </div>
-      <button onclick="doGoogleLogin()" style="display:flex;align-items:center;gap:10px;background:#fff;border:1px solid #dadce0;border-radius:4px;padding:10px 20px;font-size:14px;font-family:'Montserrat',sans-serif;cursor:pointer;margin:0 auto;color:#3c4043;font-weight:500;box-shadow:0 1px 3px rgba(0,0,0,0.1);">
-        <svg width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg"><path fill="#4285f4" d="M16.51 8H8.98v3h4.3c-.18 1-.74 1.48-1.6 2.04v2.01h2.6a7.8 7.8 0 002.38-5.88c0-.57-.05-.66-.15-1.18z"/><path fill="#34a853" d="M8.98 17c2.16 0 3.97-.72 5.3-1.94l-2.6-2a4.8 4.8 0 01-7.18-2.54H1.83v2.07A8 8 0 008.98 17z"/><path fill="#fbbc05" d="M4.5 10.52a4.8 4.8 0 010-3.04V5.41H1.83a8 8 0 000 7.18l2.67-2.07z"/><path fill="#ea4335" d="M8.98 4.18c1.17 0 2.23.4 3.06 1.2l2.3-2.3A8 8 0 001.83 5.4L4.5 7.49a4.77 4.77 0 014.48-3.3z"/></svg>
-        Iniciar sesión con Google
-      </button>
+      <div class="g_id_signin"
+           data-type="standard"
+           data-size="large"
+           data-theme="outline"
+           data-text="sign_in_with"
+           data-shape="rectangular"
+           data-logo_alignment="left"
+           data-locale="es">
+      </div>
     </div>
     <div id="login-error" class="login-error">
       ⛔ Solo se permite acceso con correos <strong>@apprecio.com</strong> o <strong>@dcanje.com</strong>
@@ -317,8 +321,6 @@ tr:last-child td{border-bottom:none;}
       <div class="login-footer">Sistema interno · Uso exclusivo Apprecio</div>
     </div>
   </div>
-
--->
 </div>
 
 <!-- APP -->
@@ -334,11 +336,11 @@ tr:last-child td{border-bottom:none;}
       </div>
     </div>
     <div class="topbar-right">
-      <div id="user-chip" style="display:none;">
+      <div id="user-chip">
         <img id="user-avatar" src="" alt=""/>
         <span id="user-name">—</span>
       </div>
-      <!-- <button id="btn-logout" onclick="doLogout()">Cerrar sesión</button> -->
+      <button id="btn-logout" onclick="doLogout()">Cerrar sesión</button>
     </div>
   </div>
 
@@ -648,7 +650,7 @@ tr:last-child td{border-bottom:none;}
 <div id="toast"></div>
 
 <!-- Google Sign-In SDK (se carga al final para no bloquear render) -->
-<!-- GOOGLE AUTH DESACTIVADO TEMPORALMENTE
+<!-- Google Auth desactivado temporalmente
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 -->
 
@@ -662,7 +664,7 @@ const ALLOWED_DOMAINS = ["apprecio.com", "dcanje.com"];
 /* ════════════════════════════════════════
    DATOS — todos los campos en línea sin parches
 ════════════════════════════════════════ */
-const CLIENTES = [
+var CLIENTES = [
   {id:755,empresa:"Blue Express",programa:"Blue Express",tipo:"Teams Motivation",admin:"In House",pais:"Chile",estado:"Activo",segmento:"A",usuarios:44,kam:"Camilo Figueroa",fee:1.5,feeMensual:1067.96,driver:"Capacitar stakeholders",adopcion:0.547,adherencia:0.075,performance:0,healthScore:0.186,semaforo:"🟠",roi:0.483,desc:"Blue Express utiliza la plataforma principalmente para carga de Entrenamientos para sus courrier.",link:"https://blueexpress.apprecio.cl/#/login",fechaInicio:"01 Ago 2019",tiempoProg:6,loginsM2:1.61,loginsM1:1.42,loginsM:0},
   {id:44,empresa:"Global Hitss",programa:"Honor Hitss",tipo:"Teams Motivation",admin:"Convenience",pais:"México",estado:"Activo",segmento:"A+",usuarios:4603,kam:"Colombina Trujillo",fee:1.5,feeMensual:1806,driver:"Conexión emocional",adopcion:0.085,adherencia:0,performance:0,healthScore:0.026,semaforo:"🔴",roi:1.508,desc:"Global Hitss usa SSO con Microsoft. Enfocado en engagement con insignias, aniversario laboral y banners.",link:"https://myrewards.globalhitss.com/#/login",fechaInicio:"01 Ago 2019",tiempoProg:6,loginsM2:1.04,loginsM1:1.0,loginsM:0},
   {id:233,empresa:"Autofin",programa:"Autofin",tipo:"Force Manager",admin:"Full Administration",pais:"Chile",estado:"Activo",segmento:"A+",usuarios:0,kam:"Johana Calzada",fee:0,feeMensual:0,driver:"Incrementar Performance Comercial",adopcion:0.313,adherencia:0,performance:0,healthScore:0.094,semaforo:"🔴",roi:-1,desc:"Módulo legal. En proceso de implementación.",link:null,fechaInicio:"—",tiempoProg:"—",loginsM2:null,loginsM1:null,loginsM:null},
@@ -690,7 +692,7 @@ const CLIENTES = [
   {id:297,empresa:"Botero Soto",programa:"Botero Soto",tipo:"Force Manager",admin:"In House",pais:"Colombia",estado:"Activo por lanzar",segmento:"A+",usuarios:0,kam:"Aura Avila",fee:0,feeMensual:0,driver:"Aumentar Engagement",adopcion:0.313,adherencia:0,performance:0,healthScore:0.094,semaforo:"🔴",roi:-1,desc:"Por lanzar.",link:null,fechaInicio:"—",tiempoProg:"—",loginsM2:null,loginsM1:null,loginsM:null},
 ];
 
-const ACTIVOS = CLIENTES.filter(c => c.estado === "Activo");
+var ACTIVOS = CLIENTES.filter(function(c){ return c.estado === "Activo"; });
 
 /* ════════════════════════════════════════
    ESTADO
@@ -718,44 +720,11 @@ function isSessionValid(loginTs) {
   return loginTs && loginTs > getLastMondayTs();
 }
 
-// doGoogleLogin: usa OAuth2 Token flow — sin popup, sin error COOP
-function doGoogleLogin() {
-  if (typeof google === 'undefined') { setTimeout(doGoogleLogin, 500); return; }
-  google.accounts.oauth2.initTokenClient({
-    client_id: '980562257177-puv5d868eouoc68cfm14oub1ljdedf5d.apps.googleusercontent.com',
-    scope: 'email profile openid',
-    callback: function(tokenResponse) {
-      if (!tokenResponse.access_token) return;
-      fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
-        headers: { Authorization: 'Bearer ' + tokenResponse.access_token }
-      })
-      .then(function(r) { return r.json(); })
-      .then(function(info) {
-        var domain = (info.email || '').split('@')[1] || '';
-        if (!ALLOWED_DOMAINS.includes(domain)) {
-          document.getElementById('login-error').style.display = 'block';
-          return;
-        }
-        localStorage.setItem('appr_user', JSON.stringify({
-          name: info.name, email: info.email, picture: info.picture,
-          loginTs: Date.now()
-        }));
-        bootApp(info);
-      });
-    }
-  }).requestAccessToken();
-}
-
-// handleGoogleLogin: callback del botón g_id_signin (si llega a ejecutarse)
 function handleGoogleLogin(response) {
   try {
-    var parts = response.credential.split('.');
-    var b64 = parts[1].replace(/-/g, '+').replace(/_/g, '/');
-    while (b64.length % 4) b64 += '=';
-    var payload = JSON.parse(decodeURIComponent(atob(b64).split('').map(function(c){
-      return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-    }).join('')));
-    var domain = (payload.email || '').split('@')[1] || '';
+    const payload = JSON.parse(atob(response.credential.split('.')[1]));
+    const email = payload.email || '';
+    const domain = email.split('@')[1] || '';
     if (!ALLOWED_DOMAINS.includes(domain)) {
       document.getElementById('login-error').style.display = 'block';
       return;
@@ -766,7 +735,7 @@ function handleGoogleLogin(response) {
     }));
     bootApp(payload);
   } catch(e) {
-    doGoogleLogin(); // fallback al token flow si JWT falla
+    document.getElementById('login-error').style.display = 'block';
   }
 }
 
@@ -788,28 +757,27 @@ function doLogout() {
 /* ════════════════════════════════════════
    INIT — esperamos que el DOM esté listo
 ════════════════════════════════════════ */
-/* LOGIN DESACTIVADO TEMPORALMENTE — restaurar cuando se solucione COOP
+/* LOGIN COMENTADO — reactivar cuando se resuelva Google Auth
 document.addEventListener('DOMContentLoaded', function() {
   const raw = localStorage.getItem('appr_user');
   if (raw) {
     try {
       var u = JSON.parse(raw);
-      if (isSessionValid(u.loginTs)) {
-        bootApp(u); return;
-      } else {
-        localStorage.removeItem('appr_user');
-      }
+      if (isSessionValid(u.loginTs)) { bootApp(u); return; }
+      else { localStorage.removeItem('appr_user'); }
     } catch(e) { localStorage.removeItem('appr_user'); }
   }
 });
 */
+
+// Acceso directo sin login (temporal)
 document.addEventListener('DOMContentLoaded', function() {
-  // Acceso directo sin login — temporal hasta resolver COOP
-  document.getElementById('app-screen').style.display = 'block';
-  document.getElementById('fab-ia').style.display = 'flex';
+  document.getElementById('user-name').textContent = 'KAM';
+  document.getElementById('user-avatar').src = 'https://ui-avatars.com/api/?name=KAM&background=FA345E&color=fff&size=64';
   var ctxCount = document.getElementById('ia-ctx-count');
   if (ctxCount) ctxCount.textContent = ACTIVOS.length;
   buildDashboard();
+  loadSheetData(); // cargar datos del sheet
 });
 
 /* ════════════════════════════════════════
@@ -1787,6 +1755,118 @@ function renderAcciones(driver) {
       +'<td><button class="btn-ia" onclick="genNotif('+c.id+')">📧</button> <button class="btn-action" onclick="openIACliente('+c.id+')">🤖</button></td>'
       +'</tr>';
   }).join('');
+}
+
+
+/* ════════════════════════════════════════
+   GOOGLE SHEETS — LECTURA DIRECTA
+   Reemplaza TU_API_KEY con tu API Key de Google Cloud
+════════════════════════════════════════ */
+const SHEET_ID = '18ApfTwL6T7wGotGDUUha3L08Oyak_NDn8rKztP_mGa8';
+const SHEET_GID = '513724513';
+const SHEETS_API_KEY = 'AIzaSyD7CZc88_HKniwXAe_KtLXU04UXaOLynWI';
+
+async function loadSheetData() {
+  if (SHEETS_API_KEY === 'TU_API_KEY') {
+    console.log('Sheet API Key no configurada — usando datos hardcodeados');
+    return;
+  }
+  try {
+    // Obtener nombre de pestaña por GID
+    var metaUrl = 'https://sheets.googleapis.com/v4/spreadsheets/' + SHEET_ID
+      + '?key=' + SHEETS_API_KEY + '&fields=sheets.properties';
+    var metaRes = await fetch(metaUrl);
+    var meta = await metaRes.json();
+    var sheetName = 'Salud del cliente'; // nombre por defecto
+    if (meta.sheets) {
+      var found = meta.sheets.find(function(s) {
+        return String(s.properties.sheetId) === SHEET_GID;
+      });
+      if (found) sheetName = found.properties.title;
+    }
+
+    // Leer datos
+    var url = 'https://sheets.googleapis.com/v4/spreadsheets/' + SHEET_ID
+      + '/values/' + encodeURIComponent(sheetName)
+      + '?key=' + SHEETS_API_KEY + '&valueRenderOption=FORMATTED_VALUE';
+    var res = await fetch(url);
+    var data = await res.json();
+
+    if (!data.values || data.values.length < 2) {
+      console.warn('Sheet vacío o sin datos');
+      return;
+    }
+
+    var headers = data.values[0];
+    var rows = data.values.slice(1);
+
+    // Mapear columnas del sheet a campos del dashboard
+    function col(row, name) {
+      var idx = headers.indexOf(name);
+      return idx >= 0 ? row[idx] || '' : '';
+    }
+    function pct(val) {
+      if (!val || val === '') return 0;
+      var n = parseFloat(String(val).replace('%','').replace(',','.'));
+      return isNaN(n) ? 0 : n > 1 ? n/100 : n;
+    }
+    function num(val) {
+      var n = parseFloat(String(val).replace(',','.'));
+      return isNaN(n) ? 0 : n;
+    }
+
+    var nuevos = rows.map(function(row) {
+      var sem = col(row, 'Semáforo') || '';
+      var semEmoji = sem.includes('Saludable') ? '🟢'
+                   : sem.includes('desarrollo') ? '🟠' : '🔴';
+      return {
+        id:          num(col(row, 'ID')),
+        empresa:     col(row, 'Empresa'),
+        programa:    col(row, 'Nombre del programa'),
+        tipo:        col(row, 'Tipo SaaS'),
+        admin:       col(row, 'Administración'),
+        pais:        col(row, 'País'),
+        estado:      col(row, 'Estado'),
+        segmento:    col(row, 'Segmento'),
+        usuarios:    num(col(row, 'N° Usuarios')),
+        link:        col(row, 'Link') || null,
+        kam:         col(row, 'KAM'),
+        correoKam:   col(row, 'Correo KAM'),
+        fee:         num(col(row, 'FEE por Usuario')),
+        feeMensual:  num(col(row, 'Fee Mensual')),
+        driver:      col(row, 'Driver'),
+        driverSec:   col(row, 'Driver secundario'),
+        desc:        col(row, 'Descripción'),
+        fechaInicio: col(row, 'Fecha de Inicio'),
+        tiempoProg:  col(row, 'Tiempo del programa'),
+        adopcion:    pct(col(row, 'Adopción')),
+        adherencia:  pct(col(row, 'Adherencia')),
+        performance: pct(col(row, 'Performance')),
+        healthScore: pct(col(row, 'Health Score')),
+        semaforo:    semEmoji,
+        roi:         num(col(row, 'ROI Apprecio')),
+        loginsM2:    col(row, 'Logins promedio Mes -2') !== '' ? num(col(row, 'Logins promedio Mes -2')) : null,
+        loginsM1:    col(row, 'Logins promedio Mes -1') !== '' ? num(col(row, 'Logins promedio Mes -1')) : null,
+        loginsM:     col(row, 'Logins promedio M') !== '' ? num(col(row, 'Logins promedio M')) : null,
+      };
+    }).filter(function(c) { return c.empresa && c.empresa !== ''; });
+
+    if (nuevos.length === 0) { console.warn('No se parsearon clientes'); return; }
+
+    // Actualizar datos globales
+    CLIENTES.length = 0;
+    nuevos.forEach(function(c) { CLIENTES.push(c); });
+    ACTIVOS.length = 0;
+    CLIENTES.filter(function(c){ return c.estado === 'Activo'; })
+            .forEach(function(c){ ACTIVOS.push(c); });
+
+    // Refrescar dashboard con datos nuevos
+    buildDashboard();
+    console.log('✅ Sheet cargado: ' + nuevos.length + ' clientes');
+
+  } catch(e) {
+    console.error('Error cargando sheet:', e);
+  }
 }
 
 </script>
