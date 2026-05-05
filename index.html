@@ -1452,7 +1452,7 @@ async function genNotif(id) {
   document.getElementById('notif-sub').textContent=c.empresa+' — KAM: '+c.kam;
   document.getElementById('notif-ta').value='⏳ Generando con Ollama...';
   document.getElementById('notif-modal').classList.add('open');
-  var pregunta='Redacta la notificación semanal para el KAM '+c.kam+' sobre el cliente '+c.empresa+'.';
+  var pregunta='Redacta la notificación para el KAM '+c.kam+' sobre '+c.empresa+'. El cliente tiene semáforo '+c.semaforo+', tiempo '+(c.tiempoProg||'1-2')+' meses, y driver: "'+c.driver+'". Recomienda las acciones a tomar en base a estos datos.';
   await callIA(
     'notif', pregunta, c.id,
     function(text){ document.getElementById('notif-ta').value=text; },
