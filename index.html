@@ -92,7 +92,10 @@ input,select,textarea{font-family:inherit;}
 .kpi-label{font-size:10px;color:var(--gray-400);font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;}
 .kpi-value{font-size:28px;font-weight:800;line-height:1;}
 .kpi-sub{font-size:11px;color:var(--gray-400);margin-top:6px;}
-.kpi-red .kpi-value{color:var(--red);}.kpi-green .kpi-value{color:var(--green);}.kpi-amber .kpi-value{color:var(--amber);}.kpi-gray .kpi-value{color:var(--gray-600);}
+.kpi-red .kpi-value{color:var(--red);}
+.kpi-green .kpi-value{color:var(--green);}
+.kpi-amber .kpi-value{color:var(--amber);}
+.kpi-gray .kpi-value{color:var(--gray-600);}
 
 /* Charts */
 .charts-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px;}
@@ -289,27 +292,36 @@ tr:last-child td{border-bottom:none;}
 
 <script>
 (function(){
-  // 🔴 INTERRUPTOR DE DESARROLLO 🔴
-  // Cámbialo a false cuando subas el archivo a producción
-  const MODO_DESARROLLO = true; 
-  
-  if(MODO_DESARROLLO) return; // Si es true, ignora toda la seguridad para que puedas trabajar.
-
-  var _a=['cmanzano-stack.github.io', 'localhost', '127.0.0.1']; // Añade aquí tu dominio de pruebas
+  // 1. DOMAIN LOCK
+  var _a=['cmanzano-stack.github.io'];
   var _h=window.location.hostname;
-  if(_h!=='' && _a.indexOf(_h)===-1){
-    document.documentElement.innerHTML='<style>body{background:#0a0a0a;display:flex;align-items:center;justify-content:center;height:100vh;font-family:sans-serif;color:#fff;text-align:center}.lk{padding:2rem}.lt{color:#FA345E;font-size:24px;font-weight:700;margin-bottom:1rem}</style><body><div class="lk"><div style="font-size:50px">🔒</div><div class="lt">Acceso no autorizado</div><div>Este panel es exclusivo de Apprecio.</div><div style="margin-top:1rem;color:#888;font-size:12px">© Apprecio</div></div></body>';
+  if(_h!=='localhost'&&_h!=='127.0.0.1'&&_h!==''&&_a.indexOf(_h)===-1){
+    document.documentElement.innerHTML=[
+      '<style>*{margin:0;padding:0;box-sizing:border-box}body{background:#0a0a0a;display:flex;align-items:center;justify-content:center;height:100vh;font-family:sans-serif}',
+      '.ap-lock{text-align:center;color:#fff;padding:2rem}.ap-lock-icon{font-size:56px;margin-bottom:1rem}',
+      '.ap-lock-title{font-size:20px;font-weight:700;color:#FA345E;margin-bottom:.5rem}',
+      '.ap-lock-sub{font-size:13px;color:#888;margin-top:.5rem}</style>',
+      '<body><div class="ap-lock">',
+      '<div class="ap-lock-icon">&#128274;</div>',
+      '<div class="ap-lock-title">Acceso no autorizado</div>',
+      '<div>Este contenido est\u00e1 protegido.</div>',
+      '<div class="ap-lock-sub">\u00a9 Apprecio \u2014 Todos los derechos reservados</div>',
+      '</div></body>'
+    ].join('');
     return;
   }
-  
+
+  // 2. BLOCK DEVTOOLS SHORTCUTS
   document.addEventListener('keydown',function(e){
-    if(e.key==='F12'||(e.ctrlKey&&e.shiftKey&&(e.key==='I'||e.key==='J'||e.key==='C'))||(e.ctrlKey&&(e.key==='u'||e.key==='s'))){
-      e.preventDefault();return false;
-    }
+    if(e.key==='F12'){e.preventDefault();e.stopPropagation();return false;}
+    if(e.ctrlKey&&e.shiftKey&&(e.key==='I'||e.key==='J'||e.key==='C')){e.preventDefault();return false;}
+    if(e.ctrlKey&&(e.key==='u'||e.key==='s')){e.preventDefault();return false;}
   },true);
-  
+
+  // 3. BLOCK RIGHT CLICK
   document.addEventListener('contextmenu',function(e){e.preventDefault();return false;},true);
-  
+
+  // 4. DEVTOOLS SIZE DETECTION
   var _dt=false;
   setInterval(function(){
     var _w=window.outerWidth-window.innerWidth>160;
@@ -319,41 +331,47 @@ tr:last-child td{border-bottom:none;}
       document.body.style.filter='blur(8px)';
       document.body.style.pointerEvents='none';
       var _d=document.createElement('div');
-      _d.id='_apw';
+      _d.id='_apwarn';
       _d.style.cssText='position:fixed;inset:0;z-index:99999;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.88);';
-      _d.innerHTML='<div style="text-align:center;color:#fff;padding:2rem"><div style="font-size:52px">🔒</div><div style="font-size:18px;font-weight:700;color:#FA345E;margin:.75rem 0">Contenido protegido</div><div style="font-size:13px;color:#aaa">Cierra DevTools para continuar.</div></div>';
+      _d.innerHTML='<div style="text-align:center;color:#fff;padding:2rem"><div style="font-size:52px">&#128274;</div><div style="font-size:18px;font-weight:700;color:#FA345E;margin:.75rem 0">Contenido protegido</div><div style="font-size:13px;color:#aaa">\u00a9 Apprecio \u2014 Cierra las herramientas de desarrollador para continuar.</div></div>';
       document.body.appendChild(_d);
-    } else if(!_w&&!_v&&_dt){
+    }else if(!_w&&!_v&&_dt){
       _dt=false;
       document.body.style.filter='';
       document.body.style.pointerEvents='';
-      var _x=document.getElementById('_apw');
+      var _x=document.getElementById('_apwarn');
       if(_x)_x.remove();
     }
   },1000);
-  
+
+  // 5. WATERMARK (invisible + visible)
   window.addEventListener('load',function(){
     var _wm=document.createElement('div');
-    _wm.style.cssText='position:fixed;bottom:0;right:0;width:1px;height:1px;opacity:0;pointer-events:none;z-index:-1;font-size:1px;color:transparent;';
-    _wm.textContent='© Apprecio 2025';
+    _wm.setAttribute('data-owner','apprecio-cmanzano');
+    _wm.setAttribute('data-domain','cmanzano-stack.github.io');
+    _wm.style.cssText='position:fixed;bottom:0;right:0;width:1px;height:1px;opacity:0;pointer-events:none;z-index:-1;font-size:1px;color:transparent;user-select:none;';
+    _wm.textContent='\u00a9 Apprecio 2025 \u2022 cmanzano-stack.github.io \u2022 Producto protegido. Prohibida la copia o redistribuci\u00f3n sin autorizaci\u00f3n expresa.';
     document.body.appendChild(_wm);
     var _f=document.createElement('div');
     _f.style.cssText='position:fixed;bottom:8px;left:50%;transform:translateX(-50%);font-size:10px;color:rgba(250,52,94,0.22);font-family:Montserrat,sans-serif;font-weight:600;pointer-events:none;user-select:none;letter-spacing:.06em;z-index:1;white-space:nowrap;';
-    _f.textContent='© Apprecio • cmanzano-stack.github.io';
+    _f.textContent='\u00a9 Apprecio \u2022 cmanzano-stack.github.io';
     document.body.appendChild(_f);
   });
-  
+
+  // 6. BLOCK BULK COPY
   document.addEventListener('copy',function(e){
     var _s=window.getSelection().toString();
     if(_s.length>200){
-      e.clipboardData.setData('text/plain','© Contenido protegido • Apprecio');
+      e.clipboardData.setData('text/plain','\u00a9 Contenido protegido \u2022 Apprecio \u2022 cmanzano-stack.github.io');
       e.preventDefault();
     }
   });
-  
+
+  // 7. BLOCK PRINT
   window.addEventListener('beforeprint',function(e){e.preventDefault();window.stop();});
   var _pmq=window.matchMedia('print');
   if(_pmq)_pmq.addListener(function(mq){if(mq.matches){document.body.style.display='none';setTimeout(function(){document.body.style.display='';},100);}});
+
 })();
 </script>
 <div id="login-screen">
@@ -699,16 +717,11 @@ tr:last-child td{border-bottom:none;}
 /* ════════════════════════════════════════
    CONFIG
 ════════════════════════════════════════ */
-// Keys ofuscadas
-const _0xW = ["https://n8n.openip.cl", "/webhook/ia-salud-cliente"].join('');
-const _0xS1 = ['18ApfTwL6T7wGotGDUU','ha3L08Oyak_NDn8rKztP_mGa8'].join('');
-const _0xK1 = ['AIzaSyD7CZc88_H','KniwXAe_KtLXU04UXaOLynWI'].join('');
-
-const N8N_WEBHOOK = _0xW;
+const N8N_WEBHOOK = "https://n8n.openip.cl/webhook/ia-salud-cliente";
 const ALLOWED_DOMAINS = ["apprecio.com", "dcanje.com"];
 
 /* ════════════════════════════════════════
-   DATOS
+   DATOS — todos los campos en línea sin parches
 ════════════════════════════════════════ */
 var CLIENTES = [
   {id:755,empresa:"Blue Express",programa:"Blue Express",tipo:"Teams Motivation",admin:"In House",pais:"Chile",estado:"Activo",segmento:"A",usuarios:44,kam:"Camilo Figueroa",fee:1.5,feeMensual:1067.96,driver:"Capacitar stakeholders",adopcion:0.547,adherencia:0.075,performance:0,healthScore:0.186,semaforo:"🟠",roi:0.483,desc:"Blue Express utiliza la plataforma principalmente para carga de Entrenamientos para sus courrier.",link:"https://blueexpress.apprecio.cl/#/login",fechaInicio:"01 Ago 2019",tiempoProg:6,loginsM2:1.61,loginsM1:1.42,loginsM:0},
@@ -751,6 +764,7 @@ let chartsBuilt = false;
 /* ════════════════════════════════════════
    GOOGLE AUTH
 ════════════════════════════════════════ */
+// Devuelve timestamp del último lunes a 00:00:00 local
 function getLastMondayTs() {
   var now = new Date();
   var day = now.getDay();
@@ -800,15 +814,29 @@ function doLogout() {
 }
 
 /* ════════════════════════════════════════
-   INIT 
+   INIT — esperamos que el DOM esté listo
 ════════════════════════════════════════ */
+/* LOGIN COMENTADO — reactivar cuando se resuelva Google Auth
+document.addEventListener('DOMContentLoaded', function() {
+  const raw = localStorage.getItem('appr_user');
+  if (raw) {
+    try {
+      var u = JSON.parse(raw);
+      if (isSessionValid(u.loginTs)) { bootApp(u); return; }
+      else { localStorage.removeItem('appr_user'); }
+    } catch(e) { localStorage.removeItem('appr_user'); }
+  }
+});
+*/
+
+// Acceso directo sin login (temporal)
 document.addEventListener('DOMContentLoaded', function() {
   document.getElementById('user-name').textContent = 'KAM';
   document.getElementById('user-avatar').src = 'https://ui-avatars.com/api/?name=KAM&background=FA345E&color=fff&size=64';
   var ctxCount = document.getElementById('ia-ctx-count');
   if (ctxCount) ctxCount.textContent = ACTIVOS.length;
   buildDashboard();
-  loadSheetData(); 
+  loadSheetData(); // cargar datos del sheet
 });
 
 /* ════════════════════════════════════════
@@ -848,6 +876,9 @@ function buildDashboard() {
   buildKamFilter();
 }
 
+/* ════════════════════════════════════════
+   KPIs
+════════════════════════════════════════ */
 function buildKPIs() {
   var n = ACTIVOS.length;
   var verde = ACTIVOS.filter(function(c){return c.semaforo==="🟢";}).length;
@@ -874,6 +905,9 @@ function buildKPIs() {
 function pct(a,b){ return b>0 ? Math.round(a/b*100)+'%' : '0%'; }
 function fmt(n){ return Math.round(n).toLocaleString('es-CL'); }
 
+/* ════════════════════════════════════════
+   RESUMEN CHARTS
+════════════════════════════════════════ */
 function destroyChart(id) {
   var existing = Chart.getChart(id);
   if (existing) existing.destroy();
@@ -943,6 +977,9 @@ function buildResumenCharts() {
   });
 }
 
+/* ════════════════════════════════════════
+   URGENTES
+════════════════════════════════════════ */
 function buildUrgentes() {
   var lista = ACTIVOS
     .filter(function(c){return c.semaforo==="🔴"||c.healthScore<0.15;})
@@ -959,6 +996,9 @@ function buildUrgentes() {
   }).join('');
 }
 
+/* ════════════════════════════════════════
+   TABLA CLIENTES CON EXPAND
+════════════════════════════════════════ */
 function buildKamFilter() {
   var kams=[...new Set(CLIENTES.map(function(c){return c.kam;}))].sort();
   var sel=document.getElementById('f-kam');
@@ -983,7 +1023,9 @@ function applyFilters() {
     if(s && c.semaforo!==s) return false;
     if(k && c.kam!==k) return false;
     if(q && !c.empresa.toLowerCase().includes(q) && !c.programa.toLowerCase().includes(q)) return false;
+    // Filtro por año de inicio del programa
     if(anio && !(c.fechaInicio && c.fechaInicio.includes(anio))) return false;
+    // Filtro por mes de inicio del programa
     if(mes && !(c.fechaInicio && c.fechaInicio.includes(mes))) return false;
     return true;
   });
@@ -1075,6 +1117,7 @@ function renderTable() {
     return mainRow+expPanel;
   }).join('');
 
+  // Paginación
   var btns=document.getElementById('pg-btns');
   btns.innerHTML='';
   function mkBtn(label,page,dis,act){
@@ -1089,6 +1132,9 @@ function renderTable() {
   mkBtn('›',currentPage+1,currentPage===pages,false);
 }
 
+/* ════════════════════════════════════════
+   KAM CARDS
+════════════════════════════════════════ */
 function buildKamCards() {
   var km={};
   ACTIVOS.forEach(function(c){
@@ -1126,6 +1172,10 @@ function showKamDetail(kam) {
     +'</tbody></table></div></div>';
 }
 
+/* ════════════════════════════════════════
+   GRÁFICOS DETALLADOS
+════════════════════════════════════════ */
+// Instancia del gráfico de métrica por país (para poder destruirlo y recrearlo)
 var chartMetricaPais = null;
 
 function buildDetailCharts() {
@@ -1140,6 +1190,7 @@ function buildDetailCharts() {
   buildTiempoTable();
 }
 
+// ── Métrica por País con selector ──────────────────────────────────
 var METRICA_MAP = {
   adopcion:    {label:'Adopción %',   field:'adopcion',    factor:100, max:100},
   adherencia:  {label:'Adherencia %', field:'adherencia',  factor:100, max:100},
@@ -1177,6 +1228,7 @@ function buildMetricaPais(key) {
   });
 }
 
+// ── Logins por País - línea de tiempo ──────────────────────────────
 function buildLoginsPais() {
   var paises = [...new Set(ACTIVOS.map(function(c){return c.pais;}))];
   var paleta = ['#FA345E','#667eea','#f59e0b','#10b981','#06b6d4'];
@@ -1211,6 +1263,7 @@ function buildLoginsPais() {
   });
 }
 
+// ── ROI ────────────────────────────────────────────────────────────
 function buildROIChart() {
   var rp=ACTIVOS.filter(function(c){return c.roi>0;}).length;
   var rn=ACTIVOS.filter(function(c){return c.roi<0;}).length;
@@ -1224,6 +1277,7 @@ function buildROIChart() {
   });
 }
 
+// ── Segmentos ──────────────────────────────────────────────────────
 function buildSegChart() {
   var segs={};
   ACTIVOS.forEach(function(c){var s=c.segmento||'N/A';segs[s]=(segs[s]||0)+1;});
@@ -1235,6 +1289,7 @@ function buildSegChart() {
   });
 }
 
+// ── Health Score bar ───────────────────────────────────────────────
 function buildHealthBarChart() {
   var sorted=ACTIVOS.filter(function(c){return c.healthScore>0;})
     .sort(function(a,b){return b.healthScore-a.healthScore;}).slice(0,20);
@@ -1252,6 +1307,7 @@ function buildHealthBarChart() {
   });
 }
 
+// ── Tabla Tiempo en el Programa ────────────────────────────────────
 function buildTiempoTable() {
   var base = CLIENTES.filter(function(c){return c.estado==='Activo'||c.estado==='Activo por lanzar';});
 
@@ -1299,6 +1355,12 @@ function buildTiempoTable() {
     +'<tbody>'+rows.join('')+'</tbody>';
 }
 
+/* ════════════════════════════════════════
+   IA — CONTEXTO
+════════════════════════════════════════ */
+/* ════════════════════════════════════════
+   IA — DATOS ESTRUCTURADOS
+════════════════════════════════════════ */
 function buildResumen() {
   var n=ACTIVOS.length;
   var sv=ACTIVOS.filter(function(c){return c.semaforo==='🟢';}).length;
@@ -1337,6 +1399,7 @@ function buildClienteDatos(c) {
 }
 
 async function callIA(tipo, pregunta, clienteId, onSuccess, onError) {
+  // Los datos los lee n8n directo desde Google Sheets
   var payload = { tipo: tipo, pregunta: pregunta };
   if (clienteId) payload.clienteId = clienteId;
   try {
@@ -1352,6 +1415,9 @@ async function callIA(tipo, pregunta, clienteId, onSuccess, onError) {
   }
 }
 
+/* ════════════════════════════════════════
+   IA — PANEL LATERAL
+════════════════════════════════════════ */
 function openIA(pregunta) {
   document.getElementById('ia-panel').classList.add('open');
   document.getElementById('ia-overlay').classList.add('open');
@@ -1361,6 +1427,7 @@ function openIA(pregunta) {
   }
 }
 
+// Análisis deep-dive de un cliente individual (tipo=cliente)
 function openIACliente(id) {
   var c = CLIENTES.find(function(x){return x.id===id;});
   if(!c) return;
@@ -1390,8 +1457,12 @@ function closeIA() {
   document.getElementById('ia-overlay').classList.remove('open');
 }
 
-function clearChat() { document.getElementById('ia-msgs').innerHTML = ''; }
+function clearChat() {
+  document.getElementById('ia-msgs').innerHTML = '';
+}
+
 function sendQuick(q) { document.getElementById('ia-input').value=q; sendIA(); }
+
 function iaKey(e) { if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendIA();} }
 
 async function sendIA() {
@@ -1431,6 +1502,9 @@ async function sendFromPage() {
   );
 }
 
+/* ════════════════════════════════════════
+   NOTIFICACIONES
+════════════════════════════════════════ */
 async function genNotif(id) {
   var c=CLIENTES.find(function(x){return x.id===id;});
   if(!c) return;
@@ -1448,6 +1522,9 @@ async function genNotif(id) {
 function closeNotif(){ document.getElementById('notif-modal').classList.remove('open'); }
 function copyNotif(){ navigator.clipboard.writeText(document.getElementById('notif-ta').value); showToast('Copiado ✓'); }
 
+/* ════════════════════════════════════════
+   EXPORT CSV
+════════════════════════════════════════ */
 function exportCSV() {
   var h=['ID','Empresa','KAM','País','Estado','Segmento','Usuarios','Adopción%','Adherencia%','Performance%','HealthScore%','Semáforo','ROI'];
   var rows=filteredData.map(function(c){return [c.id,c.empresa,c.kam,c.pais,c.estado,c.segmento,c.usuarios,Math.round(c.adopcion*100),Math.round(c.adherencia*100),Math.round(c.performance*100),Math.round(c.healthScore*100),c.semaforo,c.roi.toFixed(2)];});
@@ -1458,34 +1535,49 @@ function exportCSV() {
   showToast('CSV exportado ✓');
 }
 
+/* ════════════════════════════════════════
+   HELPERS UI
+════════════════════════════════════════ */
 function hbar(val) {
   var p=Math.min(val*100,100);
   var col=p>=35?"#065F46":p>=15?"#B45309":"#FA345E";
   return '<div class="hbar"><div class="hbar-bg"><div class="hbar-fill" style="width:'+p.toFixed(0)+'%;background:'+col+';"></div></div><span class="hbar-val" style="color:'+col+'">'+p.toFixed(0)+'%</span></div>';
 }
+
 function semBadge(s){
   if(s==="🟢") return '<span class="badge badge-green">🟢 Saludable</span>';
   if(s==="🟠") return '<span class="badge badge-amber">🟠 En desarrollo</span>';
   return '<span class="badge badge-red">🔴 En riesgo</span>';
 }
+
 function roiBadge(r){
   if(r===undefined||r===null||r===-1) return '<span style="color:var(--gray-400);font-size:12px;">—</span>';
   var cls=r>0?"badge-green":"badge-red";
   return '<span class="badge '+cls+'">'+(r>0?'+':'')+r.toFixed(2)+'x</span>';
 }
+
 function estadoBadge(e){
   if(e==="Activo") return '<span class="badge badge-green">Activo</span>';
   if(e==="Activo por lanzar") return '<span class="badge badge-amber">Por lanzar</span>';
   return '<span class="badge badge-gray">'+e+'</span>';
 }
+
 function esc(s){ return (s||'').replace(/'/g,"\\'"); }
 function escHTML(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
 function showToast(msg){
   var t=document.getElementById('toast');
   t.textContent=msg; t.classList.add('show');
   setTimeout(function(){t.classList.remove('show');},2200);
 }
 
+/* ════════════════════════════════════════
+   ACCIONES POR DRIVER
+════════════════════════════════════════ */
+
+// Datos de acciones por driver y salud — se actualizará con GIDs reales
+// GID 555420292: acciones por salud | GID 593648111: acciones 14-30-90 días
+// GID 1183417501: drivers
 var ACCIONES_DATA = {
   'Incrementar la Performance Comercial (Ventas)': {
     color:'#FA345E', emoji:'💰',
@@ -1605,6 +1697,7 @@ function getSemaforoKey(sem) {
   if (sem.includes('desarrollo') || sem === '🟠') return 'amarillo';
   return 'rojo';
 }
+
 function getTiempoKey(fechaInicio) {
   if (!fechaInicio || fechaInicio === '—') return '1-2';
   var m = (fechaInicio + '').match(/(\d{4})/);
@@ -1614,6 +1707,7 @@ function getTiempoKey(fechaInicio) {
   if (diff <= 4) return '3-4';
   return '5+';
 }
+
 function matchDriver(clienteDriver, accionKey) {
   var d = (clienteDriver || '').toLowerCase();
   var k = accionKey.toLowerCase();
@@ -1727,6 +1821,14 @@ function renderAcciones(driver) {
   }).join('');
 }
 
+
+/* ════════════════════════════════════════
+   GOOGLE SHEETS — LECTURA DIRECTA
+════════════════════════════════════════ */
+const SHEET_ID = '18ApfTwL6T7wGotGDUUha3L08Oyak_NDn8rKztP_mGa8';
+const SHEET_GID = '513724513';
+const SHEETS_API_KEY = 'AIzaSyD7CZc88_HKniwXAe_KtLXU04UXaOLynWI';
+
 async function loadSheetData() {
   if (SHEETS_API_KEY === 'TU_API_KEY') {
     console.log('Sheet API Key no configurada — usando datos hardcodeados');
@@ -1829,6 +1931,7 @@ async function loadSheetData() {
     console.error('Error cargando sheet:', e);
   }
 }
+
 </script>
 </body>
 </html>
