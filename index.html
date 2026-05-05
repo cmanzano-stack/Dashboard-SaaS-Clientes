@@ -1081,8 +1081,8 @@ function buildKamCards() {
   document.getElementById('kam-grid').innerHTML=Object.entries(km).map(function(e){
     var kam=e[0],d=e[1];
     var ini=kam.split(' ').map(function(w){return w[0]||'';}).join('').slice(0,2).toUpperCase();
-    return '<div class="kam-card" onclick="showKamDetail(\''+esc(kam)+'\')">'
-      +'<div class="kam-card-header"><div class="kam-avatar">'+ini+'</div>'
+    return '<div class="kam-card" onclick="showKamDetail(\'' + esc(kam) + '\')">'+
+      '<div class="kam-card-header"><div class="kam-avatar">'+ini+'</div>'
       +'<div><div class="kam-name">'+kam+'</div><div class="kam-count">'+d.cl.length+' clientes activos</div></div></div>'
       +'<div class="kam-sems">'
       +'<div class="ks ks-g"><div class="ks-val">'+d.v+'</div><div class="ks-lbl">🟢</div></div>'
@@ -1672,7 +1672,8 @@ function buildAccionesTab() {
   btns += '<button class="driver-tag active" onclick="filterDriver(null,this)">Todos</button>';
   driversActivos.forEach(function(d){
     var data = ACCIONES_DATA[d];
-    btns += '<button class="driver-tag" onclick="filterDriver(''+d.replace(/'/g,"\'")+ '',this)">'+(data?data.emoji:'')+ ' '+d.split('(')[0].trim().slice(0,30)+'</button>';
+    var dEsc = d.replace(/'/g, "\'");
+    btns += '<button class="driver-tag" onclick="filterDriver(\'' + dEsc + '\',this)">' + (data ? data.emoji : '') + ' ' + d.split('(')[0].trim().slice(0,30) + '</button>';
   });
   bar.innerHTML = btns;
   renderAcciones(null);
