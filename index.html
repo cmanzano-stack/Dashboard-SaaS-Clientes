@@ -92,10 +92,7 @@ input,select,textarea{font-family:inherit;}
 .kpi-label{font-size:10px;color:var(--gray-400);font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;}
 .kpi-value{font-size:28px;font-weight:800;line-height:1;}
 .kpi-sub{font-size:11px;color:var(--gray-400);margin-top:6px;}
-.kpi-red .kpi-value{color:var(--red);}
-.kpi-green .kpi-value{color:var(--green);}
-.kpi-amber .kpi-value{color:var(--amber);}
-.kpi-gray .kpi-value{color:var(--gray-600);}
+.kpi-red .kpi-value{color:var(--red);}.kpi-green .kpi-value{color:var(--green);}.kpi-amber .kpi-value{color:var(--amber);}.kpi-gray .kpi-value{color:var(--gray-600);}
 
 /* Charts */
 .charts-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px;}
@@ -291,7 +288,73 @@ tr:last-child td{border-bottom:none;}
 <body>
 
 <script>
-(function(){var _a=['cmanzano-stack.github.io'];var _h=window.location.hostname;if(_h!=='localhost'&&_h!=='127.0.0.1'&&_h!==''&&_a.indexOf(_h)===-1){document.documentElement.innerHTML='<style>body{background:#0a0a0a;display:flex;align-items:center;justify-content:center;height:100vh;font-family:sans-serif;color:#fff;text-align:center}.lk{padding:2rem}.lt{color:#FA345E;font-size:24px;font-weight:700;margin-bottom:1rem}</style><body><div class="lk"><div style="font-size:50px">🔒</div><div class="lt">Acceso no autorizado</div><div>Este panel es exclusivo de Apprecio.</div><div style="margin-top:1rem;color:#888;font-size:12px">© Apprecio</div></div></body>';return;}document.addEventListener('keydown',function(e){if(e.key==='F12'||(e.ctrlKey&&e.shiftKey&&(e.key==='I'||e.key==='J'||e.key==='C'))||(e.ctrlKey&&(e.key==='u'||e.key==='s'))){e.preventDefault();return false;}},true);document.addEventListener('contextmenu',function(e){e.preventDefault();return false;},true);var _dt=false;setInterval(function(){var _w=window.outerWidth-window.innerWidth>160;var _v=window.outerHeight-window.innerHeight>160;if((_w||_v)&&!_dt){_dt=true;document.body.style.filter='blur(8px)';document.body.style.pointerEvents='none';var _d=document.createElement('div');_d.id='_apw';_d.style.cssText='position:fixed;inset:0;z-index:99999;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.88);';_d.innerHTML='<div style="text-align:center;color:#fff;padding:2rem"><div style="font-size:52px">🔒</div><div style="font-size:18px;font-weight:700;color:#FA345E;margin:.75rem 0">Contenido protegido</div><div style="font-size:13px;color:#aaa">Cierra DevTools para continuar.</div></div>';document.body.appendChild(_d);}else if(!_w&&!_v&&_dt){_dt=false;document.body.style.filter='';document.body.style.pointerEvents='';var _x=document.getElementById('_apw');if(_x)_x.remove();}},1000);window.addEventListener('load',function(){var _wm=document.createElement('div');_wm.style.cssText='position:fixed;bottom:0;right:0;width:1px;height:1px;opacity:0;pointer-events:none;z-index:-1;font-size:1px;color:transparent;';_wm.textContent='© Apprecio 2025';document.body.appendChild(_wm);var _f=document.createElement('div');_f.style.cssText='position:fixed;bottom:8px;left:50%;transform:translateX(-50%);font-size:10px;color:rgba(250,52,94,0.22);font-family:Montserrat,sans-serif;font-weight:600;pointer-events:none;user-select:none;letter-spacing:.06em;z-index:1;white-space:nowrap;';_f.textContent='© Apprecio • cmanzano-stack.github.io';document.body.appendChild(_f);});document.addEventListener('copy',function(e){var _s=window.getSelection().toString();if(_s.length>200){e.clipboardData.setData('text/plain','© Contenido protegido • Apprecio');e.preventDefault();}});window.addEventListener('beforeprint',function(e){e.preventDefault();window.stop();});var _pmq=window.matchMedia('print');if(_pmq)_pmq.addListener(function(mq){if(mq.matches){document.body.style.display='none';setTimeout(function(){document.body.style.display='';},100);}});})();
+(function(){
+  // 🔴 INTERRUPTOR DE DESARROLLO 🔴
+  // Cámbialo a false cuando subas el archivo a producción
+  const MODO_DESARROLLO = true; 
+  
+  if(MODO_DESARROLLO) return; // Si es true, ignora toda la seguridad para que puedas trabajar.
+
+  var _a=['cmanzano-stack.github.io', 'localhost', '127.0.0.1']; // Añade aquí tu dominio de pruebas
+  var _h=window.location.hostname;
+  if(_h!=='' && _a.indexOf(_h)===-1){
+    document.documentElement.innerHTML='<style>body{background:#0a0a0a;display:flex;align-items:center;justify-content:center;height:100vh;font-family:sans-serif;color:#fff;text-align:center}.lk{padding:2rem}.lt{color:#FA345E;font-size:24px;font-weight:700;margin-bottom:1rem}</style><body><div class="lk"><div style="font-size:50px">🔒</div><div class="lt">Acceso no autorizado</div><div>Este panel es exclusivo de Apprecio.</div><div style="margin-top:1rem;color:#888;font-size:12px">© Apprecio</div></div></body>';
+    return;
+  }
+  
+  document.addEventListener('keydown',function(e){
+    if(e.key==='F12'||(e.ctrlKey&&e.shiftKey&&(e.key==='I'||e.key==='J'||e.key==='C'))||(e.ctrlKey&&(e.key==='u'||e.key==='s'))){
+      e.preventDefault();return false;
+    }
+  },true);
+  
+  document.addEventListener('contextmenu',function(e){e.preventDefault();return false;},true);
+  
+  var _dt=false;
+  setInterval(function(){
+    var _w=window.outerWidth-window.innerWidth>160;
+    var _v=window.outerHeight-window.innerHeight>160;
+    if((_w||_v)&&!_dt){
+      _dt=true;
+      document.body.style.filter='blur(8px)';
+      document.body.style.pointerEvents='none';
+      var _d=document.createElement('div');
+      _d.id='_apw';
+      _d.style.cssText='position:fixed;inset:0;z-index:99999;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.88);';
+      _d.innerHTML='<div style="text-align:center;color:#fff;padding:2rem"><div style="font-size:52px">🔒</div><div style="font-size:18px;font-weight:700;color:#FA345E;margin:.75rem 0">Contenido protegido</div><div style="font-size:13px;color:#aaa">Cierra DevTools para continuar.</div></div>';
+      document.body.appendChild(_d);
+    } else if(!_w&&!_v&&_dt){
+      _dt=false;
+      document.body.style.filter='';
+      document.body.style.pointerEvents='';
+      var _x=document.getElementById('_apw');
+      if(_x)_x.remove();
+    }
+  },1000);
+  
+  window.addEventListener('load',function(){
+    var _wm=document.createElement('div');
+    _wm.style.cssText='position:fixed;bottom:0;right:0;width:1px;height:1px;opacity:0;pointer-events:none;z-index:-1;font-size:1px;color:transparent;';
+    _wm.textContent='© Apprecio 2025';
+    document.body.appendChild(_wm);
+    var _f=document.createElement('div');
+    _f.style.cssText='position:fixed;bottom:8px;left:50%;transform:translateX(-50%);font-size:10px;color:rgba(250,52,94,0.22);font-family:Montserrat,sans-serif;font-weight:600;pointer-events:none;user-select:none;letter-spacing:.06em;z-index:1;white-space:nowrap;';
+    _f.textContent='© Apprecio • cmanzano-stack.github.io';
+    document.body.appendChild(_f);
+  });
+  
+  document.addEventListener('copy',function(e){
+    var _s=window.getSelection().toString();
+    if(_s.length>200){
+      e.clipboardData.setData('text/plain','© Contenido protegido • Apprecio');
+      e.preventDefault();
+    }
+  });
+  
+  window.addEventListener('beforeprint',function(e){e.preventDefault();window.stop();});
+  var _pmq=window.matchMedia('print');
+  if(_pmq)_pmq.addListener(function(mq){if(mq.matches){document.body.style.display='none';setTimeout(function(){document.body.style.display='';},100);}});
+})();
 </script>
 <div id="login-screen">
   <div class="login-card">
@@ -634,9 +697,9 @@ tr:last-child td{border-bottom:none;}
 
 <script>
 /* ════════════════════════════════════════
-   CONFIG PROTEGIDA
+   CONFIG
 ════════════════════════════════════════ */
-// Hemos ocultado las constantes cortando los strings
+// Keys ofuscadas
 const _0xW = ["https://n8n.openip.cl", "/webhook/ia-salud-cliente"].join('');
 const _0xS1 = ['18ApfTwL6T7wGotGDUU','ha3L08Oyak_NDn8rKztP_mGa8'].join('');
 const _0xK1 = ['AIzaSyD7CZc88_H','KniwXAe_KtLXU04UXaOLynWI'].join('');
@@ -644,12 +707,8 @@ const _0xK1 = ['AIzaSyD7CZc88_H','KniwXAe_KtLXU04UXaOLynWI'].join('');
 const N8N_WEBHOOK = _0xW;
 const ALLOWED_DOMAINS = ["apprecio.com", "dcanje.com"];
 
-const SHEET_ID = _0xS1;
-const SHEET_GID = '513724513';
-const SHEETS_API_KEY = _0xK1;
-
 /* ════════════════════════════════════════
-   DATOS — todos los campos en línea sin parches
+   DATOS
 ════════════════════════════════════════ */
 var CLIENTES = [
   {id:755,empresa:"Blue Express",programa:"Blue Express",tipo:"Teams Motivation",admin:"In House",pais:"Chile",estado:"Activo",segmento:"A",usuarios:44,kam:"Camilo Figueroa",fee:1.5,feeMensual:1067.96,driver:"Capacitar stakeholders",adopcion:0.547,adherencia:0.075,performance:0,healthScore:0.186,semaforo:"🟠",roi:0.483,desc:"Blue Express utiliza la plataforma principalmente para carga de Entrenamientos para sus courrier.",link:"https://blueexpress.apprecio.cl/#/login",fechaInicio:"01 Ago 2019",tiempoProg:6,loginsM2:1.61,loginsM1:1.42,loginsM:0},
@@ -741,16 +800,15 @@ function doLogout() {
 }
 
 /* ════════════════════════════════════════
-   INIT — esperamos que el DOM esté listo
+   INIT 
 ════════════════════════════════════════ */
-// Acceso directo sin login (temporal)
 document.addEventListener('DOMContentLoaded', function() {
   document.getElementById('user-name').textContent = 'KAM';
   document.getElementById('user-avatar').src = 'https://ui-avatars.com/api/?name=KAM&background=FA345E&color=fff&size=64';
   var ctxCount = document.getElementById('ia-ctx-count');
   if (ctxCount) ctxCount.textContent = ACTIVOS.length;
   buildDashboard();
-  loadSheetData(); // cargar datos del sheet
+  loadSheetData(); 
 });
 
 /* ════════════════════════════════════════
@@ -790,9 +848,6 @@ function buildDashboard() {
   buildKamFilter();
 }
 
-/* ════════════════════════════════════════
-   KPIs
-════════════════════════════════════════ */
 function buildKPIs() {
   var n = ACTIVOS.length;
   var verde = ACTIVOS.filter(function(c){return c.semaforo==="🟢";}).length;
@@ -819,9 +874,6 @@ function buildKPIs() {
 function pct(a,b){ return b>0 ? Math.round(a/b*100)+'%' : '0%'; }
 function fmt(n){ return Math.round(n).toLocaleString('es-CL'); }
 
-/* ════════════════════════════════════════
-   RESUMEN CHARTS
-════════════════════════════════════════ */
 function destroyChart(id) {
   var existing = Chart.getChart(id);
   if (existing) existing.destroy();
@@ -891,9 +943,6 @@ function buildResumenCharts() {
   });
 }
 
-/* ════════════════════════════════════════
-   URGENTES
-════════════════════════════════════════ */
 function buildUrgentes() {
   var lista = ACTIVOS
     .filter(function(c){return c.semaforo==="🔴"||c.healthScore<0.15;})
@@ -910,9 +959,6 @@ function buildUrgentes() {
   }).join('');
 }
 
-/* ════════════════════════════════════════
-   TABLA CLIENTES CON EXPAND
-════════════════════════════════════════ */
 function buildKamFilter() {
   var kams=[...new Set(CLIENTES.map(function(c){return c.kam;}))].sort();
   var sel=document.getElementById('f-kam');
@@ -1043,9 +1089,6 @@ function renderTable() {
   mkBtn('›',currentPage+1,currentPage===pages,false);
 }
 
-/* ════════════════════════════════════════
-   KAM CARDS
-════════════════════════════════════════ */
 function buildKamCards() {
   var km={};
   ACTIVOS.forEach(function(c){
@@ -1083,9 +1126,6 @@ function showKamDetail(kam) {
     +'</tbody></table></div></div>';
 }
 
-/* ════════════════════════════════════════
-   GRÁFICOS DETALLADOS
-════════════════════════════════════════ */
 var chartMetricaPais = null;
 
 function buildDetailCharts() {
@@ -1259,9 +1299,6 @@ function buildTiempoTable() {
     +'<tbody>'+rows.join('')+'</tbody>';
 }
 
-/* ════════════════════════════════════════
-   IA — CONTEXTO
-════════════════════════════════════════ */
 function buildResumen() {
   var n=ACTIVOS.length;
   var sv=ACTIVOS.filter(function(c){return c.semaforo==='🟢';}).length;
@@ -1315,9 +1352,6 @@ async function callIA(tipo, pregunta, clienteId, onSuccess, onError) {
   }
 }
 
-/* ════════════════════════════════════════
-   IA — PANEL LATERAL
-════════════════════════════════════════ */
 function openIA(pregunta) {
   document.getElementById('ia-panel').classList.add('open');
   document.getElementById('ia-overlay').classList.add('open');
@@ -1356,12 +1390,8 @@ function closeIA() {
   document.getElementById('ia-overlay').classList.remove('open');
 }
 
-function clearChat() {
-  document.getElementById('ia-msgs').innerHTML = '';
-}
-
+function clearChat() { document.getElementById('ia-msgs').innerHTML = ''; }
 function sendQuick(q) { document.getElementById('ia-input').value=q; sendIA(); }
-
 function iaKey(e) { if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendIA();} }
 
 async function sendIA() {
@@ -1401,9 +1431,6 @@ async function sendFromPage() {
   );
 }
 
-/* ════════════════════════════════════════
-   NOTIFICACIONES
-════════════════════════════════════════ */
 async function genNotif(id) {
   var c=CLIENTES.find(function(x){return x.id===id;});
   if(!c) return;
@@ -1421,9 +1448,6 @@ async function genNotif(id) {
 function closeNotif(){ document.getElementById('notif-modal').classList.remove('open'); }
 function copyNotif(){ navigator.clipboard.writeText(document.getElementById('notif-ta').value); showToast('Copiado ✓'); }
 
-/* ════════════════════════════════════════
-   EXPORT CSV
-════════════════════════════════════════ */
 function exportCSV() {
   var h=['ID','Empresa','KAM','País','Estado','Segmento','Usuarios','Adopción%','Adherencia%','Performance%','HealthScore%','Semáforo','ROI'];
   var rows=filteredData.map(function(c){return [c.id,c.empresa,c.kam,c.pais,c.estado,c.segmento,c.usuarios,Math.round(c.adopcion*100),Math.round(c.adherencia*100),Math.round(c.performance*100),Math.round(c.healthScore*100),c.semaforo,c.roi.toFixed(2)];});
@@ -1434,45 +1458,34 @@ function exportCSV() {
   showToast('CSV exportado ✓');
 }
 
-/* ════════════════════════════════════════
-   HELPERS UI
-════════════════════════════════════════ */
 function hbar(val) {
   var p=Math.min(val*100,100);
   var col=p>=35?"#065F46":p>=15?"#B45309":"#FA345E";
   return '<div class="hbar"><div class="hbar-bg"><div class="hbar-fill" style="width:'+p.toFixed(0)+'%;background:'+col+';"></div></div><span class="hbar-val" style="color:'+col+'">'+p.toFixed(0)+'%</span></div>';
 }
-
 function semBadge(s){
   if(s==="🟢") return '<span class="badge badge-green">🟢 Saludable</span>';
   if(s==="🟠") return '<span class="badge badge-amber">🟠 En desarrollo</span>';
   return '<span class="badge badge-red">🔴 En riesgo</span>';
 }
-
 function roiBadge(r){
   if(r===undefined||r===null||r===-1) return '<span style="color:var(--gray-400);font-size:12px;">—</span>';
   var cls=r>0?"badge-green":"badge-red";
   return '<span class="badge '+cls+'">'+(r>0?'+':'')+r.toFixed(2)+'x</span>';
 }
-
 function estadoBadge(e){
   if(e==="Activo") return '<span class="badge badge-green">Activo</span>';
   if(e==="Activo por lanzar") return '<span class="badge badge-amber">Por lanzar</span>';
   return '<span class="badge badge-gray">'+e+'</span>';
 }
-
 function esc(s){ return (s||'').replace(/'/g,"\\'"); }
 function escHTML(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-
 function showToast(msg){
   var t=document.getElementById('toast');
   t.textContent=msg; t.classList.add('show');
   setTimeout(function(){t.classList.remove('show');},2200);
 }
 
-/* ════════════════════════════════════════
-   ACCIONES POR DRIVER
-════════════════════════════════════════ */
 var ACCIONES_DATA = {
   'Incrementar la Performance Comercial (Ventas)': {
     color:'#FA345E', emoji:'💰',
@@ -1579,7 +1592,7 @@ var ACCIONES_DATA = {
     acciones_salud:{
       verde:{ '1-2':{ t14:'• Cambio de logo por Aniversario del programa\n• Reunión para presentar resultados\n• Ver oportunidades de crecimiento', t30:'• Campaña de Registro Fotográfico sobre hitos claves\n• Campaña de Insignias por aniversario\n• Concurso de "Embajador del programa"', t90:'• Reunión de premiación, reconocimientos e hitos\n• Difusión de videos con testimonios' }, '3-4':{ t14:'• Campaña "Evolución del programa"', t30:'• Retos avanzados\n• Beneficios diferenciados\n• Ranking segmentado', t90:'• Evento de evolución\n• Programa formal de embajadores\n• Reporte de impacto' }, '5+':{ t14:'• Rebranding del programa\n• Encuesta profunda', t30:'• Gamificación avanzada\n• Beneficios premium', t90:'• Relanzamiento completo\n• Impacto en indicadores del negocio' } },
       amarillo:{ '1-2':{ t14:'• Solicitud de reportería\n• Reunión con SAAS\n• Canales alternativos', t30:'• Plan de acción en campañas activas\n• Activación de campaña de Encuestas\n• Insignias y Registro Fotográfico', t90:'• Evaluación de resultados\n• Reunión de cierre' }, '3-4':{ t14:'• Reportería profunda\n• Quick wins\n• Encuesta de percepción', t30:'• Rediseñar campañas\n• Reactivación\n• Beneficios diferenciados', t90:'• Evaluación comparativa\n• Definir evolución' }, '5+':{ t14:'• Reportería histórica\n• Encuesta profunda', t30:'• Nueva dinámica\n• Reenganche emocional\n• Gamificación avanzada', t90:'• Reunión para escalar o relanzar' } },
-      rojo:{ '1-2':{ t14:'• Reportería básica\n• Fricción inicial\n• 3 quick wins\n• Campaña express\n• Comunicación multicanal', t30:'• Micro-retos semanales\n• Ranking visible\n• Recordatorios automáticos', t90:'• Evaluación de reactivación\n• Definición de siguiente plan' }, '3-4':{ t14:'• Reportería comparativa\n• 3 acciones inmediatas\n• Encuesta de percepción', t30:'• Rediseñar campaigns\n• Reactivación con incentivo fuerte\n• Dinámicas nuevas', t90:'• Evaluación comparativa\n• Ajustar estructura' }, '5+':{ t14:'• Reportería histórica\n• Evolución planteada\n• Encuesta profunda', t30:'• Nueva dinámica\n• Reenganche emocional\n• Gamificación avanzada', t90:'• Evaluación de impacto\n• Escalar o relanzar' } }
+      rojo:{ '1-2':{ t14:'• Reportería básica\n• Fricción inicial\n• 3 quick wins\n• Campaña express\n• Comunicación multicanal', t30:'• Micro-retos semanales\n• Ranking visible\n• Recordatorios automáticos', t90:'• Evaluación de reactivación\n• Definición de siguiente plan' }, '3-4':{ t14:'• Reportería comparativa\n• 3 acciones inmediatas\n• Encuesta de percepción', t30:'• Rediseñar campañas\n• Reactivación con incentivo fuerte\n• Dinámicas nuevas', t90:'• Evaluación comparativa\n• Ajustar estructura' }, '5+':{ t14:'• Reportería histórica\n• Evolución planteada\n• Encuesta profunda', t30:'• Nueva dinámica\n• Reenganche emocional\n• Gamificación avanzada', t90:'• Evaluación de impacto\n• Escalar o relanzar' } }
     }
   },
 };
@@ -1592,7 +1605,6 @@ function getSemaforoKey(sem) {
   if (sem.includes('desarrollo') || sem === '🟠') return 'amarillo';
   return 'rojo';
 }
-
 function getTiempoKey(fechaInicio) {
   if (!fechaInicio || fechaInicio === '—') return '1-2';
   var m = (fechaInicio + '').match(/(\d{4})/);
@@ -1602,7 +1614,6 @@ function getTiempoKey(fechaInicio) {
   if (diff <= 4) return '3-4';
   return '5+';
 }
-
 function matchDriver(clienteDriver, accionKey) {
   var d = (clienteDriver || '').toLowerCase();
   var k = accionKey.toLowerCase();
@@ -1716,21 +1727,6 @@ function renderAcciones(driver) {
   }).join('');
 }
 
-
-/* ════════════════════════════════════════
-   GOOGLE SHEETS — LECTURA DIRECTA
-════════════════════════════════════════ */
-// API Keys protegidas con split string
-const _0xW = ["https://n8n.openip.cl", "/webhook/ia-salud-cliente"].join('');
-const _0xS1 = ['18ApfTwL6T7wGotGDUU','ha3L08Oyak_NDn8rKztP_mGa8'].join('');
-const _0xK1 = ['AIzaSyD7CZc88_H','KniwXAe_KtLXU04UXaOLynWI'].join('');
-
-const N8N_WEBHOOK = _0xW;
-const ALLOWED_DOMAINS = ["apprecio.com", "dcanje.com"];
-const SHEET_ID = _0xS1;
-const SHEET_GID = '513724513';
-const SHEETS_API_KEY = _0xK1;
-
 async function loadSheetData() {
   if (SHEETS_API_KEY === 'TU_API_KEY') {
     console.log('Sheet API Key no configurada — usando datos hardcodeados');
@@ -1833,7 +1829,6 @@ async function loadSheetData() {
     console.error('Error cargando sheet:', e);
   }
 }
-
 </script>
 </body>
 </html>
