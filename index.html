@@ -595,10 +595,10 @@ tr:last-child td{border-bottom:none;}
 
 <div class="chart-card" style="margin-bottom:16px;">
         <div class="chart-title">Distribución ROI</div>
-        <div class="chart-sub">Rentabilidad de la cartera y detalle de clientes</div>
+        <div class="chart-sub">Rentabilidad de la cartera. Haz clic en los botones para ver los clientes.</div>
         <div style="display:flex; gap:24px; align-items:flex-start; flex-wrap:wrap; margin-top:16px;">
-          <div class="chart-wrap" style="flex:1; min-width:250px;"><canvas id="cROI"></canvas></div>
-          <div id="roi-lists" style="flex:1.5; min-width:300px; max-height:220px; overflow-y:auto; font-size:12px; padding-right:8px;"></div>
+          <div class="chart-wrap" style="flex:1; min-width:220px;"><canvas id="cROI"></canvas></div>
+          <div id="roi-lists" style="flex:1.5; min-width:280px; display:flex; flex-direction:column;"></div>
         </div>
       </div>
 
@@ -1327,13 +1327,15 @@ function buildLoginsPais() {
 }
 
 // ── ROI ────────────────────────────────────────────────────────────
+var roiListsData = { pos: '', neg: '', neu: '' };
+
 function buildROIChart() {
-  var view=getViewData();
-  var pos = view.filter(function(c){return c.roi>0;});
-  var neg = view.filter(function(c){return c.roi<0 && c.roi!==-1;}); // -1 suele ser sin datos
+  var view = getViewData();
+  // Ordenamos de mayor a menor ROI, y filtramos los que no tienen datos (-1)
+  var pos = view.filter(function(c){return c.roi>0;}).sort(function(a,b){return b.roi-a.roi;});
+  var neg = view.filter(function(c){return c.roi<0 && c.roi!==-1;}).sort(function(a,b){return a.roi-b.roi;});
   var neu = view.filter(function(c){return c.roi===0;});
 
-  // Dibujar el gráfico circular
   destroyChart('cROI');
   new Chart(document.getElementById('cROI'),{
     type:'pie',
@@ -1343,25 +1345,53 @@ function buildROIChart() {
       plugins:{legend:{position:'bottom',labels:{font:{family:'Montserrat',size:12}}}}}
   });
 
-  // Generar la lista de clientes al lado
-  var listHtml = '<div style="display:flex;flex-direction:column;gap:16px;">';
-  
-  // Positivos
-  listHtml += '<div><div style="font-size:11px;font-weight:700;color:#065F46;margin-bottom:6px;border-bottom:1px solid var(--gray-200);padding-bottom:4px;">POSITIVO ('+pos.length+')</div>';
-  listHtml += '<div style="color:var(--gray-600);line-height:1.6;">' + (pos.map(function(c){return '<strong>'+c.empresa+'</strong> ('+c.roi.toFixed(2)+'x)';}).join(', ') || 'Ninguno') + '</div></div>';
+  // Generamos los botones dinámicos
+  var tabsHtml = '<div style="display:flex; gap:6px; margin-bottom:12px;">'
+    + '<button onclick="switchRoiTab(\'pos\')" id="btn-roi-pos" style="flex:1; padding:8px 4px; border-radius:6px; font-size:11px; font-weight:700; border:1px solid #065F46; background:#F0FFF4; color:#065F46; cursor:pointer; transition:all 0.2s;">Positivo ('+pos.length+')</button>'
+    + '<button onclick="switchRoiTab(\'neg\')" id="btn-roi-neg" style="flex:1; padding:8px 4px; border-radius:6px; font-size:11px; font-weight:700; border:1px solid transparent; background:var(--gray-100); color:var(--gray-600); cursor:pointer; transition:all 0.2s;">Negativo ('+neg.length+')</button>'
+    + '<button onclick="switchRoiTab(\'neu\')" id="btn-roi-neu" style="flex:1; padding:8px 4px; border-radius:6px; font-size:11px; font-weight:700; border:1px solid transparent; background:var(--gray-100); color:var(--gray-600); cursor:pointer; transition:all 0.2s;">Neutro ('+neu.length+')</button>'
+    + '</div>';
 
-  // Negativos
-  listHtml += '<div><div style="font-size:11px;font-weight:700;color:#FA345E;margin-bottom:6px;border-bottom:1px solid var(--gray-200);padding-bottom:4px;">NEGATIVO ('+neg.length+')</div>';
-  listHtml += '<div style="color:var(--gray-600);line-height:1.6;">' + (neg.map(function(c){return '<strong>'+c.empresa+'</strong> ('+c.roi.toFixed(2)+'x)';}).join(', ') || 'Ninguno') + '</div></div>';
+  // Función interna para dibujar las listas
+  function renderList(arr, color) {
+    if (!arr.length) return '<div style="padding:16px;text-align:center;color:var(--gray-400);">Sin clientes en esta categoría</div>';
+    return arr.map(function(c){
+      return '<div style="display:flex; justify-content:space-between; padding:8px 12px; border-bottom:1px solid var(--gray-100);"><span style="font-weight:600; color:var(--gray-800);">' + c.empresa + '</span><span style="font-weight:700; color:' + color + ';">' + (c.roi?c.roi.toFixed(2)+'x':'0.00x') + '</span></div>';
+    }).join('');
+  }
 
-  // Neutros
-  listHtml += '<div><div style="font-size:11px;font-weight:700;color:#9CA3AF;margin-bottom:6px;border-bottom:1px solid var(--gray-200);padding-bottom:4px;">NEUTRO ('+neu.length+')</div>';
-  listHtml += '<div style="color:var(--gray-600);line-height:1.6;">' + (neu.map(function(c){return '<strong>'+c.empresa+'</strong>';}).join(', ') || 'Ninguno') + '</div></div>';
-
-  listHtml += '</div>';
+  roiListsData.pos = renderList(pos, '#065F46');
+  roiListsData.neg = renderList(neg, '#FA345E');
+  roiListsData.neu = renderList(neu, '#9CA3AF');
 
   var listContainer = document.getElementById('roi-lists');
-  if (listContainer) listContainer.innerHTML = listHtml;
+  if (listContainer) {
+    listContainer.innerHTML = tabsHtml + '<div id="roi-list-view" style="max-height:180px; overflow-y:auto; border:1px solid var(--gray-200); border-radius:6px; background:var(--white); font-size:12px;">' + roiListsData.pos + '</div>';
+  }
+}
+
+function switchRoiTab(type) {
+  var view = document.getElementById('roi-list-view');
+  if(view) view.innerHTML = roiListsData[type];
+  
+  var bPos = document.getElementById('btn-roi-pos');
+  var bNeg = document.getElementById('btn-roi-neg');
+  var bNeu = document.getElementById('btn-roi-neu');
+  
+  if(bPos && bNeg && bNeu) {
+    // Resetear estilos
+    [bPos, bNeg, bNeu].forEach(function(b){
+      b.style.borderColor = 'transparent';
+      b.style.background = 'var(--gray-100)';
+      b.style.color = 'var(--gray-600)';
+    });
+
+    // Activar el clickeado
+    var active = document.getElementById('btn-roi-' + type);
+    if (type === 'pos') { active.style.borderColor = '#065F46'; active.style.background = '#F0FFF4'; active.style.color = '#065F46'; }
+    if (type === 'neg') { active.style.borderColor = '#FA345E'; active.style.background = '#FDE8ED'; active.style.color = '#FA345E'; }
+    if (type === 'neu') { active.style.borderColor = '#9CA3AF'; active.style.background = '#F3F4F6'; active.style.color = '#4B5563'; }
+  }
 }
 
 // ── Segmentos ──────────────────────────────────────────────────────
