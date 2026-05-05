@@ -764,7 +764,7 @@ var CLIENTES = [
   {id:297,empresa:"Botero Soto",programa:"Botero Soto",tipo:"Force Manager",admin:"In House",pais:"Colombia",estado:"Activo por lanzar",segmento:"A+",usuarios:0,kam:"Aura Avila",fee:0,feeMensual:0,driver:"Aumentar Engagement",adopcion:0.313,adherencia:0,performance:0,healthScore:0.094,semaforo:"🔴",roi:-1,desc:"Por lanzar.",link:null,fechaInicio:"—",tiempoProg:"—",loginsM2:null,loginsM1:null,loginsM:null},
 ];
 
-var ACTIVOS = CLIENTES.filter(function(c){ return c.estado === "Activo"; });
+var ACTIVOS = CLIENTES.filter(function(c){ return c.estado === "Activo" || c.estado === "Activo por lanzar"; });
 
 /* ════════════════════════════════════════
    ESTADO
@@ -786,7 +786,7 @@ function getViewData() {
       return c.estado !== 'Activo' && c.estado !== 'Activo por lanzar';
     });
   }
-  var base = CLIENTES.filter(function(c){ return c.estado === 'Activo'; });
+  var base = CLIENTES.filter(function(c){ return c.estado === 'Activo' || c.estado === 'Activo por lanzar'; });
   if (globalSemFilter) {
     base = base.filter(function(c){ return c.semaforo === globalSemFilter; });
   }
@@ -928,7 +928,7 @@ function buildDashboard() {
    KPIs
 ════════════════════════════════════════ */
 function buildKPIs() {
-  var totalActivos = CLIENTES.filter(function(c){ return c.estado==='Activo'; }).length;
+  var totalActivos = CLIENTES.filter(function(c){ return c.estado==='Activo' || c.estado==='Activo por lanzar'; }).length;
   var totalInactivos = CLIENTES.filter(function(c){ return c.estado!=='Activo' && c.estado!=='Activo por lanzar'; }).length;
   var view = getViewData();
   var n = view.length;
@@ -2115,7 +2115,7 @@ async function loadSheetData() {
     CLIENTES.length = 0;
     nuevos.forEach(function(c) { CLIENTES.push(c); });
     ACTIVOS.length = 0;
-    CLIENTES.filter(function(c){ return c.estado === 'Activo'; })
+    CLIENTES.filter(function(c){ return c.estado === 'Activo' || c.estado === 'Activo por lanzar'; })
             .forEach(function(c){ ACTIVOS.push(c); });
 
     buildKPIs();
