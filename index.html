@@ -849,7 +849,14 @@ function fmt(n){ return Math.round(n).toLocaleString('es-CL'); }
 /* ════════════════════════════════════════
    RESUMEN CHARTS
 ════════════════════════════════════════ */
+function destroyChart(id) {
+  var existing = Chart.getChart(id);
+  if (existing) existing.destroy();
+}
+
 function buildResumenCharts() {
+  destroyChart('cSem'); destroyChart('cPais');
+  destroyChart('cKam'); destroyChart('cScatter');
   var sv=0,sa=0,sr=0;
   ACTIVOS.forEach(function(c){
     if(c.semaforo==="🟢") sv++;
@@ -1113,6 +1120,9 @@ function showKamDetail(kam) {
 var chartMetricaPais = null;
 
 function buildDetailCharts() {
+  destroyChart('cMetricaPais'); destroyChart('cLoginsPais');
+  destroyChart('cROI'); destroyChart('cSeg'); destroyChart('cHealthBar');
+  destroyChart('cAdop'); destroyChart('cAdher'); destroyChart('cPerf');
   buildMetricaPais('adopcion');
   buildLoginsPais();
   buildROIChart();
@@ -1144,7 +1154,8 @@ function buildMetricaPais(key) {
     var cs = ACTIVOS.filter(function(c){return c.pais===p;});
     return cs.length ? (cs.reduce(function(s,c){return s+c[cfg.field];},0)/cs.length*cfg.factor).toFixed(1) : 0;
   });
-  if (chartMetricaPais) chartMetricaPais.destroy();
+  destroyChart('cMetricaPais');
+  if (chartMetricaPais) { try { chartMetricaPais.destroy(); } catch(e){} }
   chartMetricaPais = new Chart(document.getElementById('cMetricaPais'),{
     type:'bar',
     data:{labels:paises,datasets:[{label:cfg.label,data:vals,backgroundColor:colors,borderRadius:8}]},
@@ -1861,8 +1872,14 @@ async function loadSheetData() {
     CLIENTES.filter(function(c){ return c.estado === 'Activo'; })
             .forEach(function(c){ ACTIVOS.push(c); });
 
-    // Refrescar dashboard con datos nuevos
-    buildDashboard();
+    // Refrescar solo las partes que usan datos (sin recrear charts)
+    buildKPIs();
+    buildUrgentes();
+    buildClientesTable();
+    buildKamCards();
+    // Resetear flag para que los gráficos se recarguen al entrar a esa pestaña
+    chartsBuilt = false;
+    accionesBuilt = false;
     console.log('✅ Sheet cargado: ' + nuevos.length + ' clientes');
 
   } catch(e) {
