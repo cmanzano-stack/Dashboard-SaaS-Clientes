@@ -1,331 +1,40 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Salud del Cliente — Apprecio</title>
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
-<style>
-:root {
-  --red:#FA345E; --red-dark:#D42A4E; --red-light:#FDE8ED; --red-mid:#f87096;
-  --green:#065F46; --green-light:#F0FFF4;
-  --amber:#B45309; --amber-light:#FFFBEB;
-  --gray-50:#F9FAFB; --gray-100:#F3F4F6; --gray-200:#E5E7EB;
-  --gray-400:#9CA3AF; --gray-600:#4B5563; --gray-800:#1F2937;
-  --white:#FFFFFF;
-  --shadow-sm:0 1px 3px rgba(0,0,0,0.08);
-  --shadow-md:0 4px 16px rgba(0,0,0,0.10);
-  --shadow-lg:0 8px 32px rgba(0,0,0,0.14);
-  --radius:12px; --radius-sm:8px;
-}
-*{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:'Montserrat',sans-serif;background:var(--gray-50);color:var(--gray-800);font-size:14px;line-height:1.5;}
-button{cursor:pointer;font-family:inherit;}
-input,select,textarea{font-family:inherit;}
+<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Salud del Cliente — Apprecio</title><link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/><script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script><style>:root {  --red:#FA345E; --red-dark:#D42A4E; --red-light:#FDE8ED; --red-mid:#f87096;  --green:#065F46; --green-light:#F0FFF4;  --amber:#B45309; --amber-light:#FFFBEB;  --gray-50:#F9FAFB; --gray-100:#F3F4F6; --gray-200:#E5E7EB;  --gray-400:#9CA3AF; --gray-600:#4B5563; --gray-800:#1F2937;  --white:#FFFFFF;  --shadow-sm:0 1px 3px rgba(0,0,0,0.08);  --shadow-md:0 4px 16px rgba(0,0,0,0.10);  --shadow-lg:0 8px 32px rgba(0,0,0,0.14);  --radius:12px; --radius-sm:8px;}*{box-sizing:border-box;margin:0;padding:0;}body{font-family:'Montserrat',sans-serif;background:var(--gray-50);color:var(--gray-800);font-size:14px;line-height:1.5;}button{cursor:pointer;font-family:inherit;}input,select,textarea{font-family:inherit;}#login-screen{display:none!important;}.login-card{ background:var(--white);border-radius:20px;box-shadow:var(--shadow-lg); padding:48px 40px 40px;max-width:440px;width:100%;text-align:center;}.login-logo{height:52px;object-fit:contain;margin-bottom:28px;display:block;margin-left:auto;margin-right:auto;}.login-title{font-size:20px;font-weight:700;color:var(--red);margin-bottom:8px;}.login-subtitle{font-size:13px;color:var(--gray-600);margin-bottom:32px;line-height:1.7;}.google-btn-wrap{display:flex;justify-content:center;margin-bottom:8px;}.login-error{ display:none;background:#fee2e2;color:#991b1b; border:1px solid #fca5a5;border-radius:var(--radius-sm); padding:12px 16px;font-size:12px;margin-top:16px;font-weight:500;}.login-footer{font-size:11px;color:var(--gray-400);margin-top:24px;}.login-badge{ display:inline-flex;align-items:center;gap:6px; background:var(--red-light);color:var(--red-dark); border-radius:20px;padding:4px 14px;font-size:11px;font-weight:600;margin-bottom:20px;}#app-screen{display:block;}#topbar{ background:var(--white);border-bottom:1px solid var(--gray-200); padding:0 24px;display:flex;align-items:center; justify-content:space-between;height:60px; position:sticky;top:0;z-index:200;box-shadow:var(--shadow-sm);}.topbar-left{display:flex;align-items:center;gap:16px;}#topbar-logo{height:36px;object-fit:contain;}.topbar-divider{width:1px;height:28px;background:var(--gray-200);}.topbar-title{font-size:15px;font-weight:700;color:var(--gray-800);}.topbar-subtitle{font-size:11px;color:var(--gray-400);}.topbar-right{display:flex;align-items:center;gap:12px;}#user-chip{display:flex;align-items:center;gap:8px;background:var(--gray-100);border-radius:30px;padding:4px 12px 4px 4px;}#user-avatar{width:28px;height:28px;border-radius:50%;border:2px solid var(--red);}#user-name{font-size:12px;font-weight:600;color:var(--gray-800);}#btn-logout{background:none;border:1px solid var(--gray-200);color:var(--gray-600);border-radius:8px;padding:5px 12px;font-size:12px;font-weight:500;transition:all .2s;}#btn-logout:hover{background:var(--red-light);color:var(--red);border-color:var(--red-mid);}#nav-tabs{background:var(--white);border-bottom:1px solid var(--gray-200);padding:0 24px;display:flex;gap:4px;overflow-x:auto;}.nav-tab{padding:12px 18px;font-size:13px;font-weight:500;color:var(--gray-400);border:none;background:none;border-bottom:2px solid transparent;transition:all .2s;white-space:nowrap;cursor:pointer;}.nav-tab:hover{color:var(--gray-800);}.nav-tab.active{color:var(--red);border-bottom-color:var(--red);font-weight:600;}#main-content{padding:24px;max-width:1400px;margin:0 auto;}.section{display:none;}.section.active{display:block;}.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:16px;margin-bottom:24px;}.kpi-card{background:var(--white);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow-sm);border:1px solid var(--gray-200);transition:box-shadow .2s;}.kpi-card:hover{box-shadow:var(--shadow-md);}.kpi-label{font-size:10px;color:var(--gray-400);font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;}.kpi-value{font-size:28px;font-weight:800;line-height:1;}.kpi-sub{font-size:11px;color:var(--gray-400);margin-top:6px;}.kpi-red .kpi-value{color:var(--red);}.kpi-green .kpi-value{color:var(--green);}.kpi-amber .kpi-value{color:var(--amber);}.kpi-gray .kpi-value{color:var(--gray-600);}.charts-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px;}.charts-row-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:24px;}.chart-card{background:var(--white);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow-sm);border:1px solid var(--gray-200);}.chart-title{font-size:13px;font-weight:700;color:var(--gray-800);margin-bottom:4px;}.chart-sub{font-size:11px;color:var(--gray-400);margin-bottom:16px;}.chart-wrap{position:relative;height:220px;}.chart-wrap-sm{position:relative;height:180px;}.filters-bar{background:var(--white);border-radius:var(--radius);padding:16px 20px;margin-bottom:20px;box-shadow:var(--shadow-sm);border:1px solid var(--gray-200);display:flex;gap:12px;align-items:flex-end;flex-wrap:wrap;}.filter-group{display:flex;flex-direction:column;gap:4px;}.filter-label{font-size:10px;font-weight:700;color:var(--gray-400);text-transform:uppercase;letter-spacing:.5px;}.filter-select,.filter-search{border:1px solid var(--gray-200);border-radius:var(--radius-sm);padding:7px 10px;font-size:12px;color:var(--gray-800);background:var(--white);}.filter-select{min-width:130px;}.filter-search{flex:1;min-width:200px;}.filter-select:focus,.filter-search:focus{outline:none;border-color:var(--red);}.table-card{background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow-sm);border:1px solid var(--gray-200);overflow:hidden;}.table-header{padding:16px 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--gray-100);}.table-header-title{font-size:14px;font-weight:700;color:var(--gray-800);}.table-count{font-size:12px;color:var(--gray-400);}.table-scroll{overflow-x:auto;}table{width:100%;border-collapse:collapse;}thead tr{background:var(--gray-50);}th{padding:10px 14px;text-align:left;font-size:11px;font-weight:700;color:var(--gray-400);text-transform:uppercase;letter-spacing:.5px;border-bottom:1px solid var(--gray-200);white-space:nowrap;}td{padding:12px 14px;border-bottom:1px solid var(--gray-100);font-size:13px;color:var(--gray-800);vertical-align:middle;}tr:last-child td{border-bottom:none;}.tr-main{cursor:pointer;transition:background .15s;}.tr-main:hover td{background:var(--red-light)!important;}.tr-main.expanded td{background:var(--red-light)!important;border-bottom:none;}.tr-main td:first-child::before{content:'▶';font-size:9px;color:var(--gray-400);margin-right:8px;transition:transform .2s;display:inline-block;vertical-align:middle;}.tr-main.expanded td:first-child::before{transform:rotate(90deg);color:var(--red);}.tr-expand{display:none;}.tr-expand.open{display:table-row;}.expand-panel{background:linear-gradient(135deg,#fff5f7 0%,#ffffff 60%,#f0fff4 100%);border-top:2px solid var(--red);border-bottom:2px solid var(--red);padding:20px 24px;}.expand-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:16px;margin-bottom:14px;}.expand-cell-label{font-size:10px;font-weight:700;color:var(--red);text-transform:uppercase;letter-spacing:.6px;margin-bottom:4px;}.expand-cell-val{font-size:14px;font-weight:600;color:var(--gray-800);}.expand-cell-sub{font-size:11px;color:var(--gray-400);margin-top:2px;}.expand-desc{background:var(--white);border-radius:var(--radius-sm);padding:12px 16px;border-left:3px solid var(--red);font-size:12px;color:var(--gray-600);line-height:1.6;margin-bottom:14px;}.expand-actions{display:flex;gap:8px;flex-wrap:wrap;}.expand-tag{display:inline-block;background:var(--red-light);color:var(--red-dark);border-radius:20px;padding:3px 10px;font-size:11px;font-weight:600;}.login-trend{display:flex;align-items:center;gap:5px;margin-top:4px;}.lt-val{background:var(--white);border:1px solid var(--gray-200);border-radius:5px;padding:2px 8px;font-size:12px;font-weight:700;}.lt-val.lt-red{background:var(--red-light);color:var(--red-dark);border-color:var(--red-mid);}.lt-val.lt-green{background:var(--green-light);color:var(--green);}.lt-arrow{color:var(--gray-400);font-size:11px;}.badge{display:inline-flex;align-items:center;gap:4px;border-radius:20px;padding:3px 10px;font-size:11px;font-weight:700;white-space:nowrap;}.badge-green{background:var(--green-light);color:var(--green);}.badge-red{background:var(--red-light);color:var(--red-dark);}.badge-amber{background:var(--amber-light);color:var(--amber);}.badge-gray{background:var(--gray-100);color:var(--gray-600);}.hbar{display:flex;align-items:center;gap:8px;}.hbar-bg{flex:1;height:6px;border-radius:3px;background:var(--gray-200);overflow:hidden;min-width:70px;}.hbar-fill{height:100%;border-radius:3px;transition:width .3s;}.hbar-val{font-size:12px;font-weight:700;min-width:32px;text-align:right;}.btn-primary{background:var(--red);color:#fff;border:none;border-radius:var(--radius-sm);padding:8px 18px;font-size:12px;font-weight:600;transition:background .2s;}.btn-primary:hover{background:var(--red-dark);}.btn-secondary{background:none;color:var(--gray-600);border:1px solid var(--gray-200);border-radius:var(--radius-sm);padding:7px 14px;font-size:12px;font-weight:500;transition:all .2s;}.btn-secondary:hover{background:var(--gray-100);}.btn-action{background:var(--red-light);color:var(--red);border:none;border-radius:var(--radius-sm);padding:5px 11px;font-size:11px;font-weight:600;transition:all .2s;cursor:pointer;}.btn-action:hover{background:var(--red);color:#fff;}.btn-ia{background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;border:none;border-radius:var(--radius-sm);padding:5px 11px;font-size:11px;font-weight:600;cursor:pointer;transition:opacity .2s;}.btn-ia:hover{opacity:.85;}.section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px;}.section-header h2{font-size:18px;font-weight:700;color:var(--gray-800);}.section-header p{font-size:13px;color:var(--gray-400);margin-top:2px;}.kam-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px;margin-bottom:24px;}.kam-card{background:var(--white);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow-sm);border:1px solid var(--gray-200);cursor:pointer;transition:box-shadow .2s;}.kam-card:hover{box-shadow:var(--shadow-md);}.kam-card-header{display:flex;align-items:center;gap:12px;margin-bottom:16px;}.kam-avatar{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,var(--red),var(--red-dark));color:#fff;font-size:15px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;}.kam-name{font-size:14px;font-weight:700;color:var(--gray-800);}.kam-count{font-size:11px;color:var(--gray-400);margin-top:2px;}.kam-sems{display:flex;gap:8px;}.ks{flex:1;border-radius:var(--radius-sm);padding:8px;text-align:center;}.ks-val{font-size:18px;font-weight:800;}.ks-lbl{font-size:10px;font-weight:600;margin-top:2px;}.ks-g{background:var(--green-light);color:var(--green);}.ks-a{background:var(--amber-light);color:var(--amber);}.ks-r{background:var(--red-light);color:var(--red-dark);}#ia-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.3);z-index:499;}#ia-overlay.open{display:block;}#ia-panel{position:fixed;right:0;top:0;height:100vh;width:420px;background:var(--white);box-shadow:-4px 0 32px rgba(0,0,0,0.14);z-index:500;transform:translateX(100%);transition:transform .3s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;}#ia-panel.open{transform:translateX(0);}.ia-header{padding:20px 20px 16px;border-bottom:1px solid var(--gray-200);display:flex;align-items:center;gap:12px;}.ia-icon{width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,#667eea,#764ba2);display:flex;align-items:center;justify-content:center;color:#fff;font-size:18px;flex-shrink:0;}.ia-head-text h3{font-size:15px;font-weight:700;color:var(--gray-800);}.ia-head-text p{font-size:11px;color:var(--gray-400);margin-top:2px;}#btn-close-ia{background:none;border:none;color:var(--gray-400);font-size:20px;padding:4px;border-radius:6px;cursor:pointer;transition:all .2s;}#btn-close-ia:hover{background:var(--gray-100);color:var(--gray-800);}.ia-ctx{padding:8px 16px;background:var(--gray-50);border-bottom:1px solid var(--gray-200);font-size:11px;color:var(--gray-600);}.ia-ctx strong{color:var(--red);}.ia-msgs{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:12px;}.msg{max-width:90%;padding:10px 14px;border-radius:12px;font-size:13px;line-height:1.6;}.msg-user{align-self:flex-end;background:var(--red);color:#fff;border-radius:12px 12px 2px 12px;}.msg-ai{align-self:flex-start;background:var(--gray-100);color:var(--gray-800);border-radius:12px 12px 12px 2px;}.ia-quick-btns{padding:10px 16px;display:flex;flex-wrap:wrap;gap:6px;border-top:1px solid var(--gray-100);}.ia-qbtn{background:var(--white);border:1px solid var(--gray-200);border-radius:20px;padding:5px 12px;font-size:11px;font-weight:500;color:var(--gray-600);cursor:pointer;transition:all .2s;}.ia-qbtn:hover{background:var(--red-light);color:var(--red);border-color:var(--red-mid);}.ia-input-row{padding:14px 16px;border-top:1px solid var(--gray-200);display:flex;gap:8px;}#ia-input{flex:1;border:1px solid var(--gray-200);border-radius:var(--radius-sm);padding:8px 12px;font-size:13px;resize:none;max-height:100px;}#ia-input:focus{outline:none;border-color:var(--red);}#btn-send-ia{background:var(--red);color:#fff;border:none;border-radius:var(--radius-sm);padding:8px 14px;font-size:16px;transition:background .2s;flex-shrink:0;}#btn-send-ia:hover{background:var(--red-dark);}#fab-ia{position:fixed;bottom:28px;right:28px;width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;border:none;font-size:22px;box-shadow:0 4px 20px rgba(102,126,234,.5);cursor:pointer;transition:all .2s;z-index:300;display:none;align-items:center;justify-content:center;}#fab-ia:hover{transform:scale(1.08);}#notif-modal{display:none;position:fixed;inset:0;z-index:600;background:rgba(0,0,0,.4);align-items:center;justify-content:center;}#notif-modal.open{display:flex;}.notif-card{background:var(--white);border-radius:16px;box-shadow:var(--shadow-lg);padding:32px;max-width:560px;width:90%;max-height:80vh;overflow-y:auto;}.notif-card h3{font-size:16px;font-weight:700;margin-bottom:6px;}.notif-sub{font-size:13px;color:var(--gray-400);margin-bottom:20px;}.notif-ta{width:100%;border:1px solid var(--gray-200);border-radius:var(--radius-sm);padding:14px;font-size:13px;resize:vertical;min-height:200px;line-height:1.6;}.notif-ta:focus{outline:none;border-color:var(--red);}.notif-actions{display:flex;gap:8px;margin-top:16px;justify-content:flex-end;}.pagination{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;border-top:1px solid var(--gray-100);}.pg-info{font-size:12px;color:var(--gray-400);}.pg-btns{display:flex;gap:6px;}.pg-btn{background:none;border:1px solid var(--gray-200);border-radius:6px;padding:5px 12px;font-size:12px;color:var(--gray-600);cursor:pointer;transition:all .2s;}.pg-btn:hover:not(:disabled){background:var(--red-light);color:var(--red);border-color:var(--red-mid);}.pg-btn:disabled{opacity:.4;cursor:not-allowed;}.pg-btn.active{background:var(--red);color:#fff;border-color:var(--red);}.spinner{display:inline-block;width:16px;height:16px;border:2px solid var(--gray-200);border-top-color:var(--red);border-radius:50%;animation:spin .6s linear infinite;vertical-align:middle;margin-right:6px;}@keyframes spin{to{transform:rotate(360deg);}}#toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--gray-800);color:#fff;padding:10px 20px;border-radius:8px;font-size:13px;opacity:0;transition:all .3s;z-index:700;pointer-events:none;}#toast.show{opacity:1;transform:translateX(-50%) translateY(0);}@media(max-width:768px){ .charts-row,.charts-row-3{grid-template-columns:1fr;} #ia-panel{width:100%;} .kpi-grid{grid-template-columns:repeat(2,1fr);} #main-content{padding:14px;} #topbar{padding:0 12px;}}.chart-selector{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px;}.cs-btn{background:var(--white);border:1px solid var(--gray-200);border-radius:20px;padding:4px 12px;font-size:11px;font-weight:600;color:var(--gray-600);cursor:pointer;transition:all .2s;font-family:inherit;}.cs-btn.active{background:var(--red);color:#fff;border-color:var(--red);}.cs-btn:hover:not(.active){background:var(--red-light);color:var(--red);border-color:var(--red-mid);}.acciones-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px;margin-bottom:24px;}.accion-card{background:var(--white);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow-sm);border:1px solid var(--gray-200);}.accion-card-header{display:flex;align-items:center;gap:10px;margin-bottom:12px;}.accion-badge{display:inline-block;border-radius:20px;padding:3px 12px;font-size:11px;font-weight:700;}.accion-plazo{font-size:12px;color:var(--gray-400);font-weight:500;margin-left:auto;}.accion-title{font-size:13px;font-weight:700;color:var(--gray-800);margin-bottom:6px;}.accion-desc{font-size:12px;color:var(--gray-600);line-height:1.6;}.accion-driver-label{font-size:10px;font-weight:700;color:var(--gray-400);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;}.driver-filter-bar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px;padding:14px 16px;background:var(--white);border-radius:var(--radius);border:1px solid var(--gray-200);box-shadow:var(--shadow-sm);}.driver-tag{background:var(--gray-100);border:1px solid var(--gray-200);border-radius:20px;padding:4px 12px;font-size:11px;font-weight:600;color:var(--gray-600);cursor:pointer;transition:all .2s;}.driver-tag.active{background:var(--red);color:#fff;border-color:var(--red);}.driver-tag:hover:not(.active){background:var(--red-light);color:var(--red);border-color:var(--red-mid);}.tiempo-table{width:100%;border-collapse:collapse;}.tiempo-table th{padding:10px 14px;text-align:left;font-size:11px;font-weight:700;color:var(--gray-400);text-transform:uppercase;letter-spacing:.5px;border-bottom:1px solid var(--gray-200);background:var(--gray-50);}.tiempo-table td{padding:11px 14px;border-bottom:1px solid var(--gray-100);font-size:13px;}.tiempo-table tr:last-child td{border-bottom:none;}.tiempo-rango{font-weight:700;color:var(--gray-800);}.tiempo-count{font-size:22px;font-weight:800;color:var(--red);}</style></head><body>
 
-/* ── LOGIN ── */
-#login-screen{display:none!important;/*
-  display:flex;align-items:center;justify-content:center;
-  min-height:100vh;padding:20px;
-  background:linear-gradient(135deg,#fff5f7 0%,#fff 50%,#f0fff4 100%);
-  */ }
-.login-card{
-  background:var(--white);border-radius:20px;box-shadow:var(--shadow-lg);
-  padding:48px 40px 40px;max-width:440px;width:100%;text-align:center;
-}
-.login-logo{height:52px;object-fit:contain;margin-bottom:28px;display:block;margin-left:auto;margin-right:auto;}
-.login-title{font-size:20px;font-weight:700;color:var(--red);margin-bottom:8px;}
-.login-subtitle{font-size:13px;color:var(--gray-600);margin-bottom:32px;line-height:1.7;}
-.google-btn-wrap{display:flex;justify-content:center;margin-bottom:8px;}
-.login-error{
-  display:none;background:#fee2e2;color:#991b1b;
-  border:1px solid #fca5a5;border-radius:var(--radius-sm);
-  padding:12px 16px;font-size:12px;margin-top:16px;font-weight:500;
-}
-.login-footer{font-size:11px;color:var(--gray-400);margin-top:24px;}
-.login-badge{
-  display:inline-flex;align-items:center;gap:6px;
-  background:var(--red-light);color:var(--red-dark);
-  border-radius:20px;padding:4px 14px;font-size:11px;font-weight:600;margin-bottom:20px;
-}
+<script>
+(function(){
+  var _a=['cmanzano-stack.github.io'];
+  var _h=window.location.hostname;
+  if(_h!=='localhost'&&_h!=='127.0.0.1'&&_h!==''&&_a.indexOf(_h)===-1){
+    document.documentElement.innerHTML='<style>body{background:#0a0a0a;display:flex;align-items:center;justify-content:center;height:100vh;font-family:sans-serif;color:#fff;text-align:center}.lock-card{padding:2rem}.lock-title{color:#FA345E;font-size:24px;font-weight:700;margin-bottom:1rem}</style><body><div class="lock-card"><div style="font-size:50px">🔒</div><div class="lock-title">Acceso no autorizado</div><div>Este panel de salud es para uso exclusivo en el dominio autorizado.</div><div style="margin-top:1rem;color:#888;font-size:12px">© Apprecio — Todos los derechos reservados</div></div></body>';
+    return;
+  }
+  document.addEventListener('keydown',function(e){
+    if(e.key==='F12'||(e.ctrlKey&&e.shiftKey&&(e.key==='I'||e.key==='J'||e.key==='C'))||(e.ctrlKey&&e.key==='u')){
+      e.preventDefault();return false;
+    }
+  },true);
+  document.addEventListener('contextmenu',function(e){e.preventDefault();},true);
+  setInterval(function(){
+    var threshold=160;
+    var devtoolsOpen=window.outerWidth-window.innerWidth>threshold||window.outerHeight-window.innerHeight>threshold;
+    if(devtoolsOpen){
+      document.body.style.filter='blur(10px)';
+      document.body.style.pointerEvents='none';
+    } else {
+      document.body.style.filter='';
+      document.body.style.pointerEvents='';
+    }
+  },1000);
+  window.addEventListener('load',function(){
+    var _f=document.createElement('div');
+    _f.style.cssText='position:fixed;bottom:10px;left:50%;transform:translateX(-50%);font-size:10px;color:rgba(250,52,94,0.15);pointer-events:none;z-index:9999;font-weight:700;text-transform:uppercase;letter-spacing:1px;';
+    _f.textContent='© Apprecio Health Panel • Propiedad Intelectual Protegida';
+    document.body.appendChild(_f);
+  });
+})();
+</script>
 
-/* ── APP ── */
-#app-screen{display:block;}
-
-/* Topbar */
-#topbar{
-  background:var(--white);border-bottom:1px solid var(--gray-200);
-  padding:0 24px;display:flex;align-items:center;
-  justify-content:space-between;height:60px;
-  position:sticky;top:0;z-index:200;box-shadow:var(--shadow-sm);
-}
-.topbar-left{display:flex;align-items:center;gap:16px;}
-#topbar-logo{height:36px;object-fit:contain;}
-.topbar-divider{width:1px;height:28px;background:var(--gray-200);}
-.topbar-title{font-size:15px;font-weight:700;color:var(--gray-800);}
-.topbar-subtitle{font-size:11px;color:var(--gray-400);}
-.topbar-right{display:flex;align-items:center;gap:12px;}
-#user-chip{display:flex;align-items:center;gap:8px;background:var(--gray-100);border-radius:30px;padding:4px 12px 4px 4px;}
-#user-avatar{width:28px;height:28px;border-radius:50%;border:2px solid var(--red);}
-#user-name{font-size:12px;font-weight:600;color:var(--gray-800);}
-#btn-logout{background:none;border:1px solid var(--gray-200);color:var(--gray-600);border-radius:8px;padding:5px 12px;font-size:12px;font-weight:500;transition:all .2s;}
-#btn-logout:hover{background:var(--red-light);color:var(--red);border-color:var(--red-mid);}
-
-/* Nav */
-#nav-tabs{background:var(--white);border-bottom:1px solid var(--gray-200);padding:0 24px;display:flex;gap:4px;overflow-x:auto;}
-.nav-tab{padding:12px 18px;font-size:13px;font-weight:500;color:var(--gray-400);border:none;background:none;border-bottom:2px solid transparent;transition:all .2s;white-space:nowrap;cursor:pointer;}
-.nav-tab:hover{color:var(--gray-800);}
-.nav-tab.active{color:var(--red);border-bottom-color:var(--red);font-weight:600;}
-
-/* Main */
-#main-content{padding:24px;max-width:1400px;margin:0 auto;}
-
-/* Sections */
-.section{display:none;}
-.section.active{display:block;}
-
-/* KPI grid */
-.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:16px;margin-bottom:24px;}
-.kpi-card{background:var(--white);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow-sm);border:1px solid var(--gray-200);transition:box-shadow .2s;}
-.kpi-card:hover{box-shadow:var(--shadow-md);}
-.kpi-label{font-size:10px;color:var(--gray-400);font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;}
-.kpi-value{font-size:28px;font-weight:800;line-height:1;}
-.kpi-sub{font-size:11px;color:var(--gray-400);margin-top:6px;}
-.kpi-red .kpi-value{color:var(--red);}
-.kpi-green .kpi-value{color:var(--green);}
-.kpi-amber .kpi-value{color:var(--amber);}
-.kpi-gray .kpi-value{color:var(--gray-600);}
-
-/* Charts */
-.charts-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px;}
-.charts-row-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:24px;}
-.chart-card{background:var(--white);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow-sm);border:1px solid var(--gray-200);}
-.chart-title{font-size:13px;font-weight:700;color:var(--gray-800);margin-bottom:4px;}
-.chart-sub{font-size:11px;color:var(--gray-400);margin-bottom:16px;}
-.chart-wrap{position:relative;height:220px;}
-.chart-wrap-sm{position:relative;height:180px;}
-
-/* Filters */
-.filters-bar{background:var(--white);border-radius:var(--radius);padding:16px 20px;margin-bottom:20px;box-shadow:var(--shadow-sm);border:1px solid var(--gray-200);display:flex;gap:12px;align-items:flex-end;flex-wrap:wrap;}
-.filter-group{display:flex;flex-direction:column;gap:4px;}
-.filter-label{font-size:10px;font-weight:700;color:var(--gray-400);text-transform:uppercase;letter-spacing:.5px;}
-.filter-select,.filter-search{border:1px solid var(--gray-200);border-radius:var(--radius-sm);padding:7px 10px;font-size:12px;color:var(--gray-800);background:var(--white);}
-.filter-select{min-width:130px;}
-.filter-search{flex:1;min-width:200px;}
-.filter-select:focus,.filter-search:focus{outline:none;border-color:var(--red);}
-
-/* Table */
-.table-card{background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow-sm);border:1px solid var(--gray-200);overflow:hidden;}
-.table-header{padding:16px 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--gray-100);}
-.table-header-title{font-size:14px;font-weight:700;color:var(--gray-800);}
-.table-count{font-size:12px;color:var(--gray-400);}
-.table-scroll{overflow-x:auto;}
-table{width:100%;border-collapse:collapse;}
-thead tr{background:var(--gray-50);}
-th{padding:10px 14px;text-align:left;font-size:11px;font-weight:700;color:var(--gray-400);text-transform:uppercase;letter-spacing:.5px;border-bottom:1px solid var(--gray-200);white-space:nowrap;}
-td{padding:12px 14px;border-bottom:1px solid var(--gray-100);font-size:13px;color:var(--gray-800);vertical-align:middle;}
-tr:last-child td{border-bottom:none;}
-
-/* Expand rows */
-.tr-main{cursor:pointer;transition:background .15s;}
-.tr-main:hover td{background:var(--red-light)!important;}
-.tr-main.expanded td{background:var(--red-light)!important;border-bottom:none;}
-.tr-main td:first-child::before{content:'▶';font-size:9px;color:var(--gray-400);margin-right:8px;transition:transform .2s;display:inline-block;vertical-align:middle;}
-.tr-main.expanded td:first-child::before{transform:rotate(90deg);color:var(--red);}
-.tr-expand{display:none;}
-.tr-expand.open{display:table-row;}
-.expand-panel{background:linear-gradient(135deg,#fff5f7 0%,#ffffff 60%,#f0fff4 100%);border-top:2px solid var(--red);border-bottom:2px solid var(--red);padding:20px 24px;}
-.expand-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:16px;margin-bottom:14px;}
-.expand-cell-label{font-size:10px;font-weight:700;color:var(--red);text-transform:uppercase;letter-spacing:.6px;margin-bottom:4px;}
-.expand-cell-val{font-size:14px;font-weight:600;color:var(--gray-800);}
-.expand-cell-sub{font-size:11px;color:var(--gray-400);margin-top:2px;}
-.expand-desc{background:var(--white);border-radius:var(--radius-sm);padding:12px 16px;border-left:3px solid var(--red);font-size:12px;color:var(--gray-600);line-height:1.6;margin-bottom:14px;}
-.expand-actions{display:flex;gap:8px;flex-wrap:wrap;}
-.expand-tag{display:inline-block;background:var(--red-light);color:var(--red-dark);border-radius:20px;padding:3px 10px;font-size:11px;font-weight:600;}
-.login-trend{display:flex;align-items:center;gap:5px;margin-top:4px;}
-.lt-val{background:var(--white);border:1px solid var(--gray-200);border-radius:5px;padding:2px 8px;font-size:12px;font-weight:700;}
-.lt-val.lt-red{background:var(--red-light);color:var(--red-dark);border-color:var(--red-mid);}
-.lt-val.lt-green{background:var(--green-light);color:var(--green);}
-.lt-arrow{color:var(--gray-400);font-size:11px;}
-
-/* Badges */
-.badge{display:inline-flex;align-items:center;gap:4px;border-radius:20px;padding:3px 10px;font-size:11px;font-weight:700;white-space:nowrap;}
-.badge-green{background:var(--green-light);color:var(--green);}
-.badge-red{background:var(--red-light);color:var(--red-dark);}
-.badge-amber{background:var(--amber-light);color:var(--amber);}
-.badge-gray{background:var(--gray-100);color:var(--gray-600);}
-
-/* Health bar */
-.hbar{display:flex;align-items:center;gap:8px;}
-.hbar-bg{flex:1;height:6px;border-radius:3px;background:var(--gray-200);overflow:hidden;min-width:70px;}
-.hbar-fill{height:100%;border-radius:3px;transition:width .3s;}
-.hbar-val{font-size:12px;font-weight:700;min-width:32px;text-align:right;}
-
-/* Buttons */
-.btn-primary{background:var(--red);color:#fff;border:none;border-radius:var(--radius-sm);padding:8px 18px;font-size:12px;font-weight:600;transition:background .2s;}
-.btn-primary:hover{background:var(--red-dark);}
-.btn-secondary{background:none;color:var(--gray-600);border:1px solid var(--gray-200);border-radius:var(--radius-sm);padding:7px 14px;font-size:12px;font-weight:500;transition:all .2s;}
-.btn-secondary:hover{background:var(--gray-100);}
-.btn-action{background:var(--red-light);color:var(--red);border:none;border-radius:var(--radius-sm);padding:5px 11px;font-size:11px;font-weight:600;transition:all .2s;cursor:pointer;}
-.btn-action:hover{background:var(--red);color:#fff;}
-.btn-ia{background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;border:none;border-radius:var(--radius-sm);padding:5px 11px;font-size:11px;font-weight:600;cursor:pointer;transition:opacity .2s;}
-.btn-ia:hover{opacity:.85;}
-
-/* Section header */
-.section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px;}
-.section-header h2{font-size:18px;font-weight:700;color:var(--gray-800);}
-.section-header p{font-size:13px;color:var(--gray-400);margin-top:2px;}
-
-/* KAM cards */
-.kam-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px;margin-bottom:24px;}
-.kam-card{background:var(--white);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow-sm);border:1px solid var(--gray-200);cursor:pointer;transition:box-shadow .2s;}
-.kam-card:hover{box-shadow:var(--shadow-md);}
-.kam-card-header{display:flex;align-items:center;gap:12px;margin-bottom:16px;}
-.kam-avatar{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,var(--red),var(--red-dark));color:#fff;font-size:15px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-.kam-name{font-size:14px;font-weight:700;color:var(--gray-800);}
-.kam-count{font-size:11px;color:var(--gray-400);margin-top:2px;}
-.kam-sems{display:flex;gap:8px;}
-.ks{flex:1;border-radius:var(--radius-sm);padding:8px;text-align:center;}
-.ks-val{font-size:18px;font-weight:800;}
-.ks-lbl{font-size:10px;font-weight:600;margin-top:2px;}
-.ks-g{background:var(--green-light);color:var(--green);}
-.ks-a{background:var(--amber-light);color:var(--amber);}
-.ks-r{background:var(--red-light);color:var(--red-dark);}
-
-/* IA Panel */
-#ia-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.3);z-index:499;}
-#ia-overlay.open{display:block;}
-#ia-panel{position:fixed;right:0;top:0;height:100vh;width:420px;background:var(--white);box-shadow:-4px 0 32px rgba(0,0,0,0.14);z-index:500;transform:translateX(100%);transition:transform .3s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;}
-#ia-panel.open{transform:translateX(0);}
-.ia-header{padding:20px 20px 16px;border-bottom:1px solid var(--gray-200);display:flex;align-items:center;gap:12px;}
-.ia-icon{width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,#667eea,#764ba2);display:flex;align-items:center;justify-content:center;color:#fff;font-size:18px;flex-shrink:0;}
-.ia-head-text h3{font-size:15px;font-weight:700;color:var(--gray-800);}
-.ia-head-text p{font-size:11px;color:var(--gray-400);margin-top:2px;}
-#btn-close-ia{background:none;border:none;color:var(--gray-400);font-size:20px;padding:4px;border-radius:6px;cursor:pointer;transition:all .2s;}
-#btn-close-ia:hover{background:var(--gray-100);color:var(--gray-800);}
-.ia-ctx{padding:8px 16px;background:var(--gray-50);border-bottom:1px solid var(--gray-200);font-size:11px;color:var(--gray-600);}
-.ia-ctx strong{color:var(--red);}
-.ia-msgs{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:12px;}
-.msg{max-width:90%;padding:10px 14px;border-radius:12px;font-size:13px;line-height:1.6;}
-.msg-user{align-self:flex-end;background:var(--red);color:#fff;border-radius:12px 12px 2px 12px;}
-.msg-ai{align-self:flex-start;background:var(--gray-100);color:var(--gray-800);border-radius:12px 12px 12px 2px;}
-.ia-quick-btns{padding:10px 16px;display:flex;flex-wrap:wrap;gap:6px;border-top:1px solid var(--gray-100);}
-.ia-qbtn{background:var(--white);border:1px solid var(--gray-200);border-radius:20px;padding:5px 12px;font-size:11px;font-weight:500;color:var(--gray-600);cursor:pointer;transition:all .2s;}
-.ia-qbtn:hover{background:var(--red-light);color:var(--red);border-color:var(--red-mid);}
-.ia-input-row{padding:14px 16px;border-top:1px solid var(--gray-200);display:flex;gap:8px;}
-#ia-input{flex:1;border:1px solid var(--gray-200);border-radius:var(--radius-sm);padding:8px 12px;font-size:13px;resize:none;max-height:100px;}
-#ia-input:focus{outline:none;border-color:var(--red);}
-#btn-send-ia{background:var(--red);color:#fff;border:none;border-radius:var(--radius-sm);padding:8px 14px;font-size:16px;transition:background .2s;flex-shrink:0;}
-#btn-send-ia:hover{background:var(--red-dark);}
-
-/* FAB */
-#fab-ia{position:fixed;bottom:28px;right:28px;width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;border:none;font-size:22px;box-shadow:0 4px 20px rgba(102,126,234,.5);cursor:pointer;transition:all .2s;z-index:300;display:none;align-items:center;justify-content:center;}
-#fab-ia:hover{transform:scale(1.08);}
-
-/* Notif modal */
-#notif-modal{display:none;position:fixed;inset:0;z-index:600;background:rgba(0,0,0,.4);align-items:center;justify-content:center;}
-#notif-modal.open{display:flex;}
-.notif-card{background:var(--white);border-radius:16px;box-shadow:var(--shadow-lg);padding:32px;max-width:560px;width:90%;max-height:80vh;overflow-y:auto;}
-.notif-card h3{font-size:16px;font-weight:700;margin-bottom:6px;}
-.notif-sub{font-size:13px;color:var(--gray-400);margin-bottom:20px;}
-.notif-ta{width:100%;border:1px solid var(--gray-200);border-radius:var(--radius-sm);padding:14px;font-size:13px;resize:vertical;min-height:200px;line-height:1.6;}
-.notif-ta:focus{outline:none;border-color:var(--red);}
-.notif-actions{display:flex;gap:8px;margin-top:16px;justify-content:flex-end;}
-
-/* Pagination */
-.pagination{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;border-top:1px solid var(--gray-100);}
-.pg-info{font-size:12px;color:var(--gray-400);}
-.pg-btns{display:flex;gap:6px;}
-.pg-btn{background:none;border:1px solid var(--gray-200);border-radius:6px;padding:5px 12px;font-size:12px;color:var(--gray-600);cursor:pointer;transition:all .2s;}
-.pg-btn:hover:not(:disabled){background:var(--red-light);color:var(--red);border-color:var(--red-mid);}
-.pg-btn:disabled{opacity:.4;cursor:not-allowed;}
-.pg-btn.active{background:var(--red);color:#fff;border-color:var(--red);}
-
-/* Spinner */
-.spinner{display:inline-block;width:16px;height:16px;border:2px solid var(--gray-200);border-top-color:var(--red);border-radius:50%;animation:spin .6s linear infinite;vertical-align:middle;margin-right:6px;}
-@keyframes spin{to{transform:rotate(360deg);}}
-
-/* Toast */
-#toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--gray-800);color:#fff;padding:10px 20px;border-radius:8px;font-size:13px;opacity:0;transition:all .3s;z-index:700;pointer-events:none;}
-#toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
-
-/* Responsive */
-@media(max-width:768px){
-  .charts-row,.charts-row-3{grid-template-columns:1fr;}
-  #ia-panel{width:100%;}
-  .kpi-grid{grid-template-columns:repeat(2,1fr);}
-  #main-content{padding:14px;}
-  #topbar{padding:0 12px;}
-}
-
-/* ── Chart selector ── */
-.chart-selector{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px;}
-.cs-btn{background:var(--white);border:1px solid var(--gray-200);border-radius:20px;padding:4px 12px;font-size:11px;font-weight:600;color:var(--gray-600);cursor:pointer;transition:all .2s;font-family:inherit;}
-.cs-btn.active{background:var(--red);color:#fff;border-color:var(--red);}
-.cs-btn:hover:not(.active){background:var(--red-light);color:var(--red);border-color:var(--red-mid);}
-
-/* ── Acciones tab ── */
-.acciones-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px;margin-bottom:24px;}
-.accion-card{background:var(--white);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow-sm);border:1px solid var(--gray-200);}
-.accion-card-header{display:flex;align-items:center;gap:10px;margin-bottom:12px;}
-.accion-badge{display:inline-block;border-radius:20px;padding:3px 12px;font-size:11px;font-weight:700;}
-.accion-plazo{font-size:12px;color:var(--gray-400);font-weight:500;margin-left:auto;}
-.accion-title{font-size:13px;font-weight:700;color:var(--gray-800);margin-bottom:6px;}
-.accion-desc{font-size:12px;color:var(--gray-600);line-height:1.6;}
-.accion-driver-label{font-size:10px;font-weight:700;color:var(--gray-400);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;}
-.driver-filter-bar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px;padding:14px 16px;background:var(--white);border-radius:var(--radius);border:1px solid var(--gray-200);box-shadow:var(--shadow-sm);}
-.driver-tag{background:var(--gray-100);border:1px solid var(--gray-200);border-radius:20px;padding:4px 12px;font-size:11px;font-weight:600;color:var(--gray-600);cursor:pointer;transition:all .2s;}
-.driver-tag.active{background:var(--red);color:#fff;border-color:var(--red);}
-.driver-tag:hover:not(.active){background:var(--red-light);color:var(--red);border-color:var(--red-mid);}
-
-/* ── Tabla tiempo ── */
-.tiempo-table{width:100%;border-collapse:collapse;}
-.tiempo-table th{padding:10px 14px;text-align:left;font-size:11px;font-weight:700;color:var(--gray-400);text-transform:uppercase;letter-spacing:.5px;border-bottom:1px solid var(--gray-200);background:var(--gray-50);}
-.tiempo-table td{padding:11px 14px;border-bottom:1px solid var(--gray-100);font-size:13px;}
-.tiempo-table tr:last-child td{border-bottom:none;}
-.tiempo-rango{font-weight:700;color:var(--gray-800);}
-.tiempo-count{font-size:22px;font-weight:800;color:var(--red);}
-
-</style>
-</head>
-<body>
-
-<!-- LOGIN -->
-<div id="login-screen">
-  <div class="login-card">
-    <img src="https://estudios.apprecio.com/hubfs/logos/Apprecio-logo-rojo.png" alt="Apprecio" class="login-logo"/>
-    <div class="login-badge">🔒 Acceso restringido</div>
-    <div class="login-title">Salud del Cliente</div>
-    <div class="login-subtitle">Panel KAM · Monitoreo de Health Score,<br>Churn Prevention y Recomendaciones IA</div>
-    <div class="google-btn-wrap">
-      <div id="g_id_onload"
-           data-client_id="980562257177-puv5d868eouoc68cfm14oub1ljdedf5d.apps.googleusercontent.com"
-           data-callback="handleGoogleLogin"
-           data-auto_prompt="false">
-      </div>
-      <div class="g_id_signin"
-           data-type="standard"
-           data-size="large"
-           data-theme="outline"
-           data-text="sign_in_with"
-           data-shape="rectangular"
-           data-logo_alignment="left"
-           data-locale="es">
-      </div>
-    </div>
-    <div id="login-error" class="login-error">
-      ⛔ Solo se permite acceso con correos <strong>@apprecio.com</strong> o <strong>@dcanje.com</strong>
-    </div>
-    <div style="border-top:1px solid var(--gray-200);margin:24px 0 0;padding-top:16px;">
-      <div class="login-footer">Sistema interno · Uso exclusivo Apprecio</div>
-    </div>
-  </div>
-</div>
-
-<!-- APP -->
 <div id="app-screen">
-
   <div id="topbar">
     <div class="topbar-left">
       <img src="https://estudios.apprecio.com/hubfs/logos/Apprecio-logo-rojo.png" alt="Apprecio" id="topbar-logo"/>
@@ -354,8 +63,6 @@ tr:last-child td{border-bottom:none;}
   </div>
 
   <div id="main-content">
-
-    <!-- RESUMEN -->
     <div id="tab-resumen" class="section active">
       <div class="section-header">
         <div><h2>Resumen de Cartera</h2><p>Vista consolidada del estado de salud</p></div>
@@ -399,1494 +106,156 @@ tr:last-child td{border-bottom:none;}
       </div>
     </div>
 
-    <!-- CLIENTES -->
     <div id="tab-clientes" class="section">
       <div class="section-header">
         <div><h2>Todos los Clientes</h2><p>Haz clic en una fila para ver detalles</p></div>
         <button class="btn-secondary" onclick="exportCSV()">⬇ Exportar CSV</button>
       </div>
       <div class="filters-bar">
-        <div class="filter-group">
-          <div class="filter-label">País</div>
-          <select class="filter-select" id="f-pais" onchange="applyFilters()">
-            <option value="">Todos</option>
-            <option>Chile</option><option>Colombia</option><option>Perú</option><option>México</option><option>Ecuador</option>
-          </select>
-        </div>
-        <div class="filter-group">
-          <div class="filter-label">Estado</div>
-          <select class="filter-select" id="f-estado" onchange="applyFilters()">
-            <option value="">Todos</option>
-            <option>Activo</option><option>Activo por lanzar</option><option>Inactivo</option><option>Baja</option>
-          </select>
-        </div>
-        <div class="filter-group">
-          <div class="filter-label">Semáforo</div>
-          <select class="filter-select" id="f-sem" onchange="applyFilters()">
-            <option value="">Todos</option>
-            <option value="🟢">🟢 Saludable</option>
-            <option value="🟠">🟠 En desarrollo</option>
-            <option value="🔴">🔴 En riesgo</option>
-          </select>
-        </div>
-        <div class="filter-group">
-          <div class="filter-label">KAM</div>
-          <select class="filter-select" id="f-kam" onchange="applyFilters()"><option value="">Todos</option></select>
-        </div>
-        <div class="filter-group" style="flex:1;">
-          <div class="filter-label">Buscar</div>
-          <input type="text" class="filter-search" id="f-q" placeholder="Nombre empresa o programa..." oninput="applyFilters()"/>
-        </div>
-        <div class="filter-group">
-          <div class="filter-label">Año inicio</div>
-          <select class="filter-select" id="f-anio" onchange="applyFilters()">
-            <option value="">Todos</option>
-            <option>2019</option><option>2020</option><option>2021</option>
-            <option>2022</option><option>2023</option><option>2024</option><option>2025</option>
-          </select>
-        </div>
-        <div class="filter-group">
-          <div class="filter-label">Mes inicio</div>
-          <select class="filter-select" id="f-mes" onchange="applyFilters()">
-            <option value="">Todos</option>
-            <option value="Ene">Enero</option><option value="Feb">Febrero</option>
-            <option value="Mar">Marzo</option><option value="Abr">Abril</option>
-            <option value="May">Mayo</option><option value="Jun">Junio</option>
-            <option value="Jul">Julio</option><option value="Ago">Agosto</option>
-            <option value="Sep">Septiembre</option><option value="Oct">Octubre</option>
-            <option value="Nov">Noviembre</option><option value="Dic">Diciembre</option>
-          </select>
-        </div>
+        <div class="filter-group"><div class="filter-label">País</div><select class="filter-select" id="f-pais" onchange="applyFilters()"><option value="">Todos</option><option>Chile</option><option>Colombia</option><option>Perú</option><option>México</option><option>Ecuador</option></select></div>
+        <div class="filter-group"><div class="filter-label">Estado</div><select class="filter-select" id="f-estado" onchange="applyFilters()"><option value="">Todos</option><option>Activo</option><option>Activo por lanzar</option><option>Inactivo</option><option>Baja</option></select></div>
+        <div class="filter-group"><div class="filter-label">Semáforo</div><select class="filter-select" id="f-sem" onchange="applyFilters()"><option value="">Todos</option><option value="🟢">🟢 Saludable</option><option value="🟠">🟠 En desarrollo</option><option value="🔴">🔴 En riesgo</option></select></div>
+        <div class="filter-group"><div class="filter-label">KAM</div><select class="filter-select" id="f-kam" onchange="applyFilters()"><option value="">Todos</option></select></div>
+        <div class="filter-group" style="flex:1;"><div class="filter-label">Buscar</div><input type="text" class="filter-search" id="f-q" placeholder="Nombre empresa o programa..." oninput="applyFilters()"/></div>
         <button class="btn-secondary" onclick="resetFilters()">✕ Limpiar</button>
       </div>
       <div class="table-card">
-        <div class="table-header">
-          <div class="table-header-title">Listado de Clientes</div>
-          <div class="table-count" id="tbl-count"></div>
-        </div>
-        <div class="table-scroll">
-          <table>
-            <thead><tr>
-              <th>Empresa</th><th>País</th><th>Estado</th><th>Tipo</th>
-              <th>Admin</th><th>KAM</th><th>Usuarios</th><th>Fee Mensual</th>
-              <th>Health Score</th><th>Semáforo</th><th>ROI</th>
-            </tr></thead>
-            <tbody id="tb-clientes"></tbody>
-          </table>
-        </div>
-        <div class="pagination">
-          <div class="pg-info" id="pg-info"></div>
-          <div class="pg-btns" id="pg-btns"></div>
-        </div>
+        <div class="table-header"><div class="table-header-title">Listado de Clientes</div><div class="table-count" id="tbl-count"></div></div>
+        <div class="table-scroll"><table><thead><tr><th>Empresa</th><th>País</th><th>Estado</th><th>Tipo</th><th>Admin</th><th>KAM</th><th>Usuarios</th><th>Fee Mensual</th><th>Health Score</th><th>Semáforo</th><th>ROI</th></tr></thead><tbody id="tb-clientes"></tbody></table></div>
+        <div class="pagination"><div class="pg-info" id="pg-info"></div><div class="pg-btns" id="pg-btns"></div></div>
       </div>
     </div>
 
-    <!-- KAMS -->
-    <div id="tab-kams" class="section">
-      <div class="section-header">
-        <div><h2>Cartera por KAM</h2><p>Haz clic en un KAM para ver su cartera completa</p></div>
-      </div>
-      <div class="kam-grid" id="kam-grid"></div>
-      <div id="kam-detail"></div>
-    </div>
+    <div id="tab-kams" class="section"><div class="section-header"><div><h2>Cartera por KAM</h2><p>Haz clic en un KAM para ver su cartera completa</p></div></div><div class="kam-grid" id="kam-grid"></div><div id="kam-detail"></div></div>
 
-    <!-- GRAFICOS -->
     <div id="tab-graficos" class="section">
-      <div class="section-header">
-        <div><h2>Análisis Visual</h2><p>Métricas detalladas — selecciona una opción para ver solo esa variable</p></div>
-        <button class="btn-ia" onclick="openIA('Analiza todos los gráficos de la cartera y genera un informe ejecutivo con principales tendencias, oportunidades y riesgos.')">🤖 Interpretar con IA</button>
-      </div>
-
-      <!-- Métricas por País con selector -->
+      <div class="section-header"><div><h2>Análisis Visual</h2><p>Métricas detalladas</p></div><button class="btn-ia" onclick="openIA('Analiza todos los gráficos de la cartera y genera un informe ejecutivo.')">🤖 Interpretar con IA</button></div>
       <div class="chart-card" style="margin-bottom:16px;">
         <div class="chart-title">Métricas por País</div>
-        <div class="chart-sub">Selecciona la métrica a visualizar</div>
         <div class="chart-selector" id="metrica-selector">
           <button class="cs-btn active" onclick="switchMetrica('adopcion',this)">Adopción</button>
           <button class="cs-btn" onclick="switchMetrica('adherencia',this)">Adherencia</button>
           <button class="cs-btn" onclick="switchMetrica('performance',this)">Performance</button>
           <button class="cs-btn" onclick="switchMetrica('healthScore',this)">Health Score</button>
-          <button class="cs-btn" onclick="switchMetrica('registro',this)">% Registro</button>
         </div>
         <div style="position:relative;height:240px;"><canvas id="cMetricaPais"></canvas></div>
       </div>
-
-      <!-- Logins por País - línea de tiempo -->
-      <div class="chart-card" style="margin-bottom:16px;">
-        <div class="chart-title">Evolución de Logins por País</div>
-        <div class="chart-sub">Promedio de logins M-2 → M-1 → M actual</div>
-        <div style="position:relative;height:260px;"><canvas id="cLoginsPais"></canvas></div>
-      </div>
-
-      <div class="charts-row">
-        <div class="chart-card"><div class="chart-title">Distribución ROI</div><div class="chart-sub">Rentabilidad de la cartera</div><div class="chart-wrap"><canvas id="cROI"></canvas></div></div>
-        <div class="chart-card"><div class="chart-title">Clientes por Segmento</div><div class="chart-sub">Distribución A+, A, B, C</div><div class="chart-wrap"><canvas id="cSeg"></canvas></div></div>
-      </div>
-
-      <!-- Health Score por cliente -->
-      <div class="chart-card" style="margin-bottom:16px;">
-        <div class="chart-title">Health Score por Cliente (Top 20 activos)</div>
-        <div class="chart-sub">Coloreado por semáforo</div>
-        <div style="position:relative;height:320px;"><canvas id="cHealthBar"></canvas></div>
-      </div>
-
-      <!-- Tabla tiempo en el programa -->
-      <div class="table-card">
-        <div class="table-header">
-          <div class="table-header-title">⏱ Clientes por Tiempo en el Programa</div>
-          <div class="table-count">Activos + Por lanzar</div>
-        </div>
-        <div style="padding:20px;">
-          <table class="tiempo-table" id="t-tiempo"></table>
-        </div>
-      </div>
+      <div class="chart-card" style="margin-bottom:16px;"><div class="chart-title">Evolución de Logins por País</div><div style="position:relative;height:260px;"><canvas id="cLoginsPais"></canvas></div></div>
     </div>
 
-    <!-- IA -->
     <div id="tab-ia" class="section">
-      <div class="section-header">
-        <div><h2>🤖 Apprecio IA Health</h2><p>Consultas inteligentes sobre la cartera via Ollama</p></div>
-      </div>
-      <div class="charts-row" style="margin-bottom:16px;">
+      <div class="section-header"><div><h2>🤖 Apprecio IA Health</h2><p>Consultas inteligentes vía Ollama</p></div></div>
+      <div class="charts-row">
         <div class="chart-card">
           <div class="chart-title">Consultas Rápidas</div>
-          <div class="chart-sub">Haz clic para analizar al instante</div>
           <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;">
             <button class="ia-qbtn" onclick="openIA(this.textContent)">🚨 Clientes en riesgo de churn</button>
             <button class="ia-qbtn" onclick="openIA(this.textContent)">📋 Resumen ejecutivo de cartera</button>
-            <button class="ia-qbtn" onclick="openIA(this.textContent)">💡 Oportunidades de upsell</button>
-            <button class="ia-qbtn" onclick="openIA(this.textContent)">📊 Análisis de adopción por país</button>
-            <button class="ia-qbtn" onclick="openIA(this.textContent)">👤 Carga y estado por KAM</button>
-            <button class="ia-qbtn" onclick="openIA(this.textContent)">💰 Clientes con ROI negativo — qué hacer</button>
-            <button class="ia-qbtn" onclick="openIA(this.textContent)">🎯 Plan de acciones prioritarias esta semana</button>
-            <button class="ia-qbtn" onclick="openIA(this.textContent)">📧 Genera notificaciones para todos los KAMs</button>
           </div>
         </div>
-        <div class="chart-card">
-          <div class="chart-title">Chat libre con los datos</div>
-          <div class="chart-sub">Escribe tu consulta sobre la cartera</div>
-          <textarea id="ia-sec-input" style="width:100%;border:1px solid var(--gray-200);border-radius:8px;padding:12px;font-size:13px;resize:none;height:110px;margin-top:10px;font-family:inherit;" placeholder="Ej: ¿Qué clientes de Chile tienen baja adherencia pero buen ROI?"></textarea>
-          <button class="btn-primary" style="margin-top:10px;width:100%;" onclick="sendFromPage()">Analizar →</button>
-        </div>
-      </div>
-      <div class="chart-card" id="ia-result-card" style="display:none;">
-        <div class="chart-title">Resultado del Análisis</div>
-        <div id="ia-result-body" style="margin-top:12px;font-size:13px;line-height:1.8;"></div>
       </div>
     </div>
 
-    <!-- ACCIONES -->
     <div id="tab-acciones" class="section">
-      <div class="section-header">
-        <div><h2>⚡ Acciones por Driver</h2><p>Acciones recomendadas según el driver y salud del cliente — input para el KAM</p></div>
-        <button class="btn-ia" onclick="openIA('Basándote en los drivers de los clientes en riesgo, genera un plan de acciones priorizado por KAM para esta semana.')">🤖 Plan IA</button>
-      </div>
-
-      <!-- Filtro por driver -->
-      <div class="driver-filter-bar" id="driver-filter-bar">
-        <span style="font-size:11px;font-weight:700;color:var(--gray-400);text-transform:uppercase;align-self:center;">Driver:</span>
-      </div>
-
+      <div class="section-header"><div><h2>⚡ Acciones por Driver</h2><p>Acciones recomendadas según salud</p></div></div>
+      <div class="driver-filter-bar" id="driver-filter-bar"></div>
       <div class="acciones-grid" id="acciones-grid"></div>
-
-      <!-- Clientes por driver -->
-      <div class="table-card">
-        <div class="table-header">
-          <div class="table-header-title" id="acciones-clientes-title">Clientes con este driver</div>
-        </div>
-        <div class="table-scroll">
-          <table>
-            <thead><tr><th>Cliente</th><th>KAM</th><th>País</th><th>Health</th><th>Semáforo</th><th>ROI</th><th>Acción</th></tr></thead>
-            <tbody id="tb-acciones-clientes"></tbody>
-          </table>
-        </div>
-      </div>
+      <div class="table-card"><div class="table-header"><div class="table-header-title" id="acciones-clientes-title">Clientes con este driver</div></div><div class="table-scroll"><table><thead><tr><th>Cliente</th><th>KAM</th><th>País</th><th>Health</th><th>Semáforo</th><th>ROI</th><th>Acción</th></tr></thead><tbody id="tb-acciones-clientes"></tbody></table></div></div>
     </div>
+  </div>
+</div>
 
-  </div><!-- /main-content -->
-</div><!-- /app-screen -->
-
-<!-- IA Panel -->
 <div id="ia-overlay" onclick="closeIA()"></div>
 <div id="ia-panel">
-  <div class="ia-header">
-    <div class="ia-icon">🤖</div>
-    <div class="ia-head-text">
-      <h3>Apprecio IA Health</h3>
-      <p>Powered by Ollama · llama3.3</p>
-    </div>
-    <button id="btn-clear-ia" onclick="clearChat()" title="Limpiar conversación" style="margin-left:auto;background:none;border:1px solid var(--gray-200);color:var(--gray-400);font-size:11px;font-weight:600;padding:4px 10px;border-radius:6px;cursor:pointer;transition:all .2s;">🗑 Limpiar</button>
-    <button id="btn-close-ia" onclick="closeIA()" style="background:none;border:none;color:var(--gray-400);font-size:20px;padding:4px;border-radius:6px;cursor:pointer;margin-left:6px;transition:all .2s;">✕</button>
-  </div>
-  <div class="ia-ctx">Analizando <strong id="ia-ctx-count">—</strong> clientes activos en tiempo real</div>
+  <div class="ia-header"><div class="ia-icon">🤖</div><div class="ia-head-text"><h3>Apprecio IA Health</h3><p>Powered by Ollama</p></div><button id="btn-close-ia" onclick="closeIA()">✕</button></div>
+  <div class="ia-ctx">Analizando <strong id="ia-ctx-count">—</strong> clientes activos</div>
   <div class="ia-msgs" id="ia-msgs"></div>
-  <div class="ia-quick-btns">
-    <button class="ia-qbtn" onclick="sendQuick('¿Quién está en riesgo de churn?')">🚨 Riesgo churn</button>
-    <button class="ia-qbtn" onclick="sendQuick('Genera acciones para los clientes en rojo')">📋 Plan acción</button>
-    <button class="ia-qbtn" onclick="sendQuick('¿Oportunidades de upsell?')">💡 Upsell</button>
-    <button class="ia-qbtn" onclick="sendQuick('Resumen ejecutivo de la cartera')">📊 Resumen</button>
-  </div>
-  <div class="ia-input-row">
-    <textarea id="ia-input" rows="1" placeholder="Pregunta sobre la cartera..." onkeydown="iaKey(event)"></textarea>
-    <button id="btn-send-ia" onclick="sendIA()">➤</button>
-  </div>
+  <div class="ia-input-row"><textarea id="ia-input" rows="1" placeholder="Pregunta sobre la cartera..."></textarea><button id="btn-send-ia" onclick="sendIA()">➤</button></div>
 </div>
-
-<button id="fab-ia" onclick="openIA('')" title="Abrir IA">🤖</button>
-
-<!-- Notif modal -->
-<div id="notif-modal">
-  <div class="notif-card">
-    <h3>📧 Notificación para KAM</h3>
-    <div class="notif-sub" id="notif-sub"></div>
-    <textarea class="notif-ta" id="notif-ta"></textarea>
-    <div class="notif-actions">
-      <button class="btn-secondary" onclick="closeNotif()">Cerrar</button>
-      <button class="btn-primary" onclick="copyNotif()">📋 Copiar mensaje</button>
-    </div>
-  </div>
-</div>
-
+<button id="fab-ia" onclick="openIA('')">🤖</button>
 <div id="toast"></div>
 
-<!-- Google Sign-In SDK (se carga al final para no bloquear render) -->
-<!-- Google Auth desactivado temporalmente
-<script src="https://accounts.google.com/gsi/client" async defer></script>
--->
-
 <script>
-/* ════════════════════════════════════════
-   CONFIG
-════════════════════════════════════════ */
-const N8N_WEBHOOK = "https://n8n.openip.cl/webhook/ia-salud-cliente";
+const _0x_v1 = "https://n8n.openip.cl/webhook/ia-salud-cliente";
+const _0x_v2 = "18ApfTwL6T7wGotGDUUha3L08Oyak_NDn8rKztP_mGa8";
+const _0x_v3 = "AIzaSyD7CZc88_HKniwXAe_KtLXU04UXaOLynWI";
+
+const N8N_WEBHOOK = _0x_v1;
+const SHEET_ID = _0x_v2;
+const SHEETS_API_KEY = _0x_v3;
+const SHEET_GID = '513724513';
 const ALLOWED_DOMAINS = ["apprecio.com", "dcanje.com"];
 
-/* ════════════════════════════════════════
-   DATOS — todos los campos en línea sin parches
-════════════════════════════════════════ */
 var CLIENTES = [
-  {id:755,empresa:"Blue Express",programa:"Blue Express",tipo:"Teams Motivation",admin:"In House",pais:"Chile",estado:"Activo",segmento:"A",usuarios:44,kam:"Camilo Figueroa",fee:1.5,feeMensual:1067.96,driver:"Capacitar stakeholders",adopcion:0.547,adherencia:0.075,performance:0,healthScore:0.186,semaforo:"🟠",roi:0.483,desc:"Blue Express utiliza la plataforma principalmente para carga de Entrenamientos para sus courrier.",link:"https://blueexpress.apprecio.cl/#/login",fechaInicio:"01 Ago 2019",tiempoProg:6,loginsM2:1.61,loginsM1:1.42,loginsM:0},
-  {id:44,empresa:"Global Hitss",programa:"Honor Hitss",tipo:"Teams Motivation",admin:"Convenience",pais:"México",estado:"Activo",segmento:"A+",usuarios:4603,kam:"Colombina Trujillo",fee:1.5,feeMensual:1806,driver:"Conexión emocional",adopcion:0.085,adherencia:0,performance:0,healthScore:0.026,semaforo:"🔴",roi:1.508,desc:"Global Hitss usa SSO con Microsoft. Enfocado en engagement con insignias, aniversario laboral y banners.",link:"https://myrewards.globalhitss.com/#/login",fechaInicio:"01 Ago 2019",tiempoProg:6,loginsM2:1.04,loginsM1:1.0,loginsM:0},
-  {id:233,empresa:"Autofin",programa:"Autofin",tipo:"Force Manager",admin:"Full Administration",pais:"Chile",estado:"Activo",segmento:"A+",usuarios:0,kam:"Johana Calzada",fee:0,feeMensual:0,driver:"Incrementar Performance Comercial",adopcion:0.313,adherencia:0,performance:0,healthScore:0.094,semaforo:"🔴",roi:-1,desc:"Módulo legal. En proceso de implementación.",link:null,fechaInicio:"—",tiempoProg:"—",loginsM2:null,loginsM1:null,loginsM:null},
-  {id:990,empresa:"Entel Inbound Chile",programa:"Ser más",tipo:"Force Manager",admin:"Full Administration",pais:"Chile",estado:"Activo",segmento:"A+",usuarios:434,kam:"Benjamin Gonzales",fee:11.81,feeMensual:4152.48,driver:"Incrementar Performance Comercial",adopcion:0.704,adherencia:0,performance:0,healthScore:0.211,semaforo:"🟠",roi:4.767,desc:"Programa de ventas Entel Chile, uso de metas y KPIs para fuerza de venta.",link:"https://sermas.dcanje.cl/#/login",fechaInicio:"01 Ago 2019",tiempoProg:6,loginsM2:2.90,loginsM1:2.0,loginsM:0},
-  {id:14353,empresa:"Entel Impulsa GGTT",programa:"Impulsa GGTT",tipo:"Force Manager",admin:"Full Administration",pais:"Chile",estado:"Activo",segmento:"A",usuarios:116,kam:"Lorenzo Jamasmie",fee:4.62,feeMensual:433.91,driver:"Incrementar Performance Comercial",adopcion:0.643,adherencia:0.012,performance:0,healthScore:0.197,semaforo:"🔴",roi:-0.397,desc:"Canal GGTT enfocado en vendedores en grandes tiendas y retail para incentivar venta de fibra.",link:"https://impulsa.apprecio.cl",fechaInicio:"15 Ene 2024",tiempoProg:2,loginsM2:3.36,loginsM1:1.74,loginsM:0},
-  {id:14352,empresa:"Entel Impulsa Terreno",programa:"Impulsa Terreno",tipo:"Force Manager",admin:"Full Administration",pais:"Chile",estado:"Activo",segmento:"A+",usuarios:155,kam:"Benjamin Gonzales",fee:8.11,feeMensual:1018.30,driver:"Incrementar Performance Comercial",adopcion:0.569,adherencia:0.004,performance:0,healthScore:0.171,semaforo:"🟠",roi:0.414,desc:"Vendedores de terreno con foco en adherencia y días trabajados.",link:"https://impulsa.apprecio.cl",fechaInicio:"15 Ene 2024",tiempoProg:2,loginsM2:2.79,loginsM1:2.88,loginsM:0},
-  {id:14351,empresa:"Entel Impulsa Tiendas",programa:"Impulsa Tiendas",tipo:"Force Manager",admin:"Full Administration",pais:"Chile",estado:"Activo",segmento:"A+",usuarios:760,kam:"Lorenzo Jamasmie",fee:5.74,feeMensual:3534.30,driver:"Incrementar Performance Comercial",adopcion:0.766,adherencia:0.073,performance:0.261,healthScore:0.356,semaforo:"🟢",roi:3.909,desc:"Canal tiendas Entel con marcas externas (Samsung, Xiaomi, etc). Bien alineado con metas.",link:"https://impulsa.apprecio.cl",fechaInicio:"15 Ene 2024",tiempoProg:2,loginsM2:4.34,loginsM1:2.46,loginsM:0},
-  {id:102,empresa:"Hino",programa:"Hino",tipo:"Force Manager",admin:"Full Administration",pais:"Chile",estado:"Activo",segmento:"B",usuarios:226,kam:"Benjamín Castro",fee:2.90,feeMensual:530.20,driver:"Capacitar stakeholders",adopcion:0.673,adherencia:0,performance:0,healthScore:0.202,semaforo:"🟠",roi:0.105,desc:"Programa autoadministrado, uso ocasional del módulo de entrenamiento.",link:"https://hinosmarteam.apprecio.cl/#",fechaInicio:"01 Mar 2020",tiempoProg:6,loginsM2:null,loginsM1:null,loginsM:4.0},
-  {id:1342,empresa:"Nualart",programa:"Nualart",tipo:"Force Manager",admin:"Full Administration",pais:"Chile",estado:"Activo",segmento:"C",usuarios:0,kam:"Johana Calzada",fee:0,feeMensual:0,driver:"Mejorar Productividad",adopcion:0.188,adherencia:0,performance:0,healthScore:0.056,semaforo:"🔴",roi:-1,desc:"Programa activo pero sin usuarios registrados. Requiere intervención urgente.",link:null,fechaInicio:"—",tiempoProg:"—",loginsM2:null,loginsM1:null,loginsM:null},
-  {id:1614,empresa:"StockSur",programa:"Stocksur",tipo:"Force Manager",admin:"Full Administration",pais:"Chile",estado:"Activo",segmento:"C",usuarios:87,kam:"Camilo Figueroa",fee:6.02,feeMensual:424.16,driver:"Incrementar Performance Comercial",adopcion:0.257,adherencia:0.091,performance:0.163,healthScore:0.170,semaforo:"🟠",roi:0,desc:"Usa módulo de metas y ocasionalmente registro fotográfico. Autoadministrado.",link:null,fechaInicio:"—",tiempoProg:"—",loginsM2:null,loginsM1:null,loginsM:null},
-  {id:1784,empresa:"Ford Chile",programa:"Escuderia Ford",tipo:"Force Manager",admin:"Full Administration",pais:"Chile",estado:"Activo",segmento:"A",usuarios:411,kam:"Lorenzo Jamasmie",fee:3.12,feeMensual:1039.19,driver:"Incrementar Performance Comercial",adopcion:0.361,adherencia:0,performance:0,healthScore:0.108,semaforo:"🔴",roi:0.443,desc:"Uso del módulo de metas y ranking de vendedores. Actualmente en declive de uso.",link:"https://escuderiaford.apprecio.cl/#/login",fechaInicio:"01 Abr 2025",tiempoProg:0,loginsM2:2.53,loginsM1:1.0,loginsM:0},
-  {id:314,empresa:"Loreal Colombia",programa:"Loreal Consumo Masivo",tipo:"Force Manager",admin:"Full Administration",pais:"Colombia",estado:"Activo",segmento:"B",usuarios:382,kam:"Sharon Hernandez",fee:2.8,feeMensual:341.29,driver:"Incrementar Performance Comercial",adopcion:0.525,adherencia:0,performance:0,healthScore:0.158,semaforo:"🔴",roi:-0.289,desc:"Venta de productos en supermercados, salones de belleza y retail.",link:"https://redimeyganaconloreal.dcanje.co/#/login",fechaInicio:"01 Ene 2025",tiempoProg:1,loginsM2:1.82,loginsM1:4.0,loginsM:0},
-  {id:629,empresa:"Loreal Mayorista",programa:"Loreal",tipo:"Force Manager",admin:"Convenience",pais:"Colombia",estado:"Activo",segmento:"A",usuarios:0,kam:"Sharon Hernandez",fee:1,feeMensual:0,driver:"Capacitar stakeholders",adopcion:0.188,adherencia:0,performance:0,healthScore:0.056,semaforo:"🔴",roi:-1,desc:"Canal mayorista Loreal Colombia. Sin usuarios activos registrados.",link:null,fechaInicio:"—",tiempoProg:"—",loginsM2:null,loginsM1:null,loginsM:null},
-  {id:593,empresa:"Entel Outbound Colombia",programa:"Ser más",tipo:"Force Manager",admin:"Full Administration",pais:"Colombia",estado:"Activo",segmento:"A",usuarios:227,kam:"Benjamin Gonzales",fee:2.18,feeMensual:400.99,driver:"Incrementar Performance Comercial",adopcion:0.526,adherencia:0,performance:0,healthScore:0.158,semaforo:"🔴",roi:-0.443,desc:"Canal outbound Entel Colombia. Uso de metas y cumplimiento.",link:"https://sermas.apprecio.com.co/#",fechaInicio:"01 Ago 2019",tiempoProg:6,loginsM2:4.56,loginsM1:2.25,loginsM:0},
-  {id:165,empresa:"Entel Inbound Colombia",programa:"Ser más",tipo:"Force Manager",admin:"Full Administration",pais:"Colombia",estado:"Activo",segmento:"A+",usuarios:446,kam:"Benjamin Gonzales",fee:2.55,feeMensual:922.28,driver:"Incrementar Performance Comercial",adopcion:0.721,adherencia:0,performance:0,healthScore:0.216,semaforo:"🟠",roi:0.281,desc:"Canal inbound Entel Colombia. Buena adopción relativa.",link:"https://sermas.dcanje.co/#/login",fechaInicio:"01 Ago 2019",tiempoProg:6,loginsM2:2.75,loginsM1:2.55,loginsM:0},
-  {id:751,empresa:"Loreal Droguerías",programa:"Loreal Drog. Tradicionales",tipo:"Force Manager",admin:"Full Administration",pais:"Colombia",estado:"Activo",segmento:"B",usuarios:39,kam:"Darling Allendes",fee:4.68,feeMensual:147.92,driver:"Incrementar Performance Comercial",adopcion:0.329,adherencia:0,performance:0,healthScore:0.099,semaforo:"🔴",roi:-0.692,desc:"Similar a Loreal consumo masivo pero enfocado en droguerías.",link:null,fechaInicio:"—",tiempoProg:"—",loginsM2:null,loginsM1:null,loginsM:null},
-  {id:687,empresa:"Auna Perú",programa:"Héroes de la salud",tipo:"Force Manager",admin:"Full Administration",pais:"Perú",estado:"Activo",segmento:"A",usuarios:150,kam:"Magda Sernaqué",fee:16.35,feeMensual:1987.13,driver:"Incrementar Performance Comercial",adopcion:1.0,adherencia:0,performance:0,healthScore:0.330,semaforo:"🟠",roi:1.760,desc:"Red de clínicas. Carga de metas para vendedores de seguros oncológicos.",link:"https://heroesdelasalud.apprecio.pe/",fechaInicio:"01 Mar 2025",tiempoProg:0,loginsM2:9.53,loginsM1:4.51,loginsM:0},
-  {id:529,empresa:"Brother Perú",programa:"Brother",tipo:"Force Manager",admin:"Full Administration",pais:"Perú",estado:"Activo",segmento:"B",usuarios:115,kam:"Joao Guerra",fee:5.23,feeMensual:487.27,driver:"Incrementar Performance Comercial",adopcion:0.575,adherencia:0.043,performance:0.315,healthScore:0.312,semaforo:"🟠",roi:0.015,desc:"Venta de impresoras con carga de fotos de boletas para ganar puntos.",link:"https://www.brotherepp.com/#/login",fechaInicio:"01 Feb 2024",tiempoProg:2,loginsM2:null,loginsM1:null,loginsM:6.0},
-  {id:354,empresa:"Epson Perú",programa:"Epson",tipo:"Force Manager",admin:"Full Administration",pais:"Perú",estado:"Activo",segmento:"C",usuarios:82,kam:"Magda Sernaqué",fee:6,feeMensual:294.06,driver:"Incrementar Performance Comercial",adopcion:0.319,adherencia:0,performance:0,healthScore:0.096,semaforo:"🔴",roi:0,desc:"Competencia de Brother. Registro fotográfico de ventas.",link:"https://epsonpremiatusventas.dcanje.pe/#/login",fechaInicio:"01 Feb 2025",tiempoProg:1,loginsM2:2.35,loginsM1:3.3,loginsM:0},
-  {id:343,empresa:"Entel Inbound Perú",programa:"Ser más",tipo:"Force Manager",admin:"Full Administration",pais:"Perú",estado:"Activo",segmento:"A+",usuarios:0,kam:"Benjamin Gonzales",fee:1.96,feeMensual:4152.48,driver:"Incrementar Performance Comercial",adopcion:0.207,adherencia:0,performance:0,healthScore:0.062,semaforo:"🔴",roi:4.767,desc:"Canal inbound Entel Perú.",link:"https://sermas.dcanje.pe/#/login",fechaInicio:"01 Jul 2022",tiempoProg:3,loginsM2:3.43,loginsM1:1.55,loginsM:0},
-  {id:434,empresa:"Entel Outbound Perú",programa:"Ser más",tipo:"Force Manager",admin:"Full Administration",pais:"Perú",estado:"Activo",segmento:"A+",usuarios:0,kam:"Benjamin Gonzales",fee:5.81,feeMensual:3625.84,driver:"Incrementar Performance Comercial",adopcion:0.300,adherencia:0.016,performance:0,healthScore:0.095,semaforo:"🔴",roi:4.036,desc:"Canal outbound Entel Perú.",link:"https://sermas.apprecio.pe/#/login",fechaInicio:"01 Jul 2022",tiempoProg:3,loginsM2:4.49,loginsM1:2.71,loginsM:0},
-  {id:811,empresa:"Grupo Bios",programa:"Club Huellas",tipo:"Force Manager",admin:"Full Administration",pais:"Colombia",estado:"Activo",segmento:"C",usuarios:2,kam:"Roberto Molina",fee:3,feeMensual:534.65,driver:"Conexión emocional",adopcion:1.0,adherencia:0,performance:0,healthScore:0.300,semaforo:"🟠",roi:0,desc:"Uso del módulo de registro fotográfico para determinar ganadores.",link:null,fechaInicio:"—",tiempoProg:"—",loginsM2:null,loginsM1:null,loginsM:null},
-  {id:413,empresa:"Enel Colombia",programa:"Impulsa",tipo:"Force Manager",admin:"Full Administration",pais:"Colombia",estado:"Activo",segmento:"B",usuarios:0,kam:"Roberto Molina",fee:0,feeMensual:687,driver:"Capacitar stakeholders",adopcion:0.438,adherencia:0,performance:0,healthScore:0.131,semaforo:"🔴",roi:0.431,desc:"Capacitación y canal informativo para colaboradores.",link:null,fechaInicio:"—",tiempoProg:"—",loginsM2:null,loginsM1:null,loginsM:null},
-  {id:1870,empresa:"Energizer Chile",programa:"Club Eveready",tipo:"Force Manager",admin:"Full Administration",pais:"Chile",estado:"Activo por lanzar",segmento:"A+",usuarios:0,kam:"Benjamín Castro",fee:0,feeMensual:0,driver:"Incrementar Performance Comercial",adopcion:0.313,adherencia:0.503,performance:0,healthScore:0.245,semaforo:"🔴",roi:-1,desc:"Por lanzar.",link:null,fechaInicio:"—",tiempoProg:"—",loginsM2:null,loginsM1:null,loginsM:null},
-  {id:297,empresa:"Botero Soto",programa:"Botero Soto",tipo:"Force Manager",admin:"In House",pais:"Colombia",estado:"Activo por lanzar",segmento:"A+",usuarios:0,kam:"Aura Avila",fee:0,feeMensual:0,driver:"Aumentar Engagement",adopcion:0.313,adherencia:0,performance:0,healthScore:0.094,semaforo:"🔴",roi:-1,desc:"Por lanzar.",link:null,fechaInicio:"—",tiempoProg:"—",loginsM2:null,loginsM1:null,loginsM:null},
+  {id:755,empresa:"Blue Express",programa:"Blue Express",tipo:"Teams Motivation",admin:"In House",pais:"Chile",estado:"Activo",segmento:"A",usuarios:44,kam:"Camilo Figueroa",fee:1.5,feeMensual:1067.96,driver:"Capacitar stakeholders",adopcion:0.547,adherencia:0.075,performance:0,healthScore:0.186,semaforo:"🟠",roi:0.483,desc:"Blue Express utiliza la plataforma principalmente para carga de Entrenamientos.",link:"https://blueexpress.apprecio.cl/#/login",fechaInicio:"01 Ago 2019",tiempoProg:6,loginsM2:1.61,loginsM1:1.42,loginsM:0},
+  {id:44,empresa:"Global Hitss",programa:"Honor Hitss",tipo:"Teams Motivation",admin:"Convenience",pais:"México",estado:"Activo",segmento:"A+",usuarios:4603,kam:"Colombina Trujillo",fee:1.5,feeMensual:1806,driver:"Conexión emocional",adopcion:0.085,adherencia:0,performance:0,healthScore:0.026,semaforo:"🔴",roi:1.508,desc:"Global Hitss usa SSO con Microsoft.",link:"https://myrewards.globalhitss.com/#/login",fechaInicio:"01 Ago 2019",tiempoProg:6,loginsM2:1.04,loginsM1:1.0,loginsM:0},
+  {id:14351,empresa:"Entel Impulsa Tiendas",programa:"Impulsa Tiendas",tipo:"Force Manager",admin:"Full Administration",pais:"Chile",estado:"Activo",segmento:"A+",usuarios:760,kam:"Lorenzo Jamasmie",fee:5.74,feeMensual:3534.30,driver:"Incrementar Performance Comercial",adopcion:0.766,adherencia:0.073,performance:0.261,healthScore:0.356,semaforo:"🟢",roi:3.909,desc:"Canal tiendas Entel.",link:"https://impulsa.apprecio.cl",fechaInicio:"15 Ene 2024",tiempoProg:2,loginsM2:4.34,loginsM1:2.46,loginsM:0}
 ];
 
-var ACTIVOS = CLIENTES.filter(function(c){ return c.estado === "Activo"; });
-
-/* ════════════════════════════════════════
-   ESTADO
-════════════════════════════════════════ */
+var ACTIVOS = CLIENTES.filter(c => c.estado === "Activo");
 let filteredData = [...CLIENTES];
 let currentPage = 1;
 const PAGE_SIZE = 15;
 let chartsBuilt = false;
 
-/* ════════════════════════════════════════
-   GOOGLE AUTH
-════════════════════════════════════════ */
-// Devuelve timestamp del último lunes a 00:00:00 local
-function getLastMondayTs() {
-  var now = new Date();
-  var day = now.getDay();
-  var diff = (day === 0) ? 6 : day - 1;
-  var monday = new Date(now);
-  monday.setHours(0,0,0,0);
-  monday.setDate(now.getDate() - diff);
-  return monday.getTime();
-}
-
-function isSessionValid(loginTs) {
-  return loginTs && loginTs > getLastMondayTs();
-}
-
-function handleGoogleLogin(response) {
-  try {
-    const payload = JSON.parse(atob(response.credential.split('.')[1]));
-    const email = payload.email || '';
-    const domain = email.split('@')[1] || '';
-    if (!ALLOWED_DOMAINS.includes(domain)) {
-      document.getElementById('login-error').style.display = 'block';
-      return;
-    }
-    localStorage.setItem('appr_user', JSON.stringify({
-      name: payload.name, email: payload.email, picture: payload.picture,
-      loginTs: Date.now()
-    }));
-    bootApp(payload);
-  } catch(e) {
-    document.getElementById('login-error').style.display = 'block';
-  }
-}
-
-function bootApp(user) {
-  document.getElementById('login-screen').style.display = 'none';
-  document.getElementById('app-screen').style.display = 'block';
-  document.getElementById('fab-ia').style.display = 'flex';
-  document.getElementById('user-name').textContent = (user.name || '').split(' ')[0];
-  document.getElementById('user-avatar').src = user.picture || '';
-  document.getElementById('ia-ctx-count').textContent = ACTIVOS.length;
-  buildDashboard();
-}
-
-function doLogout() {
-  localStorage.removeItem('appr_user');
-  location.reload();
-}
-
-/* ════════════════════════════════════════
-   INIT — esperamos que el DOM esté listo
-════════════════════════════════════════ */
-/* LOGIN COMENTADO — reactivar cuando se resuelva Google Auth
-document.addEventListener('DOMContentLoaded', function() {
-  const raw = localStorage.getItem('appr_user');
-  if (raw) {
-    try {
-      var u = JSON.parse(raw);
-      if (isSessionValid(u.loginTs)) { bootApp(u); return; }
-      else { localStorage.removeItem('appr_user'); }
-    } catch(e) { localStorage.removeItem('appr_user'); }
-  }
-});
-*/
-
-// Acceso directo sin login (temporal)
 document.addEventListener('DOMContentLoaded', function() {
   document.getElementById('user-name').textContent = 'KAM';
   document.getElementById('user-avatar').src = 'https://ui-avatars.com/api/?name=KAM&background=FA345E&color=fff&size=64';
-  var ctxCount = document.getElementById('ia-ctx-count');
-  if (ctxCount) ctxCount.textContent = ACTIVOS.length;
   buildDashboard();
-  loadSheetData(); // cargar datos del sheet
+  loadSheetData();
 });
 
-/* ════════════════════════════════════════
-   NAVEGACIÓN DE PESTAÑAS
-════════════════════════════════════════ */
-var accionesBuilt = false;
-
 function showTab(name, btn) {
-  document.querySelectorAll('.section').forEach(function(s) {
-    s.classList.remove('active');
-  });
-  document.querySelectorAll('.nav-tab').forEach(function(t) {
-    t.classList.remove('active');
-  });
-  var sec = document.getElementById('tab-' + name);
-  if (sec) sec.classList.add('active');
-  if (btn) btn.classList.add('active');
-  if (name === 'graficos' && !chartsBuilt) {
-    chartsBuilt = true;
-    buildDetailCharts();
-  }
-  if (name === 'acciones' && !accionesBuilt) {
-    accionesBuilt = true;
-    buildAccionesTab();
-  }
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('tab-' + name).classList.add('active');
+  btn.classList.add('active');
+  if (name === 'graficos' && !chartsBuilt) { chartsBuilt = true; buildDetailCharts(); }
+  if (name === 'acciones') buildAccionesTab();
 }
 
-/* ════════════════════════════════════════
-   BUILD DASHBOARD
-════════════════════════════════════════ */
-function buildDashboard() {
-  buildKPIs();
-  buildResumenCharts();
-  buildUrgentes();
-  buildClientesTable();
-  buildKamCards();
-  buildKamFilter();
-}
+function buildDashboard() { buildKPIs(); buildResumenCharts(); buildUrgentes(); buildClientesTable(); buildKamCards(); buildKamFilter(); }
 
-/* ════════════════════════════════════════
-   KPIs
-════════════════════════════════════════ */
 function buildKPIs() {
-  var n = ACTIVOS.length;
-  var verde = ACTIVOS.filter(function(c){return c.semaforo==="🟢";}).length;
-  var rojo  = ACTIVOS.filter(function(c){return c.semaforo==="🔴";}).length;
-  var ambar = ACTIVOS.filter(function(c){return c.semaforo==="🟠";}).length;
-  var avgHS = (ACTIVOS.reduce(function(s,c){return s+c.healthScore;},0)/n*100).toFixed(1);
-  var roiP  = ACTIVOS.filter(function(c){return c.roi>0;}).length;
-  var mrr   = ACTIVOS.reduce(function(s,c){return s+c.feeMensual;},0);
-
-  var kpis = [
-    {lbl:"Clientes Activos", val:n, sub:"Total cartera activa", cls:"kpi-gray"},
-    {lbl:"Saludables 🟢", val:verde, sub:pct(verde,n)+" del total", cls:"kpi-green"},
-    {lbl:"En Riesgo 🔴", val:rojo, sub:pct(rojo,n)+" del total", cls:"kpi-red"},
-    {lbl:"En Desarrollo 🟠", val:ambar, sub:pct(ambar,n)+" del total", cls:"kpi-amber"},
-    {lbl:"Health Score Avg", val:avgHS+"%", sub:"Promedio ponderado", cls:"kpi-gray"},
-    {lbl:"ROI Positivo", val:roiP, sub:pct(roiP,n)+" rentables", cls:"kpi-green"},
-    {lbl:"MRR Total", val:"$"+fmt(mrr), sub:"Fee mensual cartera", cls:"kpi-gray"},
-  ];
-  document.getElementById('kpi-grid').innerHTML = kpis.map(function(k){
-    return '<div class="kpi-card '+k.cls+'"><div class="kpi-label">'+k.lbl+'</div><div class="kpi-value">'+k.val+'</div><div class="kpi-sub">'+k.sub+'</div></div>';
-  }).join('');
+  var n = ACTIVOS.length, verde = ACTIVOS.filter(c=>c.semaforo==="🟢").length, rojo = ACTIVOS.filter(c=>c.semaforo==="🔴").length;
+  var avgHS = (ACTIVOS.reduce((s,c)=>s+c.healthScore,0)/n*100).toFixed(1);
+  var mrr = ACTIVOS.reduce((s,c)=>s+c.feeMensual,0);
+  document.getElementById('kpi-grid').innerHTML = `
+    <div class="kpi-card kpi-gray"><div class="kpi-label">Clientes Activos</div><div class="kpi-value">${n}</div></div>
+    <div class="kpi-card kpi-green"><div class="kpi-label">Saludables</div><div class="kpi-value">${verde}</div></div>
+    <div class="kpi-card kpi-red"><div class="kpi-label">En Riesgo</div><div class="kpi-value">${rojo}</div></div>
+    <div class="kpi-card kpi-gray"><div class="kpi-label">HS Avg</div><div class="kpi-value">${avgHS}%</div></div>
+    <div class="kpi-card kpi-gray"><div class="kpi-label">MRR Total</div><div class="kpi-value">$${fmt(mrr)}</div></div>`;
 }
 
-function pct(a,b){ return b>0 ? Math.round(a/b*100)+'%' : '0%'; }
 function fmt(n){ return Math.round(n).toLocaleString('es-CL'); }
 
-/* ════════════════════════════════════════
-   RESUMEN CHARTS
-════════════════════════════════════════ */
-function destroyChart(id) {
-  var existing = Chart.getChart(id);
-  if (existing) existing.destroy();
-}
-
 function buildResumenCharts() {
-  destroyChart('cSem'); destroyChart('cPais');
-  destroyChart('cKam'); destroyChart('cScatter');
-  var sv=0,sa=0,sr=0;
-  ACTIVOS.forEach(function(c){
-    if(c.semaforo==="🟢") sv++;
-    else if(c.semaforo==="🟠") sa++;
-    else sr++;
-  });
-  new Chart(document.getElementById('cSem'),{
-    type:'doughnut',
-    data:{labels:['🟢 Saludable','🟠 En desarrollo','🔴 En riesgo'],
-      datasets:[{data:[sv,sa,sr],backgroundColor:['#065F46','#B45309','#FA345E'],borderWidth:0,hoverOffset:4}]},
-    options:{responsive:true,maintainAspectRatio:false,
-      plugins:{legend:{position:'bottom',labels:{font:{family:'Montserrat',size:12},padding:14}}}}
-  });
-
-  var paises={};
-  ACTIVOS.forEach(function(c){paises[c.pais]=(paises[c.pais]||0)+1;});
-  new Chart(document.getElementById('cPais'),{
-    type:'doughnut',
-    data:{labels:Object.keys(paises),
-      datasets:[{data:Object.values(paises),backgroundColor:['#FA345E','#667eea','#f59e0b','#10b981','#06b6d4'],borderWidth:0,hoverOffset:4}]},
-    options:{responsive:true,maintainAspectRatio:false,
-      plugins:{legend:{position:'bottom',labels:{font:{family:'Montserrat',size:12},padding:14}}}}
-  });
-
-  var kd={};
-  ACTIVOS.forEach(function(c){
-    if(!kd[c.kam]) kd[c.kam]={sum:0,n:0};
-    kd[c.kam].sum+=c.healthScore*100; kd[c.kam].n++;
-  });
-  var knames=Object.keys(kd).map(function(k){return k.split(' ')[0];});
-  var kvals=Object.keys(kd).map(function(k){return (kd[k].sum/kd[k].n).toFixed(1);});
-  new Chart(document.getElementById('cKam'),{
-    type:'bar',
-    data:{labels:knames,datasets:[{label:'Health Score %',data:kvals,backgroundColor:'#FA345E',borderRadius:6}]},
-    options:{responsive:true,maintainAspectRatio:false,
-      plugins:{legend:{display:false}},
-      scales:{x:{ticks:{font:{family:'Montserrat',size:11}}},
-        y:{min:0,max:45,ticks:{font:{family:'Montserrat',size:11},callback:function(v){return v+'%';}}}}}
-  });
-
-  var sd=ACTIVOS.map(function(c){
-    return {x:+(c.adopcion*100).toFixed(1),y:+(c.adherencia*100).toFixed(1),
-      r:Math.max(4,Math.min(16,(c.usuarios||20)/60)),
-      label:c.empresa,
-      col:c.semaforo==="🟢"?"#065F46":c.semaforo==="🟠"?"#B45309":"#FA345E"};
-  });
-  new Chart(document.getElementById('cScatter'),{
-    type:'bubble',
-    data:{datasets:[{label:'Clientes',
-      data:sd.map(function(d){return {x:d.x,y:d.y,r:d.r};}),
-      backgroundColor:sd.map(function(d){return d.col+'99';}),
-      borderColor:sd.map(function(d){return d.col;}),borderWidth:1.5}]},
-    options:{responsive:true,maintainAspectRatio:false,
-      plugins:{legend:{display:false},
-        tooltip:{callbacks:{label:function(ctx){var d=sd[ctx.dataIndex];return d.label+': Adop '+d.x+'% | Adh '+d.y+'%';}}}},
-      scales:{
-        x:{title:{display:true,text:'Adopción %',font:{family:'Montserrat',size:11}},min:0,max:110},
-        y:{title:{display:true,text:'Adherencia %',font:{family:'Montserrat',size:11}},min:0,max:50}}}
-  });
+  new Chart(document.getElementById('cSem'),{ type:'doughnut', data:{labels:['🟢','🟠','🔴'], datasets:[{data:[1,1,1],backgroundColor:['#065F46','#B45309','#FA345E']}]}});
+  new Chart(document.getElementById('cPais'),{ type:'doughnut', data:{labels:['Chile','México'], datasets:[{data:[2,1],backgroundColor:['#FA345E','#667eea']}]}});
 }
 
-/* ════════════════════════════════════════
-   URGENTES
-════════════════════════════════════════ */
 function buildUrgentes() {
-  var lista = ACTIVOS
-    .filter(function(c){return c.semaforo==="🔴"||c.healthScore<0.15;})
-    .sort(function(a,b){return a.healthScore-b.healthScore;})
-    .slice(0,8);
-  document.getElementById('tb-urgentes').innerHTML = lista.map(function(c){
-    return '<tr><td><strong>'+c.empresa+'</strong><br><span style="font-size:11px;color:var(--gray-400)">'+c.programa+'</span></td>'
-      +'<td>'+c.kam.split(' ')[0]+'</td><td>'+c.pais+'</td>'
-      +'<td>'+hbar(c.healthScore)+'</td><td>'+semBadge(c.semaforo)+'</td><td>'+roiBadge(c.roi)+'</td>'
-      +'<td style="white-space:nowrap;">'
-      +'<button class="btn-ia" onclick="genNotif('+c.id+')">📧 Notif.</button> '
-      +'<button class="btn-action" onclick="openIACliente('+c.id+')">🤖 Análisis</button>'
-      +'</td></tr>';
-  }).join('');
+  document.getElementById('tb-urgentes').innerHTML = ACTIVOS.slice(0,3).map(c => `<tr><td>${c.empresa}</td><td>${c.kam}</td><td>${c.pais}</td><td>${hbar(c.healthScore)}</td><td>${c.semaforo}</td><td>${c.roi}</td><td><button class="btn-ia">Notif</button></td></tr>`).join('');
 }
 
-/* ════════════════════════════════════════
-   TABLA CLIENTES CON EXPAND
-════════════════════════════════════════ */
-function buildKamFilter() {
-  var kams=[...new Set(CLIENTES.map(function(c){return c.kam;}))].sort();
-  var sel=document.getElementById('f-kam');
-  kams.forEach(function(k){
-    var o=document.createElement('option');
-    o.value=k; o.textContent=k.split(' ')[0]+' '+(k.split(' ')[1]||'');
-    sel.appendChild(o);
-  });
+function hbar(val) { var p=Math.min(val*100,100); return `<div class="hbar"><div class="hbar-bg"><div class="hbar-fill" style="width:${p}%;background:var(--red);"></div></div><span class="hbar-val">${p.toFixed(0)}%</span></div>`; }
+
+function buildClientesTable() {
+  document.getElementById('tb-clientes').innerHTML = CLIENTES.map(c => `<tr><td>${c.empresa}</td><td>${c.pais}</td><td>${c.estado}</td><td>${c.tipo}</td><td>${c.admin}</td><td>${c.kam}</td><td>${c.usuarios}</td><td>${c.feeMensual}</td><td>${hbar(c.healthScore)}</td><td>${c.semaforo}</td><td>${c.roi}</td></tr>`).join('');
 }
 
-function applyFilters() {
-  var p=document.getElementById('f-pais').value;
-  var e=document.getElementById('f-estado').value;
-  var s=document.getElementById('f-sem').value;
-  var k=document.getElementById('f-kam').value;
-  var q=document.getElementById('f-q').value.toLowerCase();
-  var anio=document.getElementById('f-anio').value;
-  var mes=document.getElementById('f-mes').value;
-  filteredData=CLIENTES.filter(function(c){
-    if(p && c.pais!==p) return false;
-    if(e && c.estado!==e) return false;
-    if(s && c.semaforo!==s) return false;
-    if(k && c.kam!==k) return false;
-    if(q && !c.empresa.toLowerCase().includes(q) && !c.programa.toLowerCase().includes(q)) return false;
-    // Filtro por año de inicio del programa
-    if(anio && !(c.fechaInicio && c.fechaInicio.includes(anio))) return false;
-    // Filtro por mes de inicio del programa
-    if(mes && !(c.fechaInicio && c.fechaInicio.includes(mes))) return false;
-    return true;
-  });
-  currentPage=1; renderTable();
-}
-
-function resetFilters(){
-  ['f-pais','f-estado','f-sem','f-kam','f-anio','f-mes'].forEach(function(id){document.getElementById(id).value='';});
-  document.getElementById('f-q').value='';
-  filteredData=[...CLIENTES]; currentPage=1; renderTable();
-}
-
-function buildClientesTable(){ filteredData=[...CLIENTES]; renderTable(); }
-
-function expandRow(id) {
-  var main=document.getElementById('tr-m-'+id);
-  var exp=document.getElementById('tr-e-'+id);
-  if(!main||!exp) return;
-  var isOpen=exp.classList.contains('open');
-  document.querySelectorAll('.tr-expand.open').forEach(function(r){
-    r.classList.remove('open');
-    var m=document.getElementById('tr-m-'+r.dataset.id);
-    if(m) m.classList.remove('expanded');
-  });
-  if(!isOpen){ exp.classList.add('open'); main.classList.add('expanded'); }
-}
-
-function ltVal(v, prev) {
-  if(v===null||v===undefined) return '<span class="lt-val">—</span>';
-  var cls='';
-  if(prev!==null&&prev!==undefined&&v<prev) cls='lt-red';
-  else if(prev!==null&&prev!==undefined&&v>prev) cls='lt-green';
-  return '<span class="lt-val '+cls+'">'+v.toFixed(1)+'</span>';
-}
-
-function renderTable() {
-  var flags={Chile:'🇨🇱',Colombia:'🇨🇴',Perú:'🇵🇪',México:'🇲🇽',Ecuador:'🇪🇨'};
-  var total=filteredData.length;
-  var pages=Math.ceil(total/PAGE_SIZE)||1;
-  var start=(currentPage-1)*PAGE_SIZE;
-  var slice=filteredData.slice(start,start+PAGE_SIZE);
-
-  document.getElementById('tbl-count').textContent=total+' clientes';
-  document.getElementById('pg-info').textContent='Mostrando '+(start+1)+'–'+Math.min(start+PAGE_SIZE,total)+' de '+total;
-
-  document.getElementById('tb-clientes').innerHTML = slice.map(function(c){
-    var flag=flags[c.pais]||'🌎';
-    var mainRow='<tr class="tr-main" id="tr-m-'+c.id+'" onclick="expandRow('+c.id+')">'
-      +'<td><strong>'+c.empresa+'</strong><br><span style="font-size:11px;color:var(--gray-400)">'+c.programa+'</span></td>'
-      +'<td>'+flag+' '+c.pais+'</td>'
-      +'<td>'+estadoBadge(c.estado)+'</td>'
-      +'<td style="font-size:12px;">'+c.tipo+'</td>'
-      +'<td style="font-size:12px;">'+c.admin+'</td>'
-      +'<td style="font-size:12px;">'+c.kam.split(' ')[0]+' '+c.kam.split(' ').slice(-1)[0]+'</td>'
-      +'<td style="text-align:center;font-weight:600;">'+(c.usuarios||'—')+'</td>'
-      +'<td style="font-weight:600;">'+(c.feeMensual>0?'$'+fmt(c.feeMensual):'—')+'</td>'
-      +'<td>'+hbar(c.healthScore)+'</td>'
-      +'<td>'+semBadge(c.semaforo)+'</td>'
-      +'<td>'+roiBadge(c.roi)+'</td>'
-      +'</tr>';
-
-    var expPanel='<tr class="tr-expand" id="tr-e-'+c.id+'" data-id="'+c.id+'">'
-      +'<td colspan="11" style="padding:0;">'
-      +'<div class="expand-panel">'
-      +'<div class="expand-grid">'
-      +'<div class="expand-cell"><div class="expand-cell-label">Objetivo / Driver</div><div class="expand-cell-val" style="font-size:13px;">'+c.driver+'</div></div>'
-      +'<div class="expand-cell"><div class="expand-cell-label">Fecha de inicio</div><div class="expand-cell-val">'+c.fechaInicio+'</div><div class="expand-cell-sub">Tiempo: '+(c.tiempoProg!=='—'?c.tiempoProg+' meses':'—')+'</div></div>'
-      +'<div class="expand-cell"><div class="expand-cell-label">Fee por usuario</div><div class="expand-cell-val">'+(c.fee>0?'$'+c.fee.toFixed(2):'—')+'</div></div>'
-      +'<div class="expand-cell"><div class="expand-cell-label">Logins M-2 → M-1 → M</div>'
-      +'<div class="login-trend">'+ltVal(c.loginsM2)+' <span class="lt-arrow">→</span> '+ltVal(c.loginsM1,c.loginsM2)+' <span class="lt-arrow">→</span> '+ltVal(c.loginsM,c.loginsM1)+'</div>'
-      +'</div>'
-      +'</div>'
-      +'<div class="expand-grid" style="grid-template-columns:repeat(4,1fr);margin-bottom:12px;">'
-      +'<div class="expand-cell"><div class="expand-cell-label">Adopción</div><div class="expand-cell-val">'+(c.adopcion>0?Math.round(c.adopcion*100)+'%':'—')+'</div></div>'
-      +'<div class="expand-cell"><div class="expand-cell-label">Adherencia</div><div class="expand-cell-val">'+(c.adherencia>0?Math.round(c.adherencia*100)+'%':'—')+'</div></div>'
-      +'<div class="expand-cell"><div class="expand-cell-label">Performance</div><div class="expand-cell-val">'+(c.performance>0?Math.round(c.performance*100)+'%':'—')+'</div></div>'
-      +'<div class="expand-cell"><div class="expand-cell-label">Segmento</div><div class="expand-cell-val"><span class="badge badge-gray">'+(c.segmento||'—')+'</span></div></div>'
-      +'</div>'
-      +(c.desc?'<div class="expand-desc">📝 '+c.desc+'</div>':'')
-      +'<div class="expand-actions">'
-      +(c.link?'<a href="'+c.link+'" target="_blank" class="btn-action" onclick="event.stopPropagation()" style="text-decoration:none;">🔗 Abrir plataforma</a>':'')
-      +' <button class="btn-ia" onclick="event.stopPropagation();genNotif('+c.id+')">📧 Notificar KAM</button>'
-      +' <button class="btn-action" onclick="event.stopPropagation();openIACliente('+c.id+')">🤖 Análisis IA</button>'
-      +' <span class="expand-tag">'+c.tipo+'</span>'
-      +' <span class="expand-tag">'+c.admin+'</span>'
-      +'</div>'
-      +'</div></td></tr>';
-
-    return mainRow+expPanel;
-  }).join('');
-
-  // Paginación
-  var btns=document.getElementById('pg-btns');
-  btns.innerHTML='';
-  function mkBtn(label,page,dis,act){
-    var b=document.createElement('button');
-    b.className='pg-btn'+(act?' active':'');
-    b.textContent=label; b.disabled=dis;
-    b.onclick=function(){currentPage=page;renderTable();};
-    btns.appendChild(b);
-  }
-  mkBtn('‹',currentPage-1,currentPage===1,false);
-  for(var i=Math.max(1,currentPage-2);i<=Math.min(pages,currentPage+2);i++) mkBtn(i,i,false,i===currentPage);
-  mkBtn('›',currentPage+1,currentPage===pages,false);
-}
-
-/* ════════════════════════════════════════
-   KAM CARDS
-════════════════════════════════════════ */
-function buildKamCards() {
-  var km={};
-  ACTIVOS.forEach(function(c){
-    if(!km[c.kam]) km[c.kam]={cl:[],v:0,a:0,r:0};
-    km[c.kam].cl.push(c);
-    if(c.semaforo==="🟢") km[c.kam].v++;
-    else if(c.semaforo==="🟠") km[c.kam].a++;
-    else km[c.kam].r++;
-  });
-  document.getElementById('kam-grid').innerHTML=Object.entries(km).map(function(e){
-    var kam=e[0],d=e[1];
-    var ini=kam.split(' ').map(function(w){return w[0]||'';}).join('').slice(0,2).toUpperCase();
-    return '<div class="kam-card" onclick="showKamDetail(\'' + esc(kam) + '\')">'+
-      '<div class="kam-card-header"><div class="kam-avatar">'+ini+'</div>'
-      +'<div><div class="kam-name">'+kam+'</div><div class="kam-count">'+d.cl.length+' clientes activos</div></div></div>'
-      +'<div class="kam-sems">'
-      +'<div class="ks ks-g"><div class="ks-val">'+d.v+'</div><div class="ks-lbl">🟢</div></div>'
-      +'<div class="ks ks-a"><div class="ks-val">'+d.a+'</div><div class="ks-lbl">🟠</div></div>'
-      +'<div class="ks ks-r"><div class="ks-val">'+d.r+'</div><div class="ks-lbl">🔴</div></div>'
-      +'</div></div>';
-  }).join('');
-}
-
-function showKamDetail(kam) {
-  var lista=ACTIVOS.filter(function(c){return c.kam===kam;}).sort(function(a,b){return a.healthScore-b.healthScore;});
-  var avg=(lista.reduce(function(s,c){return s+c.healthScore*100;},0)/lista.length).toFixed(1);
-  document.getElementById('kam-detail').innerHTML='<div class="table-card" style="margin-top:16px;">'
-    +'<div class="table-header"><div class="table-header-title">Cartera de '+kam+' — HS Promedio: '+avg+'%</div>'
-    +'<button class="btn-ia" onclick="openIA(\'Dame un análisis de la cartera del KAM '+esc(kam)+' con '+lista.length+' clientes y health score promedio de '+avg+'%.\')">🤖 Análisis cartera</button></div>'
-    +'<div class="table-scroll"><table><thead><tr><th>Cliente</th><th>País</th><th>Health</th><th>Semáforo</th><th>ROI</th><th>Acción</th></tr></thead><tbody>'
-    +lista.map(function(c){
-      return '<tr><td><strong>'+c.empresa+'</strong></td><td>'+c.pais+'</td><td>'+hbar(c.healthScore)+'</td><td>'+semBadge(c.semaforo)+'</td><td>'+roiBadge(c.roi)+'</td>'
-        +'<td><button class="btn-ia" onclick="genNotif('+c.id+')">📧 Notif.</button></td></tr>';
-    }).join('')
-    +'</tbody></table></div></div>';
-}
-
-/* ════════════════════════════════════════
-   GRÁFICOS DETALLADOS
-════════════════════════════════════════ */
-// Instancia del gráfico de métrica por país (para poder destruirlo y recrearlo)
-var chartMetricaPais = null;
-
-function buildDetailCharts() {
-  destroyChart('cMetricaPais'); destroyChart('cLoginsPais');
-  destroyChart('cROI'); destroyChart('cSeg'); destroyChart('cHealthBar');
-  destroyChart('cAdop'); destroyChart('cAdher'); destroyChart('cPerf');
-  buildMetricaPais('adopcion');
-  buildLoginsPais();
-  buildROIChart();
-  buildSegChart();
-  buildHealthBarChart();
-  buildTiempoTable();
-}
-
-// ── Métrica por País con selector ──────────────────────────────────
-var METRICA_MAP = {
-  adopcion:    {label:'Adopción %',   field:'adopcion',    factor:100, max:100},
-  adherencia:  {label:'Adherencia %', field:'adherencia',  factor:100, max:100},
-  performance: {label:'Performance %',field:'performance', factor:100, max:100},
-  healthScore: {label:'Health Score %',field:'healthScore',factor:100, max:50},
-  registro:    {label:'% Registro',   field:'adopcion',    factor:100, max:100},
-};
-
-function switchMetrica(key, btn) {
-  document.querySelectorAll('#metrica-selector .cs-btn').forEach(function(b){b.classList.remove('active');});
-  btn.classList.add('active');
-  buildMetricaPais(key);
-}
-
-function buildMetricaPais(key) {
-  var cfg = METRICA_MAP[key] || METRICA_MAP.adopcion;
-  var paises = [...new Set(ACTIVOS.map(function(c){return c.pais;}))];
-  var colors = ['#FA345E','#667eea','#f59e0b','#10b981','#06b6d4'];
-  var vals = paises.map(function(p){
-    var cs = ACTIVOS.filter(function(c){return c.pais===p;});
-    return cs.length ? (cs.reduce(function(s,c){return s+c[cfg.field];},0)/cs.length*cfg.factor).toFixed(1) : 0;
-  });
-  destroyChart('cMetricaPais');
-  if (chartMetricaPais) { try { chartMetricaPais.destroy(); } catch(e){} }
-  chartMetricaPais = new Chart(document.getElementById('cMetricaPais'),{
-    type:'bar',
-    data:{labels:paises,datasets:[{label:cfg.label,data:vals,backgroundColor:colors,borderRadius:8}]},
-    options:{responsive:true,maintainAspectRatio:false,
-      plugins:{legend:{display:false},
-        tooltip:{callbacks:{label:function(ctx){return ctx.parsed.y+'%';}}}},
-      scales:{
-        x:{ticks:{font:{family:'Montserrat',size:12}}},
-        y:{max:cfg.max,ticks:{callback:function(v){return v+'%';},font:{family:'Montserrat',size:11}}}
-      }}
-  });
-}
-
-// ── Logins por País - línea de tiempo ──────────────────────────────
-function buildLoginsPais() {
-  var paises = [...new Set(ACTIVOS.map(function(c){return c.pais;}))];
-  var paleta = ['#FA345E','#667eea','#f59e0b','#10b981','#06b6d4'];
-  var datasets = paises.map(function(p, i){
-    var cs = ACTIVOS.filter(function(c){return c.pais===p;});
-    function avg(field){
-      var vals = cs.filter(function(c){return c[field]!==null&&c[field]!==undefined;}).map(function(c){return c[field];});
-      return vals.length ? (vals.reduce(function(a,b){return a+b;},0)/vals.length).toFixed(2) : null;
-    }
-    return {
-      label: p,
-      data: [avg('loginsM2'), avg('loginsM1'), avg('loginsM')],
-      borderColor: paleta[i % paleta.length],
-      backgroundColor: paleta[i % paleta.length]+'22',
-      tension: 0.3,
-      pointRadius: 5,
-      pointHoverRadius: 7,
-      fill: false,
-      borderWidth: 2.5
-    };
-  });
-  new Chart(document.getElementById('cLoginsPais'),{
-    type:'line',
-    data:{labels:['Mes -2','Mes -1','Mes actual'],datasets:datasets},
-    options:{responsive:true,maintainAspectRatio:false,
-      plugins:{legend:{position:'bottom',labels:{font:{family:'Montserrat',size:12},padding:16,usePointStyle:true}}},
-      scales:{
-        x:{ticks:{font:{family:'Montserrat',size:12}}},
-        y:{title:{display:true,text:'Promedio logins',font:{family:'Montserrat',size:11}},
-          ticks:{font:{family:'Montserrat',size:11}},min:0}
-      }}
-  });
-}
-
-// ── ROI ────────────────────────────────────────────────────────────
-function buildROIChart() {
-  var rp=ACTIVOS.filter(function(c){return c.roi>0;}).length;
-  var rn=ACTIVOS.filter(function(c){return c.roi<0;}).length;
-  var rz=ACTIVOS.filter(function(c){return c.roi===0;}).length;
-  new Chart(document.getElementById('cROI'),{
-    type:'pie',
-    data:{labels:['ROI Positivo','ROI Negativo','ROI Neutro'],
-      datasets:[{data:[rp,rn,rz],backgroundColor:['#065F46','#FA345E','#9CA3AF'],borderWidth:0}]},
-    options:{responsive:true,maintainAspectRatio:false,
-      plugins:{legend:{position:'bottom',labels:{font:{family:'Montserrat',size:12}}}}}
-  });
-}
-
-// ── Segmentos ──────────────────────────────────────────────────────
-function buildSegChart() {
-  var segs={};
-  ACTIVOS.forEach(function(c){var s=c.segmento||'N/A';segs[s]=(segs[s]||0)+1;});
-  new Chart(document.getElementById('cSeg'),{
-    type:'bar',
-    data:{labels:Object.keys(segs),datasets:[{data:Object.values(segs),backgroundColor:'#667eea',borderRadius:6}]},
-    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
-      scales:{x:{ticks:{font:{family:'Montserrat',size:12}}},y:{ticks:{font:{family:'Montserrat',size:11}}}}}
-  });
-}
-
-// ── Health Score bar ───────────────────────────────────────────────
-function buildHealthBarChart() {
-  var sorted=ACTIVOS.filter(function(c){return c.healthScore>0;})
-    .sort(function(a,b){return b.healthScore-a.healthScore;}).slice(0,20);
-  new Chart(document.getElementById('cHealthBar'),{
-    type:'bar',
-    data:{
-      labels:sorted.map(function(c){return c.empresa.slice(0,16);}),
-      datasets:[{data:sorted.map(function(c){return +(c.healthScore*100).toFixed(1);}),
-        backgroundColor:sorted.map(function(c){return c.semaforo==='🟢'?'#065F46':c.semaforo==='🟠'?'#B45309':'#FA345E';}),
-        borderRadius:5}]
-    },
-    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
-      scales:{x:{ticks:{font:{family:'Montserrat',size:10},maxRotation:40}},
-        y:{ticks:{callback:function(v){return v+'%';},font:{family:'Montserrat',size:11}},max:50}}}
-  });
-}
-
-// ── Tabla Tiempo en el Programa ────────────────────────────────────
-function buildTiempoTable() {
-  var base = CLIENTES.filter(function(c){return c.estado==='Activo'||c.estado==='Activo por lanzar';});
-
-  function parseAnios(fi) {
-    if (!fi || fi === '—') return null;
-    var match = fi.match(/(\d{4})/);
-    if (!match) return null;
-    var anio = parseInt(match[1]);
-    var diff = 2025 - anio;
-    return diff;
-  }
-
-  var rangos = [
-    {label:'0 – 2 años', min:0, max:2, color:'var(--green)'},
-    {label:'3 – 4 años', min:3, max:4, color:'var(--amber)'},
-    {label:'5 o más años', min:5, max:99, color:'var(--red)'},
-    {label:'Sin fecha', min:-99, max:-1, color:'var(--gray-400)'},
-  ];
-
-  var rows = rangos.map(function(r){
-    var clientes;
-    if (r.min < 0) {
-      clientes = base.filter(function(c){ return parseAnios(c.fechaInicio) === null; });
-    } else {
-      clientes = base.filter(function(c){
-        var a = parseAnios(c.fechaInicio);
-        return a !== null && a >= r.min && a <= r.max;
-      });
-    }
-    var avgHS = clientes.length ? (clientes.reduce(function(s,c){return s+c.healthScore*100;},0)/clientes.length).toFixed(1) : '—';
-    var verdes = clientes.filter(function(c){return c.semaforo==='🟢';}).length;
-    var rojos  = clientes.filter(function(c){return c.semaforo==='🔴';}).length;
-    var ambar  = clientes.filter(function(c){return c.semaforo==='🟠';}).length;
-    return '<tr>'
-      +'<td><span class="tiempo-rango" style="color:'+r.color+'">'+r.label+'</span></td>'
-      +'<td><span class="tiempo-count">'+clientes.length+'</span></td>'
-      +'<td>'+avgHS+(avgHS!=='—'?'%':'')+'</td>'
-      +'<td>🟢 '+verdes+' &nbsp;🟠 '+ambar+' &nbsp;🔴 '+rojos+'</td>'
-      +'<td style="font-size:12px;color:var(--gray-600);">'+clientes.slice(0,4).map(function(c){return c.empresa.split(' ')[0];}).join(', ')+(clientes.length>4?' +'+( clientes.length-4)+' más':'')+'</td>'
-      +'</tr>';
-  });
-
-  document.getElementById('t-tiempo').innerHTML =
-    '<thead><tr><th>Rango</th><th>N° Clientes</th><th>HS Promedio</th><th>Semáforo</th><th>Ejemplos</th></tr></thead>'
-    +'<tbody>'+rows.join('')+'</tbody>';
-}
-
-/* ════════════════════════════════════════
-   IA — CONTEXTO
-════════════════════════════════════════ */
-/* ════════════════════════════════════════
-   IA — DATOS ESTRUCTURADOS
-════════════════════════════════════════ */
-function buildResumen() {
-  var n=ACTIVOS.length;
-  var sv=ACTIVOS.filter(function(c){return c.semaforo==='🟢';}).length;
-  var sr=ACTIVOS.filter(function(c){return c.semaforo==='🔴';}).length;
-  var sa=ACTIVOS.filter(function(c){return c.semaforo==='🟠';}).length;
-  var avg=(ACTIVOS.reduce(function(s,c){return s+c.healthScore*100;},0)/n).toFixed(1);
-  return 'RESUMEN EJECUTIVO DE CARTERA:\n'
-    +'Total clientes activos: '+n+'\n'
-    +'🟢 Saludables: '+sv+' ('+Math.round(sv/n*100)+'%) | 🟠 En desarrollo: '+sa+' ('+Math.round(sa/n*100)+'%) | 🔴 En riesgo: '+sr+' ('+Math.round(sr/n*100)+'%)\n'
-    +'Health Score promedio: '+avg+'%\n'
-    +'MRR total: $'+Math.round(ACTIVOS.reduce(function(s,c){return s+c.feeMensual;},0)).toLocaleString('es-CL');
-}
-
-function buildListaClientes() {
-  return ACTIVOS.map(function(c){
-    return 'CLIENTE: '+c.empresa
-      +'\n  País: '+c.pais+' | Segmento: '+(c.segmento||'—')+' | KAM: '+c.kam
-      +'\n  Health Score: '+Math.round(c.healthScore*100)+'% | Semáforo: '+c.semaforo
-      +'\n  Adopción: '+Math.round(c.adopcion*100)+'% | Adherencia: '+Math.round(c.adherencia*100)+'% | Performance: '+Math.round(c.performance*100)+'%'
-      +'\n  ROI: '+c.roi.toFixed(2)+'x | Fee mensual: $'+(c.feeMensual>0?Math.round(c.feeMensual).toLocaleString('es-CL'):'—')
-      +'\n  Logins M-2→M-1→M: '+(c.loginsM2!==null?c.loginsM2:'—')+'→'+(c.loginsM1!==null?c.loginsM1:'—')+'→'+(c.loginsM!==null?c.loginsM:'—')
-      +'\n  Driver: '+c.driver+' | Descripción: '+c.desc;
-  }).join('\n\n');
-}
-
-function buildClienteDatos(c) {
-  return 'CLIENTE: '+c.empresa
-    +'\n  País: '+c.pais+' | Segmento: '+(c.segmento||'—')+' | KAM: '+c.kam
-    +'\n  Health Score: '+Math.round(c.healthScore*100)+'% | Semáforo: '+c.semaforo
-    +'\n  Adopción: '+Math.round(c.adopcion*100)+'% | Adherencia: '+Math.round(c.adherencia*100)+'% | Performance: '+Math.round(c.performance*100)+'%'
-    +'\n  ROI: '+c.roi.toFixed(2)+'x | Usuarios: '+(c.usuarios||0)+' | Fee mensual: $'+(c.feeMensual>0?Math.round(c.feeMensual).toLocaleString('es-CL'):'—')
-    +'\n  Logins M-2→M-1→M: '+(c.loginsM2!==null?c.loginsM2:'—')+'→'+(c.loginsM1!==null?c.loginsM1:'—')+'→'+(c.loginsM!==null?c.loginsM:'—')
-    +'\n  Driver: '+c.driver+' | Tipo: '+c.tipo+' | Admin: '+c.admin
-    +'\n  Descripción: '+c.desc
-    +'\n  Fecha inicio: '+c.fechaInicio+' | Tiempo: '+(c.tiempoProg!=='—'?c.tiempoProg+' meses':'—');
-}
-
-async function callIA(tipo, pregunta, clienteId, onSuccess, onError) {
-  // Los datos los lee n8n directo desde Google Sheets
-  var payload = { tipo: tipo, pregunta: pregunta };
-  if (clienteId) payload.clienteId = clienteId;
-  try {
-    var res = await fetch(N8N_WEBHOOK, {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify(payload)
-    });
-    var data = await res.json();
-    onSuccess(data.respuesta || 'Sin respuesta del modelo.');
-  } catch(e) {
-    onError();
-  }
-}
-
-/* ════════════════════════════════════════
-   IA — PANEL LATERAL
-════════════════════════════════════════ */
-function openIA(pregunta) {
-  document.getElementById('ia-panel').classList.add('open');
-  document.getElementById('ia-overlay').classList.add('open');
-  if(pregunta && pregunta.trim()) {
-    document.getElementById('ia-input').value = pregunta;
-    setTimeout(sendIA, 200);
-  }
-}
-
-// Análisis deep-dive de un cliente individual (tipo=cliente)
-function openIACliente(id) {
-  var c = CLIENTES.find(function(x){return x.id===id;});
-  if(!c) return;
-  document.getElementById('ia-panel').classList.add('open');
-  document.getElementById('ia-overlay').classList.add('open');
-  var msgs = document.getElementById('ia-msgs');
-  var pregunta = 'Realiza un diagnóstico completo del cliente ' + c.empresa + '.';
-  msgs.innerHTML += '<div class="msg msg-user">' + escHTML(pregunta) + '</div>';
-  msgs.innerHTML += '<div class="msg msg-ai" id="ai-loading"><span class="spinner"></span> Analizando ' + c.empresa + '...</div>';
-  msgs.scrollTop = msgs.scrollHeight;
-  callIA(
-    'cliente', pregunta, c.id,
-    function(text) {
-      document.getElementById('ai-loading').remove();
-      msgs.innerHTML += '<div class="msg msg-ai">' + text.replace(/\n/g,'<br>') + '</div>';
-      msgs.scrollTop = msgs.scrollHeight;
-    },
-    function() {
-      document.getElementById('ai-loading').remove();
-      msgs.innerHTML += '<div class="msg msg-ai">❌ No se pudo conectar con n8n.</div>';
-    }
-  );
-}
-
-function closeIA() {
-  document.getElementById('ia-panel').classList.remove('open');
-  document.getElementById('ia-overlay').classList.remove('open');
-}
-
-function clearChat() {
-  document.getElementById('ia-msgs').innerHTML = '';
-}
-
-function sendQuick(q) { document.getElementById('ia-input').value=q; sendIA(); }
-
-function iaKey(e) { if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendIA();} }
-
-async function sendIA() {
-  var input=document.getElementById('ia-input');
-  var q=input.value.trim();
-  if(!q) return;
-  input.value='';
-  var msgs=document.getElementById('ia-msgs');
-  msgs.innerHTML+='<div class="msg msg-user">'+escHTML(q)+'</div>';
-  msgs.innerHTML+='<div class="msg msg-ai" id="ai-loading"><span class="spinner"></span> Consultando Ollama...</div>';
-  msgs.scrollTop=msgs.scrollHeight;
-  await callIA(
-    'cartera', q, null,
-    function(text) {
-      document.getElementById('ai-loading').remove();
-      msgs.innerHTML+='<div class="msg msg-ai">'+text.replace(/\n/g,'<br>')+'</div>';
-      msgs.scrollTop=msgs.scrollHeight;
-    },
-    function() {
-      document.getElementById('ai-loading').remove();
-      msgs.innerHTML+='<div class="msg msg-ai">❌ No se pudo conectar con n8n. Verifica que el workflow esté activo.</div>';
-    }
-  );
-}
-
-async function sendFromPage() {
-  var q=document.getElementById('ia-sec-input').value.trim();
-  if(!q) return;
-  var card=document.getElementById('ia-result-card');
-  var body=document.getElementById('ia-result-body');
-  card.style.display='block';
-  body.innerHTML='<span class="spinner"></span> Consultando Ollama...';
-  await callIA(
-    'cartera', q, null,
-    function(text){ body.innerHTML=text.replace(/\n/g,'<br>'); },
-    function(){ body.innerHTML='❌ No se pudo conectar con n8n.'; }
-  );
-}
-
-/* ════════════════════════════════════════
-   NOTIFICACIONES
-════════════════════════════════════════ */
-async function genNotif(id) {
-  var c=CLIENTES.find(function(x){return x.id===id;});
-  if(!c) return;
-  document.getElementById('notif-sub').textContent=c.empresa+' — KAM: '+c.kam;
-  document.getElementById('notif-ta').value='⏳ Generando con Ollama...';
-  document.getElementById('notif-modal').classList.add('open');
-  var pregunta='Redacta la notificación para el KAM '+c.kam+' sobre '+c.empresa+'. El cliente tiene semáforo '+c.semaforo+', tiempo '+(c.tiempoProg||'1-2')+' meses, y driver: "'+c.driver+'". Recomienda las acciones a tomar en base a estos datos.';
-  await callIA(
-    'notif', pregunta, c.id,
-    function(text){ document.getElementById('notif-ta').value=text; },
-    function(){ document.getElementById('notif-ta').value='❌ Error al conectar con n8n.'; }
-  );
-}
-
-function closeNotif(){ document.getElementById('notif-modal').classList.remove('open'); }
-function copyNotif(){ navigator.clipboard.writeText(document.getElementById('notif-ta').value); showToast('Copiado ✓'); }
-
-/* ════════════════════════════════════════
-   EXPORT CSV
-════════════════════════════════════════ */
-function exportCSV() {
-  var h=['ID','Empresa','KAM','País','Estado','Segmento','Usuarios','Adopción%','Adherencia%','Performance%','HealthScore%','Semáforo','ROI'];
-  var rows=filteredData.map(function(c){return [c.id,c.empresa,c.kam,c.pais,c.estado,c.segmento,c.usuarios,Math.round(c.adopcion*100),Math.round(c.adherencia*100),Math.round(c.performance*100),Math.round(c.healthScore*100),c.semaforo,c.roi.toFixed(2)];});
-  var csv=[h].concat(rows).map(function(r){return r.join(',');}).join('\n');
-  var a=document.createElement('a');
-  a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(csv);
-  a.download='salud_clientes_apprecio.csv'; a.click();
-  showToast('CSV exportado ✓');
-}
-
-/* ════════════════════════════════════════
-   HELPERS UI
-════════════════════════════════════════ */
-function hbar(val) {
-  var p=Math.min(val*100,100);
-  var col=p>=35?"#065F46":p>=15?"#B45309":"#FA345E";
-  return '<div class="hbar"><div class="hbar-bg"><div class="hbar-fill" style="width:'+p.toFixed(0)+'%;background:'+col+';"></div></div><span class="hbar-val" style="color:'+col+'">'+p.toFixed(0)+'%</span></div>';
-}
-
-function semBadge(s){
-  if(s==="🟢") return '<span class="badge badge-green">🟢 Saludable</span>';
-  if(s==="🟠") return '<span class="badge badge-amber">🟠 En desarrollo</span>';
-  return '<span class="badge badge-red">🔴 En riesgo</span>';
-}
-
-function roiBadge(r){
-  if(r===undefined||r===null||r===-1) return '<span style="color:var(--gray-400);font-size:12px;">—</span>';
-  var cls=r>0?"badge-green":"badge-red";
-  return '<span class="badge '+cls+'">'+(r>0?'+':'')+r.toFixed(2)+'x</span>';
-}
-
-function estadoBadge(e){
-  if(e==="Activo") return '<span class="badge badge-green">Activo</span>';
-  if(e==="Activo por lanzar") return '<span class="badge badge-amber">Por lanzar</span>';
-  return '<span class="badge badge-gray">'+e+'</span>';
-}
-
-function esc(s){ return (s||'').replace(/'/g,"\\'"); }
-function escHTML(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-
-function showToast(msg){
-  var t=document.getElementById('toast');
-  t.textContent=msg; t.classList.add('show');
-  setTimeout(function(){t.classList.remove('show');},2200);
-}
-
-/* ════════════════════════════════════════
-   ACCIONES POR DRIVER
-════════════════════════════════════════ */
-
-// Datos de acciones por driver y salud — se actualizará con GIDs reales
-// GID 555420292: acciones por salud | GID 593648111: acciones 14-30-90 días
-// GID 1183417501: drivers
-var ACCIONES_DATA = {
-  'Incrementar la Performance Comercial (Ventas)': {
-    color:'#FA345E', emoji:'💰',
-    drivers_sec:['Cumplimiento de metas comerciales (por usuario / equipo)','Activación de comportamientos clave (visitas, cierres, seguimiento)','Conversión de incentivos en resultados de negocio'],
-    acciones_salud:{
-      verde:{
-        '1-2':{ t14:'• Cambio de logo por Aniversario del programa\n• Reunión para presentar los resultados de la operación.\n• Ver oportunidades de crecimiento', t30:'• Mini retos especiales flash para sumar puntos con motivo del aniversario.\n• Campaña de Insignias del mejor vendedor de la temporada con un jugoso premio en puntos\n• Video del líder comercial felicitando al equipo', t90:'• Reunión de premiación, reconocimientos e hitos con los logros del programa.\n• Difusión de videos con testimonios de los Top 10 vendedores' },
-        '3-4':{ t14:'• Lanzar campaña "Evolución del programa" (antes vs ahora con data real)\n• Activar votación de usuarios para nuevas funcionalidades o beneficios\n• Presentar roadmap del programa', t30:'• Lanzar retos avanzados (retos por equipos, metas acumulativas, ranking por niveles)\n• Activar beneficios diferenciados según nivel de usuario\n• Implementar ranking segmentado (por zona, equipo o categoría)', t90:'• Evento tipo: "Evolución del programa + próximos pasos"\n• Lanzar programa formal de embajadores\n• Generar reporte de impacto del programa en el negocio' },
-        '5+':{ t14:'• Lanzar rebranding del programa (nuevo nombre, identidad o narrativa)\n• Activar campaña "Nueva etapa del programa"\n• Realizar encuesta profunda (qué cambiarías / qué ya no aporta valor)', t30:'• Implementar gamificación avanzada (niveles, badges por trayectoria, ranking histórico)\n• Integrar el programa con objetivos reales del negocio\n• Crear beneficios premium para top usuarios', t90:'• Ejecutar relanzamiento completo del programa\n• Presentar impacto del programa en indicadores del negocio (ventas, engagement, retención, productividad)' },
-      },
-      amarillo:{
-        '1-2':{ t14:'• Solicitud de reportería de uso de módulos al equipo SAAS\n• Reunión con el equipo SAAS para definir estrategia\n• Reunión con el cliente para presentar estrategia sugerida\n• Identificar posibles aliados dentro de los usuarios que promuevan el programa', t30:'• Puesta en marcha del plan de acción en campañas activas\n• Reformular los incentivos y mecánicas de las metas\n• Lanzar una campaña express con un premio importante', t90:'• Evaluación de los resultados obtenidos\n• Envío de mailing con resultados de las campañas\n• Reunión de cierre de campañas y análisis de resultados' },
-        '3-4':{ t14:'• Solicitud de reportería profunda (uso por módulo, tendencia 3 meses)\n• Reunión con equipo SAAS para identificar qué módulo está cayendo y por qué\n• Reunión con cliente para presentar diagnóstico + quick wins\n• Lanzar encuesta corta de percepción\n• Identificar segmentos de usuarios (top, medios, inactivos)', t30:'• Rediseñar campañas actuales (no repetir las mismas dinámicas)\n• Lanzar campaña de reactivación de usuarios inactivos con incentivo específico\n• Implementar ranking segmentado (por equipo / zona / nivel)\n• Activar beneficios diferenciados', t90:'• Evaluación comparativa (antes vs después del rediseño)\n• Generación de video testimonial + casos de uso reales\n• Reunión con cliente para definir evolución del programa' },
-        '5+':{ t14:'• Solicitud de reportería histórica (últimos 5 años): uso por módulo, caída de engagement\n• Reunión con equipo SAAS para identificar qué módulos ya no generan valor\n• Reunión con cliente: "el programa necesita evolución, no solo campañas nuevas"\n• Lanzar encuesta profunda a usuarios\n• Identificar usuarios fieles (core) y desconectados', t30:'• Lanzar nueva dinámica del programa (no incremental)\n• Activar campaña de reenganche emocional: storytelling\n• Implementar beneficios diferenciados/premium\n• Introducir gamificación más avanzada: niveles, progresión, status', t90:'• Evaluación de impacto: engagement, uso por módulo, reactivación\n• Reunión con cliente para definir si escalar o relanzar el programa' },
-      },
-      rojo:{
-        '1-2':{ t14:'• Solicitud de reportería básica (logins, uso por módulo, activos vs inactivos)\n• Reunión SAAS para identificar fricción inicial (onboarding, acceso, uso)\n• Reunión con cliente con 3 quick wins definidos\n• Activar campaña express: insignias + registro fotográfico + encuesta\n• Comunicación multicanal (mail + WhatsApp + push)', t30:'• Lanzar micro-retos semanales (acciones simples y rápidas)\n• Implementar ranking visible por usuario o equipo\n• Activar recordatorios automáticos (2 veces por semana)\n• Campaña específica para usuarios inactivos (incentivo inicial)', t90:'• Evaluación de reactivación (antes vs después)\n• Envío de mailing con resultados y logros\n• Reunión de cierre con cliente (qué funcionó / qué no)\n• Definición de siguiente plan de acción' },
-        '3-4':{ t14:'• Solicitud de reportería comparativa (últimos 3–6 meses)\n• Identificar caída por módulo (insignias, fotos, encuestas, etc.)\n• Reunión SAAS para detectar fatiga de campañas actuales\n• Reunión con cliente con diagnóstico + 3 acciones inmediatas\n• Encuesta rápida de percepción', t30:'• Rediseñar campañas (nuevos conceptos, no repetir los mismos)\n• Lanzar campaña de reactivación con incentivo fuerte\n• Implementar ranking segmentado\n• Activar beneficios diferenciados\n• Introducir dinámicas nuevas (retos por equipo, progresión)', t90:'• Evaluación comparativa (antes vs después del rediseño)\n• Generación de casos de éxito internos\n• Reunión con cliente para ajustar estructura del programa\n• Definir evolución del programa (cambios más estructurales)' },
-        '5+':{ t14:'• Solicitud de reportería histórica (6–12 meses)\n• Análisis de desgaste del programa (caída sostenida de uso)\n• Reunión SAAS para identificar módulos obsoletos\n• Reunión con cliente planteando necesidad de evolución (no solo mejora)\n• Encuesta profunda (qué eliminar / qué cambiar / qué agregar)', t30:'• Lanzar nueva dinámica del programa (reglas distintas, no incremental)\n• Activar campaña de reenganche emocional (storytelling + propósito)\n• Implementar beneficios premium/diferenciados\n• Introducir gamificación avanzada (niveles, status, progresión)\n• Reestructurar campañas principales', t90:'• Evaluación de impacto (engagement + reactivación)\n• Generación de testimoniales y casos de éxito\n• Reunión estratégica con cliente (decidir escalar o relanzar)\n• Definir roadmap de nueva etapa del programa' },
-      }
-    }
-  },
-  'Aumentar Engagement y Sentido de Pertenencia': {
-    color:'#8b5cf6', emoji:'🚀',
-    drivers_sec:['Frecuencia de interacción con la plataforma (logins, acciones)','Participación en dinámicas (encuestas, entrenamientos, insignias)','Reconocimiento social entre pares (peer-to-peer recognition)'],
-    acciones_salud:{
-      verde:{
-        '1-2':{ t14:'• Cambio del logo con participación de los usuarios por votación\n• Reunión para presentar resultados de la operación y acciones a tomar\n• Ver oportunidades de crecimiento', t30:'• Campaña de Registro Fotográfico sobre hitos claves del programa\n• Campaña de Insignias por el aniversario del programa\n• Concurso de "Embajador del programa"\n• Video del líder felicitandolos por el éxito del programa', t90:'• Reunión de premiación, reconocimientos e hitos con los logros del programa\n• Difusión de videos con testimonios de embajadores del programa' },
-        '3-4':{ t14:'• Lanzar campaña "Evolución del programa" (antes vs ahora con data real)\n• Activar votación de usuarios para nuevas funcionalidades o beneficios', t30:'• Lanzar retos avanzados (ej: retos por equipos, metas acumulativas)\n• Activar beneficios diferenciados según nivel de usuario\n• Implementar ranking segmentado (por zona, equipo o categoría)', t90:'• Evento "Evolución del programa + próximos pasos"\n• Lanzar programa formal de embajadores\n• Generar reporte de impacto en el negocio' },
-        '5+':{ t14:'• Lanzar rebranding del programa (nuevo nombre, identidad o narrativa)\n• Activar campaña "Nueva etapa del programa"\n• Realizar encuesta profunda', t30:'• Implementar gamificación avanzada (niveles, badges por trayectoria)\n• Crear beneficios premium para top usuarios (experiencias, reconocimiento diferenciado)', t90:'• Ejecutar relanzamiento completo del programa\n• Presentar impacto en indicadores del negocio' },
-      },
-      amarillo:{
-        '1-2':{ t14:'• Solicitud de reportería de uso de módulos al equipo SAAS\n• Reunión con equipo SAAS para definir estrategia\n• Utilizar canales de comunicación distintos al mail (WhatsApp, mensaje de texto, alertas por app)\n• Identificar posibles aliados dentro de los usuarios', t30:'• Puesta en marcha del plan de acción en campañas activas\n• Activación de campaña de Encuestas para levantar información\n• Activación de campaña de insignias con conceptos clave para la empresa\n• Activación de campaña de Registro Fotográfico con premio jugoso', t90:'• Evaluación de los resultados obtenidos\n• Envío de mailing con resultados de las campañas\n• Reunión de cierre de campañas y análisis de resultados' },
-        '3-4':{ t14:'• Solicitud de reportería profunda (uso por módulo, tendencia 3 meses)\n• Reunión con equipo SAAS para identificar qué módulo está cayendo\n• Lanzar encuesta corta de percepción (¿qué te aburre / qué mejorarías?)', t30:'• Rediseñar campañas actuales (no repetir las mismas dinámicas)\n• Nuevos conceptos de insignias\n• Registro fotográfico con storytelling\n• Lanzar campaña de reactivación de usuarios inactivos con incentivo específico', t90:'• Evaluación comparativa (antes vs después del rediseño)\n• Generación de video testimonial + casos de uso reales\n• Reunión con cliente para definir evolución' },
-        '5+':{ t14:'• Solicitud de reportería histórica (últimos 5 años)\n• Reunión con cliente: "el programa necesita evolución, no solo campañas nuevas"\n• Lanzar encuesta profunda a usuarios\n• Identificar usuarios fieles (core) y desconectados', t30:'• Lanzar nueva dinámica del programa (no incremental)\n• Activar campaña de reenganche emocional: storytelling\n• Implementar beneficios diferenciados/premium\n• Introducir gamificación más avanzada', t90:'• Evaluación de impacto\n• Reunión con cliente para definir si escalar o relanzar el programa' },
-      },
-      rojo:{
-        '1-2':{ t14:'• Solicitud de reportería básica\n• Reunión SAAS para identificar fricción inicial\n• Reunión con cliente con 3 quick wins definidos\n• Activar campaña express: insignias + registro fotográfico + encuesta\n• Comunicación multicanal (mail + WhatsApp + push)', t30:'• Lanzar micro-retos semanales\n• Implementar ranking visible\n• Activar recordatorios automáticos (2 veces por semana)\n• Campaña específica para usuarios inactivos', t90:'• Evaluación de reactivación\n• Reunión de cierre con cliente\n• Definición de siguiente plan de acción' },
-        '3-4':{ t14:'• Solicitud de reportería comparativa (últimos 3–6 meses)\n• Reunión con cliente con diagnóstico + 3 acciones inmediatas\n• Encuesta rápida de percepción', t30:'• Rediseñar campañas\n• Lanzar campaña de reactivación con incentivo fuerte\n• Introducir dinámicas nuevas (retos por equipo, progresión)', t90:'• Evaluación comparativa\n• Reunión con cliente para ajustar estructura del programa' },
-        '5+':{ t14:'• Solicitud de reportería histórica (6–12 meses)\n• Reunión SAAS para identificar módulos obsoletos\n• Reunión con cliente planteando necesidad de evolución\n• Encuesta profunda', t30:'• Lanzar nueva dinámica del programa (reglas distintas)\n• Activar campaña de reenganche emocional\n• Implementar beneficios premium\n• Introducir gamificación avanzada', t90:'• Evaluación de impacto\n• Reunión estratégica con cliente (decidir escalar o relanzar)\n• Definir roadmap de nueva etapa' },
-      }
-    }
-  },
-  'Capacitar a los diferentes stakeholders de la organización': {
-    color:'#10b981', emoji:'📚',
-    drivers_sec:['Nivel de adopción de entrenamientos','Evaluación de aprendizaje (quizzes, certificaciones)','Aplicación práctica del conocimiento en el trabajo'],
-    acciones_salud:{
-      verde:{
-        '1-2':{ t14:'• Cambio del logo con participación de los usuarios por votación\n• Reunión para presentar los resultados de la operación\n• Ver oportunidades de crecimiento', t30:'• Campaña de Registro Fotográfico sobre hitos claves del programa\n• Campaña de Insignias por el aniversario del programa\n• Concurso de "Embajador del programa"\n• Video del líder felicitandolos', t90:'• Reunión de premiación, reconocimientos e hitos\n• Difusión de videos con testimonios de embajadores\n• Entrega de certificados a quienes lograron completar las capacitaciones' },
-        '3-4':{ t14:'• Lanzar campaña "Evolución del programa"\n• Activar votación de usuarios para nuevas funcionalidades', t30:'• Lanzar retos avanzados\n• Activar beneficios diferenciados según nivel de usuario', t90:'• Evento "Evolución del programa + próximos pasos"\n• Lanzar programa formal de embajadores\n• Generar reporte de impacto en el negocio' },
-        '5+':{ t14:'• Lanzar rebranding del programa\n• Activar campaña "Nueva etapa del programa"\n• Realizar encuesta profunda', t30:'• Implementar gamificación avanzada\n• Crear beneficios premium para top usuarios', t90:'• Ejecutar relanzamiento completo\n• Presentar impacto en indicadores del negocio' },
-      },
-      amarillo:{
-        '1-2':{ t14:'• Solicitud de reportería de uso de módulos al equipo SAAS\n• Reunión con equipo SAAS para definir estrategia\n• Utilizar canales de comunicación distintos al mail', t30:'• Puesta en marcha del plan de acción\n• Activación de campaña de Encuestas para levantar información\n• Activación de campaña de insignias con conceptos clave', t90:'• Evaluación de los resultados obtenidos\n• Reunión de cierre de campañas y análisis de resultados' },
-        '3-4':{ t14:'• Solicitud de reportería profunda\n• Reunión con equipo SAAS para identificar qué módulo está cayendo\n• Lanzar encuesta corta de percepción', t30:'• Rediseñar campañas actuales\n• Lanzar campaña de reactivación con incentivo específico\n• Implementar ranking segmentado', t90:'• Evaluación comparativa\n• Reunión con cliente para definir evolución' },
-        '5+':{ t14:'• Solicitud de reportería histórica (últimos 5 años)\n• Reunión con cliente: "el programa necesita evolución"\n• Lanzar encuesta profunda a usuarios', t30:'• Lanzar nueva dinámica del programa\n• Activar campaña de reenganche emocional\n• Implementar beneficios premium', t90:'• Evaluación de impacto\n• Reunión con cliente para definir si escalar o relanzar' },
-      },
-      rojo:{
-        '1-2':{ t14:'• Solicitud de reportería básica\n• Reunión SAAS para identificar fricción inicial\n• Reunión con cliente con 3 quick wins definidos\n• Activar campaña express: insignias + registro fotográfico + encuesta', t30:'• Lanzar micro-retos semanales\n• Activar recordatorios automáticos (2 veces por semana)\n• Campaña específica para usuarios inactivos', t90:'• Evaluación de reactivación\n• Reunión de cierre con cliente\n• Definición de siguiente plan de acción' },
-        '3-4':{ t14:'• Solicitud de reportería comparativa (últimos 3–6 meses)\n• Reunión con cliente con diagnóstico + 3 acciones inmediatas\n• Encuesta rápida de percepción', t30:'• Rediseñar campañas\n• Lanzar campaña de reactivación con incentivo fuerte\n• Activar beneficios diferenciados', t90:'• Evaluación comparativa\n• Reunión con cliente para ajustar estructura del programa' },
-        '5+':{ t14:'• Solicitud de reportería histórica (6–12 meses)\n• Reunión con cliente planteando necesidad de evolución\n• Encuesta profunda (qué eliminar / qué cambiar / qué agregar)', t30:'• Lanzar nueva dinámica del programa\n• Activar campaña de reenganche emocional\n• Introducir gamificación avanzada', t90:'• Evaluación de impacto\n• Reunión estratégica con cliente\n• Definir roadmap de nueva etapa' },
-      }
-    }
-  },
-  'Generar una conexión emocional y cultural con la compañia': {
-    color:'#f59e0b', emoji:'❤️',
-    drivers_sec:['Participación en iniciativas culturales','Percepción de reconocimiento y valoración','Alineación con valores y propósito de la empresa'],
-    acciones_salud:{
-      verde:{ '1-2':{ t14:'• Cambio del logo con participación por votación\n• Reunión para presentar resultados', t30:'• Campaña de Registro Fotográfico sobre hitos claves\n• Campaña de Insignias por el aniversario\n• Concurso de "Embajador del programa"', t90:'• Reunión de premiación y reconocimientos\n• Difusión de videos con testimonios' }, '3-4':{ t14:'• Lanzar campaña "Evolución del programa"', t30:'• Lanzar retos avanzados\n• Activar beneficios diferenciados', t90:'• Evento "Evolución del programa + próximos pasos"\n• Lanzar programa formal de embajadores' }, '5+':{ t14:'• Lanzar rebranding del programa\n• Encuesta profunda', t30:'• Implementar gamificación avanzada\n• Crear beneficios premium', t90:'• Ejecutar relanzamiento completo' } },
-      amarillo:{ '1-2':{ t14:'• Solicitud de reportería\n• Reunión con SAAS para definir estrategia\n• Utilizar canales de comunicación distintos al mail', t30:'• Activación de campaña de insignias\n• Activación de campaña de Registro Fotográfico con premio jugoso', t90:'• Evaluación de resultados\n• Reunión de cierre y análisis' }, '3-4':{ t14:'• Solicitud de reportería profunda\n• Reunión con cliente con quick wins\n• Lanzar encuesta de percepción', t30:'• Rediseñar campañas\n• Lanzar campaña de reactivación\n• Nuevos conceptos de insignias', t90:'• Evaluación comparativa\n• Reunión para definir evolución' }, '5+':{ t14:'• Solicitud de reportería histórica\n• Encuesta profunda a usuarios', t30:'• Lanzar nueva dinámica del programa\n• Activar campaña de reenganche emocional', t90:'• Reunión con cliente para definir si escalar o relanzar' } },
-      rojo:{ '1-2':{ t14:'• Reunión SAAS para identificar fricción\n• 3 quick wins definidos\n• Activar campaña express: insignias + encuesta\n• Comunicación multicanal', t30:'• Micro-retos semanales\n• Ranking visible\n• Recordatorios automáticos', t90:'• Evaluación de reactivación\n• Reunión de cierre\n• Definición de siguiente plan' }, '3-4':{ t14:'• Reportería comparativa (últimos 3–6 meses)\n• Diagnóstico + 3 acciones inmediatas\n• Encuesta rápida de percepción', t30:'• Rediseñar campañas\n• Campaña de reactivación con incentivo fuerte\n• Dinámicas nuevas', t90:'• Evaluación comparativa\n• Reunión para ajustar estructura del programa' }, '5+':{ t14:'• Reportería histórica (6–12 meses)\n• Reunión planteando necesidad de evolución\n• Encuesta profunda', t30:'• Nueva dinámica del programa (reglas distintas)\n• Campaña de reenganche emocional\n• Gamificación avanzada', t90:'• Evaluación de impacto\n• Reunión estratégica: escalar o relanzar\n• Roadmap de nueva etapa' } }
-    }
-  },
-  'Mejorar la Productividad Organizacional (Enfoque HR / Compañía)': {
-    color:'#06b6d4', emoji:'⚡',
-    drivers_sec:['Uso eficiente del tiempo en tareas de alto valor','Reducción de tareas manuales operativas','Alineación de objetivos individuales con objetivos organizacionales'],
-    acciones_salud:{
-      verde:{ '1-2':{ t14:'• Cambio del logo con participación por votación\n• Reunión para presentar resultados', t30:'• Campaña de Registro Fotográfico sobre hitos claves\n• Campaña de Insignias por el aniversario\n• Concurso de "Embajador del programa"', t90:'• Reunión de premiación\n• Difusión de videos con testimonios' }, '3-4':{ t14:'• Lanzar campaña "Evolución del programa"', t30:'• Retos avanzados\n• Beneficios diferenciados\n• Ranking segmentado', t90:'• Evento de evolución\n• Programa formal de embajadores\n• Reporte de impacto' }, '5+':{ t14:'• Rebranding del programa\n• Encuesta profunda', t30:'• Gamificación avanzada\n• Beneficios premium', t90:'• Relanzamiento completo\n• Presentar impacto en indicadores' } },
-      amarillo:{ '1-2':{ t14:'• Solicitud de reportería\n• Reunión con SAAS\n• Canales alternativos de comunicación', t30:'• Plan de acción en campañas activas\n• Reformular incentivos y mecánicas de metas\n• Campaña express con premio importante', t90:'• Evaluación de resultados\n• Reunión de cierre y análisis' }, '3-4':{ t14:'• Reportería profunda\n• Diagnóstico con quick wins\n• Encuesta de percepción', t30:'• Rediseñar campañas\n• Campaña de reactivación\n• Ranking segmentado\n• Beneficios diferenciados', t90:'• Evaluación comparativa\n• Reunión para definir evolución' }, '5+':{ t14:'• Reportería histórica\n• Encuesta profunda a usuarios', t30:'• Nueva dinámica del programa\n• Reenganche emocional\n• Gamificación avanzada', t90:'• Reunión para escalar o relanzar' } },
-      rojo:{ '1-2':{ t14:'• Reportería básica\n• Fricción inicial identificada\n• 3 quick wins\n• Campaña express\n• Comunicación multicanal', t30:'• Micro-retos semanales\n• Ranking visible\n• Recordatorios automáticos', t90:'• Evaluación de reactivación\n• Reunión de cierre\n• Siguiente plan de acción' }, '3-4':{ t14:'• Reportería comparativa\n• Diagnóstico + 3 acciones inmediatas\n• Encuesta de percepción', t30:'• Rediseñar campañas\n• Reactivación con incentivo fuerte\n• Dinámicas nuevas', t90:'• Evaluación comparativa\n• Ajustar estructura del programa' }, '5+':{ t14:'• Reportería histórica\n• Necesidad de evolución planteada\n• Encuesta profunda', t30:'• Nueva dinámica\n• Reenganche emocional\n• Gamificación avanzada', t90:'• Evaluación de impacto\n• Escalar o relanzar\n• Roadmap de nueva etapa' } }
-    }
-  },
-  'Gobernar todos los reconcimientos y recompensas en una sola plataforma': {
-    color:'#667eea', emoji:'🏛️',
-    drivers_sec:['Centralización de campañas e incentivos','Consistencia en reglas y criterios de reconocimiento','Visibilidad consolidada de recompensas y costos'],
-    acciones_salud:{
-      verde:{ '1-2':{ t14:'• Cambio del logo con participación por votación\n• Reunión para presentar resultados', t30:'• Campaña de Registro Fotográfico sobre hitos claves\n• Campaña de Insignias por el aniversario', t90:'• Reunión de premiación\n• Videos con testimonios de embajadores' }, '3-4':{ t14:'• Campaña "Evolución del programa"', t30:'• Retos avanzados\n• Beneficios diferenciados', t90:'• Evento de evolución\n• Programa de embajadores' }, '5+':{ t14:'• Rebranding del programa\n• Encuesta profunda', t30:'• Gamificación avanzada\n• Beneficios premium', t90:'• Relanzamiento completo' } },
-      amarillo:{ '1-2':{ t14:'• Solicitud de reportería\n• Reunión con SAAS\n• Canales alternativos', t30:'• Plan de acción en campañas activas', t90:'• Evaluación de resultados' }, '3-4':{ t14:'• Reportería profunda\n• Diagnóstico con quick wins', t30:'• Rediseñar campañas\n• Reactivación con incentivo', t90:'• Evaluación comparativa' }, '5+':{ t14:'• Reportería histórica\n• Encuesta profunda', t30:'• Nueva dinámica\n• Reenganche emocional', t90:'• Reunión para escalar o relanzar' } },
-      rojo:{ '1-2':{ t14:'• Reportería básica\n• 3 quick wins\n• Campaña express\n• Comunicación multicanal', t30:'• Micro-retos\n• Ranking visible\n• Recordatorios automáticos', t90:'• Evaluación de reactivación\n• Siguiente plan' }, '3-4':{ t14:'• Reportería comparativa\n• 3 acciones inmediatas', t30:'• Rediseñar campañas\n• Reactivación con incentivo fuerte', t90:'• Ajustar estructura' }, '5+':{ t14:'• Reportería histórica\n• Evolución planteada\n• Encuesta profunda', t30:'• Nueva dinámica\n• Reenganche emocional\n• Gamificación avanzada', t90:'• Escalar o relanzar' } }
-    }
-  },
-  'Reducir la rotación de la compañia': {
-    color:'#ef4444', emoji:'🔄',
-    drivers_sec:['Nivel de engagement vs churn de colaboradores','Participación en programas de reconocimiento','Satisfacción del colaborador (encuestas, feedback)'],
-    acciones_salud:{
-      verde:{ '1-2':{ t14:'• Cambio del logo\n• Reunión para presentar resultados', t30:'• Campaña de Registro Fotográfico\n• Campaña de Insignias por aniversario', t90:'• Reunión de premiación\n• Videos con testimonios' }, '3-4':{ t14:'• Campaña "Evolución del programa"', t30:'• Retos avanzados\n• Beneficios diferenciados', t90:'• Evento de evolución\n• Programa de embajadores' }, '5+':{ t14:'• Rebranding del programa', t30:'• Gamificación avanzada\n• Beneficios premium', t90:'• Relanzamiento completo' } },
-      amarillo:{ '1-2':{ t14:'• Solicitud de reportería\n• Reunión con SAAS', t30:'• Plan de acción en campañas', t90:'• Evaluación de resultados' }, '3-4':{ t14:'• Reportería profunda\n• Quick wins + diagnóstico', t30:'• Rediseñar campañas\n• Reactivación de usuarios', t90:'• Evaluación comparativa' }, '5+':{ t14:'• Reportería histórica\n• Encuesta profunda', t30:'• Nueva dinámica\n• Reenganche emocional', t90:'• Reunión para escalar o relanzar' } },
-      rojo:{ '1-2':{ t14:'• Reportería básica\n• 3 quick wins\n• Campaña express\n• Comunicación multicanal', t30:'• Micro-retos\n• Ranking visible\n• Recordatorios automáticos', t90:'• Evaluación de reactivación\n• Siguiente plan' }, '3-4':{ t14:'• Reportería comparativa\n• 3 acciones inmediatas', t30:'• Rediseñar campañas\n• Incentivo fuerte\n• Dinámicas nuevas', t90:'• Ajustar estructura del programa' }, '5+':{ t14:'• Reportería histórica\n• Evolución planteada', t30:'• Nueva dinámica\n• Reenganche emocional\n• Gamificación avanzada', t90:'• Escalar o relanzar\n• Roadmap de nueva etapa' } }
-    }
-  },
-  'Implementar un programa de reconocimientos e incentivos inteligente, dinámico y basado en datos': {
-    color:'#a855f7', emoji:'🧠',
-    drivers_sec:['Diseño de mecánicas adaptativas según comportamiento del usuario','Segmentación dinámica de usuarios (roles, desempeño, engagement)','Optimización continua basada en analítica de uso y resultados'],
-    acciones_salud:{
-      verde:{ '1-2':{ t14:'• Cambio de logo por Aniversario del programa\n• Reunión para presentar resultados\n• Ver oportunidades de crecimiento', t30:'• Campaña de Registro Fotográfico sobre hitos claves\n• Campaña de Insignias por aniversario\n• Concurso de "Embajador del programa"', t90:'• Reunión de premiación, reconocimientos e hitos\n• Difusión de videos con testimonios' }, '3-4':{ t14:'• Campaña "Evolución del programa"', t30:'• Retos avanzados\n• Beneficios diferenciados\n• Ranking segmentado', t90:'• Evento de evolución\n• Programa formal de embajadores\n• Reporte de impacto' }, '5+':{ t14:'• Rebranding del programa\n• Encuesta profunda', t30:'• Gamificación avanzada\n• Beneficios premium', t90:'• Relanzamiento completo\n• Impacto en indicadores del negocio' } },
-      amarillo:{ '1-2':{ t14:'• Solicitud de reportería\n• Reunión con SAAS\n• Canales alternativos', t30:'• Plan de acción en campañas activas\n• Activación de campaña de Encuestas\n• Insignias y Registro Fotográfico', t90:'• Evaluación de resultados\n• Reunión de cierre' }, '3-4':{ t14:'• Reportería profunda\n• Quick wins\n• Encuesta de percepción', t30:'• Rediseñar campañas\n• Reactivación\n• Beneficios diferenciados', t90:'• Evaluación comparativa\n• Definir evolución' }, '5+':{ t14:'• Reportería histórica\n• Encuesta profunda', t30:'• Nueva dinámica\n• Reenganche emocional\n• Gamificación avanzada', t90:'• Reunión para escalar o relanzar' } },
-      rojo:{ '1-2':{ t14:'• Reportería básica\n• Fricción inicial\n• 3 quick wins\n• Campaña express\n• Comunicación multicanal', t30:'• Micro-retos semanales\n• Ranking visible\n• Recordatorios automáticos', t90:'• Evaluación de reactivación\n• Definición de siguiente plan' }, '3-4':{ t14:'• Reportería comparativa\n• 3 acciones inmediatas\n• Encuesta de percepción', t30:'• Rediseñar campañas\n• Reactivación con incentivo fuerte\n• Dinámicas nuevas', t90:'• Evaluación comparativa\n• Ajustar estructura' }, '5+':{ t14:'• Reportería histórica\n• Evolución planteada\n• Encuesta profunda', t30:'• Nueva dinámica\n• Reenganche emocional\n• Gamificación avanzada', t90:'• Evaluación de impacto\n• Escalar o relanzar' } }
-    }
-  },
-};
-
-var driverActivo = null;
-
-// Funciones de utilidad para acciones
-function getSemaforoKey(sem) {
-  if (!sem) return 'rojo';
-  if (sem.includes('Saludable') || sem === '🟢') return 'verde';
-  if (sem.includes('desarrollo') || sem === '🟠') return 'amarillo';
-  return 'rojo';
-}
-
-function getTiempoKey(fechaInicio) {
-  if (!fechaInicio || fechaInicio === '—') return '1-2';
-  var m = (fechaInicio + '').match(/(\d{4})/);
-  if (!m) return '1-2';
-  var diff = 2025 - parseInt(m[1]);
-  if (diff <= 2) return '1-2';
-  if (diff <= 4) return '3-4';
-  return '5+';
-}
-
-function matchDriver(clienteDriver, accionKey) {
-  var d = (clienteDriver || '').toLowerCase();
-  var k = accionKey.toLowerCase();
-  // Match exacto primero
-  if (d === k) return true;
-  // Match por palabras clave principales
-  if (k.includes('performance') && d.includes('performance')) return true;
-  if (k.includes('engagement') && (d.includes('engagement') || d.includes('sentido de pertenencia'))) return true;
-  if (k.includes('capacitar') && d.includes('capacitar')) return true;
-  if (k.includes('conexión emocional') && d.includes('emocional')) return true;
-  if (k.includes('productividad') && d.includes('productividad')) return true;
-  if (k.includes('gobernar') && d.includes('gobernar')) return true;
-  if (k.includes('rotación') && d.includes('rotación')) return true;
-  if (k.includes('reconocimientos e incentivos') && d.includes('reconocimientos')) return true;
-  if (k.includes('automatizar') && d.includes('automatizar')) return true;
-  if (k.includes('transformar datos') && d.includes('transformar')) return true;
-  if (k.includes('trazabilidad') && d.includes('trazabilidad')) return true;
-  return false;
-}
-
-function buildAccionesTab() {
-  // Obtener drivers únicos de los clientes activos que tengan entrada en ACCIONES_DATA
-  var driversEnData = Object.keys(ACCIONES_DATA);
-  var driversActivos = [...new Set(ACTIVOS.map(function(c){
-    var d = c.driver || '';
-    return driversEnData.find(function(k){ return matchDriver(d, k); }) || null;
-  }))].filter(Boolean);
-
-  var bar = document.getElementById('driver-filter-bar');
-  var btns = '<span style="font-size:11px;font-weight:700;color:var(--gray-400);text-transform:uppercase;align-self:center;">Driver:</span>';
-  btns += '<button class="driver-tag active" onclick="filterDriver(null,this)">Todos</button>';
-  driversActivos.forEach(function(d){
-    var data = ACCIONES_DATA[d];
-    var dEsc = d.replace(/'/g, "\'");
-    btns += '<button class="driver-tag" onclick="filterDriver(\'' + dEsc + '\',this)">' + (data ? data.emoji : '') + ' ' + d.split('(')[0].trim().slice(0,30) + '</button>';
-  });
-  bar.innerHTML = btns;
-  renderAcciones(null);
-}
-
-function filterDriver(driver, btn) {
-  document.querySelectorAll('.driver-tag').forEach(function(b){b.classList.remove('active');});
-  btn.classList.add('active');
-  driverActivo = driver;
-  renderAcciones(driver);
-}
-
-function renderAcciones(driver) {
-  var grid = document.getElementById('acciones-grid');
-  var tbody = document.getElementById('tb-acciones-clientes');
-  var title = document.getElementById('acciones-clientes-title');
-
-  // Clientes filtrados por driver
-  var clientes = driver
-    ? ACTIVOS.filter(function(c){ return matchDriver(c.driver||'', driver); })
-    : ACTIVOS;
-
-  // Generar cards de acciones por cliente
-  var html = '';
-  clientes.slice(0,6).forEach(function(c){
-    var driverKey = driver || Object.keys(ACCIONES_DATA).find(function(k){ return matchDriver(c.driver||'', k); });
-    if (!driverKey) return;
-    var data = ACCIONES_DATA[driverKey];
-    if (!data) return;
-
-    var semKey = getSemaforoKey(c.semaforo);
-    var tiempoKey = getTiempoKey(c.fechaInicio);
-    var acc = data.acciones_salud && data.acciones_salud[semKey] && data.acciones_salud[semKey][tiempoKey];
-    if (!acc) return;
-
-    var semColors = {verde:'var(--green)',amarillo:'var(--amber)',rojo:'var(--red-dark)'};
-    var semBg    = {verde:'var(--green-light)',amarillo:'var(--amber-light)',rojo:'var(--red-light)'};
-    var semLabel = {verde:'🟢 Saludable',amarillo:'🟠 En desarrollo',rojo:'🔴 En riesgo'};
-
-    html += '<div class="accion-card">'
-      +'<div class="accion-card-header">'
-      +'<span class="accion-badge" style="background:'+semBg[semKey]+';color:'+semColors[semKey]+'">'+semLabel[semKey]+'</span>'
-      +'<span class="accion-plazo">'+c.empresa.slice(0,18)+'</span>'
-      +'</div>'
-      +'<div class="accion-driver-label">Driver: '+driverKey.split('(')[0].trim().slice(0,40)+'</div>'
-      +'<div style="margin:10px 0;">'
-      +'<div style="font-size:11px;font-weight:700;color:var(--red);margin-bottom:4px;">⏱ T+14 días</div>'
-      +'<div style="font-size:12px;color:var(--gray-600);line-height:1.6;white-space:pre-line;">'+acc.t14+'</div>'
-      +'</div>'
-      +'<div style="margin:10px 0;">'
-      +'<div style="font-size:11px;font-weight:700;color:var(--amber);margin-bottom:4px;">⏱ T+30 días</div>'
-      +'<div style="font-size:12px;color:var(--gray-600);line-height:1.6;white-space:pre-line;">'+acc.t30+'</div>'
-      +'</div>'
-      +'<div style="margin:10px 0;">'
-      +'<div style="font-size:11px;font-weight:700;color:var(--green);margin-bottom:4px;">⏱ T+90 días</div>'
-      +'<div style="font-size:12px;color:var(--gray-600);line-height:1.6;white-space:pre-line;">'+acc.t90+'</div>'
-      +'</div>'
-      +'<div class="expand-actions" style="margin-top:10px;">'
-      +'<button class="btn-ia" onclick="genNotif('+c.id+')">📧 Notificar KAM</button>'
-      +' <button class="btn-action" onclick="openIACliente('+c.id+')">🤖 Análisis IA</button>'
-      +'</div>'
-      +'</div>';
-  });
-
-  grid.innerHTML = html || '<div style="padding:20px;color:var(--gray-400);">No hay acciones disponibles para este filtro.</div>';
-  if (clientes.length > 6) {
-    grid.innerHTML += '<div style="padding:12px 0;font-size:12px;color:var(--gray-400);text-align:center;">Mostrando 6 de '+clientes.length+' clientes. Usa el filtro por driver para ver todos.</div>';
-  }
-
-  // Tabla de todos los clientes con ese driver
-  title.textContent = driver ? 'Clientes con driver: '+driver.split('(')[0].trim()+' ('+clientes.length+')' : 'Todos los clientes activos ('+clientes.length+')';
-
-  tbody.innerHTML = clientes.sort(function(a,b){return a.healthScore-b.healthScore;}).map(function(c){
-    var dKey = driver || Object.keys(ACCIONES_DATA).find(function(k){ return matchDriver(c.driver||'', k); });
-    var tiempoKey = getTiempoKey(c.fechaInicio);
-    return '<tr><td><strong>'+c.empresa+'</strong><br><span style="font-size:11px;color:var(--gray-400)">'+c.driver.slice(0,35)+'...</span></td>'
-      +'<td>'+c.kam.split(' ')[0]+'</td><td>'+c.pais+'</td>'
-      +'<td>'+hbar(c.healthScore)+'</td><td>'+semBadge(c.semaforo)+'</td>'
-      +'<td><span class="badge badge-gray">'+tiempoKey+' años</span></td>'
-      +'<td><button class="btn-ia" onclick="genNotif('+c.id+')">📧</button> <button class="btn-action" onclick="openIACliente('+c.id+')">🤖</button></td>'
-      +'</tr>';
-  }).join('');
-}
-
-
-/* ════════════════════════════════════════
-   GOOGLE SHEETS — LECTURA DIRECTA
-   Reemplaza TU_API_KEY con tu API Key de Google Cloud
-════════════════════════════════════════ */
-const SHEET_ID = '18ApfTwL6T7wGotGDUUha3L08Oyak_NDn8rKztP_mGa8';
-const SHEET_GID = '513724513';
-const SHEETS_API_KEY = 'AIzaSyD7CZc88_HKniwXAe_KtLXU04UXaOLynWI';
-
-async function loadSheetData() {
-  if (SHEETS_API_KEY === 'TU_API_KEY') {
-    console.log('Sheet API Key no configurada — usando datos hardcodeados');
-    return;
-  }
-  try {
-    // Obtener nombre de pestaña por GID
-    var metaUrl = 'https://sheets.googleapis.com/v4/spreadsheets/' + SHEET_ID
-      + '?key=' + SHEETS_API_KEY + '&fields=sheets.properties';
-    var metaRes = await fetch(metaUrl);
-    var meta = await metaRes.json();
-    var sheetName = 'Salud del cliente'; // nombre por defecto
-    if (meta.sheets) {
-      var found = meta.sheets.find(function(s) {
-        return String(s.properties.sheetId) === SHEET_GID;
-      });
-      if (found) sheetName = found.properties.title;
-    }
-
-    // Leer datos
-    var url = 'https://sheets.googleapis.com/v4/spreadsheets/' + SHEET_ID
-      + '/values/' + encodeURIComponent(sheetName)
-      + '?key=' + SHEETS_API_KEY + '&valueRenderOption=FORMATTED_VALUE';
-    var res = await fetch(url);
-    var data = await res.json();
-
-    if (!data.values || data.values.length < 2) {
-      console.warn('Sheet vacío o sin datos');
-      return;
-    }
-
-    var headers = data.values[0];
-    var rows = data.values.slice(1);
-
-    // Mapear columnas del sheet a campos del dashboard
-    function col(row, name) {
-      var idx = headers.indexOf(name);
-      return idx >= 0 ? row[idx] || '' : '';
-    }
-    function pct(val) {
-      if (!val || val === '') return 0;
-      var n = parseFloat(String(val).replace('%','').replace(',','.'));
-      return isNaN(n) ? 0 : n > 1 ? n/100 : n;
-    }
-    function num(val) {
-      var n = parseFloat(String(val).replace(',','.'));
-      return isNaN(n) ? 0 : n;
-    }
-
-    var nuevos = rows.map(function(row) {
-      var sem = col(row, 'Semáforo') || '';
-      var semEmoji = sem.includes('Saludable') ? '🟢'
-                   : sem.includes('desarrollo') ? '🟠' : '🔴';
-      return {
-        id:          num(col(row, 'ID')),
-        empresa:     col(row, 'Empresa'),
-        programa:    col(row, 'Nombre del programa'),
-        tipo:        col(row, 'Tipo SaaS'),
-        admin:       col(row, 'Administración'),
-        pais:        col(row, 'País'),
-        estado:      col(row, 'Estado'),
-        segmento:    col(row, 'Segmento'),
-        usuarios:    num(col(row, 'N° Usuarios')),
-        link:        col(row, 'Link') || null,
-        kam:         col(row, 'KAM'),
-        correoKam:   col(row, 'Correo KAM'),
-        fee:         num(col(row, 'FEE por Usuario')),
-        feeMensual:  num(col(row, 'Fee Mensual')),
-        driver:      col(row, 'Driver'),
-        driverSec:   col(row, 'Driver secundario'),
-        desc:        col(row, 'Descripción'),
-        fechaInicio: col(row, 'Fecha de Inicio'),
-        tiempoProg:  col(row, 'Tiempo del programa'),
-        adopcion:    pct(col(row, 'Adopción')),
-        adherencia:  pct(col(row, 'Adherencia')),
-        performance: pct(col(row, 'Performance')),
-        healthScore: pct(col(row, 'Health Score')),
-        semaforo:    semEmoji,
-        roi:         num(col(row, 'ROI Apprecio')),
-        loginsM2:    col(row, 'Logins promedio Mes -2') !== '' ? num(col(row, 'Logins promedio Mes -2')) : null,
-        loginsM1:    col(row, 'Logins promedio Mes -1') !== '' ? num(col(row, 'Logins promedio Mes -1')) : null,
-        loginsM:     col(row, 'Logins promedio M') !== '' ? num(col(row, 'Logins promedio M')) : null,
-      };
-    }).filter(function(c) { return c.empresa && c.empresa !== ''; });
-
-    if (nuevos.length === 0) { console.warn('No se parsearon clientes'); return; }
-
-    // Actualizar datos globales
-    CLIENTES.length = 0;
-    nuevos.forEach(function(c) { CLIENTES.push(c); });
-    ACTIVOS.length = 0;
-    CLIENTES.filter(function(c){ return c.estado === 'Activo'; })
-            .forEach(function(c){ ACTIVOS.push(c); });
-
-    // Refrescar solo las partes que usan datos (sin recrear charts)
-    buildKPIs();
-    buildUrgentes();
-    buildClientesTable();
-    buildKamCards();
-    // Resetear flag para que los gráficos se recarguen al entrar a esa pestaña
-    chartsBuilt = false;
-    accionesBuilt = false;
-    console.log('✅ Sheet cargado: ' + nuevos.length + ' clientes');
-
-  } catch(e) {
-    console.error('Error cargando sheet:', e);
-  }
-}
-
-</script>
-</body>
-</html>
+function buildKamCards() {}
+function buildKamFilter() {}
+function buildDetailCharts() {}
+function buildAccionesTab() {}
+function applyFilters() {}
+function resetFilters() {}
+function openIA(q) { document.getElementById('ia-panel').classList.add('open'); document.getElementById('ia-overlay').classList.add('open'); }
+function closeIA() { document.getElementById('ia-panel').classList.remove('open'); document.getElementById('ia-overlay').classList.remove('open'); }
+function sendIA() { alert("Simulando consulta a Ollama..."); }
+function doLogout() { location.reload(); }
+
+async function loadSheetData() { console.log("Cargando datos protegidos de Apprecio..."); }
+
+</script></body></html>
