@@ -25,11 +25,11 @@ button{cursor:pointer;font-family:inherit;}
 input,select,textarea{font-family:inherit;}
 
 /* ── LOGIN ── */
-#login-screen{display:none!important;/*
+#login-screen{
   display:flex;align-items:center;justify-content:center;
   min-height:100vh;padding:20px;
   background:linear-gradient(135deg,#fff5f7 0%,#fff 50%,#f0fff4 100%);
-  */ }
+}
 .login-card{
   background:var(--white);border-radius:20px;box-shadow:var(--shadow-lg);
   padding:48px 40px 40px;max-width:440px;width:100%;text-align:center;
@@ -51,7 +51,7 @@ input,select,textarea{font-family:inherit;}
 }
 
 /* ── APP ── */
-#app-screen{display:block;}
+#app-screen{display:none;}
 
 /* Topbar */
 #topbar{
@@ -674,14 +674,6 @@ tr:last-child td{border-bottom:none;}
         <div style="position:relative;height:220px;"><canvas id="cRegistro"></canvas></div>
       </div>
 
-      <!-- Impacto $ vs ROI por Segmento -->
-      <div class="chart-card" style="margin-bottom:16px;">
-        <div class="chart-title">$ Impacto vs ROI por Segmento</div>
-        <div class="chart-sub">Fee mensual promedio (barras) vs ROI Apprecio (línea)</div>
-        <div id="impacto-kpis" style="display:flex;gap:24px;margin-bottom:12px;flex-wrap:wrap;"></div>
-        <div style="position:relative;height:280px;"><canvas id="cImpacto"></canvas></div>
-      </div>
-
       <!-- Health Score por cliente -->
       <div class="chart-card" style="margin-bottom:16px;">
         <div class="chart-title">Health Score por Cliente (Top 20 activos)</div>
@@ -807,6 +799,10 @@ tr:last-child td{border-bottom:none;}
 </div>
 
 <div id="toast"></div>
+
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+
+<script>
 
 <!-- Google Sign-In SDK (se carga al final para no bloquear render) -->
 <!-- Google Auth desactivado temporalmente
@@ -1038,42 +1034,24 @@ function doLogout() {
 /* ════════════════════════════════════════
    INIT — esperamos que el DOM esté listo
 ════════════════════════════════════════ */
-/* LOGIN COMENTADO — reactivar cuando se resuelva Google Auth
 document.addEventListener('DOMContentLoaded', function() {
-  const raw = localStorage.getItem('appr_user');
-  if (raw) {
-    try {
-      var u = JSON.parse(raw);
-      if (isSessionValid(u.loginTs)) { bootApp(u); return; }
-      else { localStorage.removeItem('appr_user'); }
-    } catch(e) { localStorage.removeItem('appr_user'); }
-  }
-});
-*/
-
-// Acceso directo sin login (login comentado — temporal)
-document.addEventListener('DOMContentLoaded', function() {
-  /* LOGIN COMENTADO — descomentar cuando se resuelva COOP
   var raw = localStorage.getItem('appr_user');
   if (raw) {
     try {
       var u = JSON.parse(raw);
-      if (isSessionValid(u.loginTs)) { bootApp(u); return; }
-      else { localStorage.removeItem('appr_user'); }
-    } catch(e) { localStorage.removeItem('appr_user'); }
+      if (isSessionValid(u.loginTs)) { 
+        bootApp(u); 
+        return; 
+      } else { 
+        localStorage.removeItem('appr_user'); 
+      }
+    } catch(e) { 
+      localStorage.removeItem('appr_user'); 
+    }
   }
-  // Sin sesión válida → mostrar login
-  var loginScreen = document.getElementById('login-screen');
-  if (loginScreen) loginScreen.style.display = 'flex';
-  */
-
-  // Acceso directo (temporal)
-  document.getElementById('user-name').textContent = 'KAM';
-  document.getElementById('user-avatar').src = 'https://ui-avatars.com/api/?name=KAM&background=FA345E&color=fff&size=64';
-  var ctxCount = document.getElementById('ia-ctx-count');
-  if (ctxCount) ctxCount.textContent = ACTIVOS.length;
-  buildDashboard();
-  loadSheetData();
+  // Si no hay sesión válida, mostramos explícitamente el login
+  document.getElementById('login-screen').style.display = 'flex';
+  document.getElementById('app-screen').style.display = 'none';
 });
 
 /* ════════════════════════════════════════
@@ -1463,14 +1441,13 @@ function buildDetailCharts() {
   destroyChart('cMetricaPais'); destroyChart('cLoginsPais');
   destroyChart('cROI'); destroyChart('cSeg'); destroyChart('cHealthBar');
   destroyChart('cAdop'); destroyChart('cAdher'); destroyChart('cPerf');
-  destroyChart('cRegistro'); destroyChart('cImpacto');
+  destroyChart('cRegistro');
   buildMetricaPais('adopcion');
   buildLoginsPais();
   buildROIChart();
   buildSegChart();
   buildHealthBarChart();
   buildRegistroPais();
-  buildImpactoSegmento();
   buildTiempoTable();
 }
 
@@ -1649,106 +1626,6 @@ function buildRegistroPais() {
         x:{ticks:{font:{family:'Montserrat',size:12}}},
         y:{max:100,ticks:{callback:function(v){return v+'%';},font:{family:'Montserrat',size:11}}}
       }}
-  });
-}
-
-function buildImpactoSegmento() {
-  destroyChart('cImpacto');
-  var view = getViewData();
-  var SEG_ORDER = ['A+','A','B','C','S/D'];
-  var segData = {};
-  SEG_ORDER.forEach(function(s){ segData[s]={fees:[],roisCliente:[],roisAppr:[]}; });
-  view.forEach(function(c){
-    var s = c.segmento || 'S/D';
-    if (!segData[s]) segData[s]={fees:[],roisCliente:[],roisAppr:[]};
-    if (c.feeMensual > 0) segData[s].fees.push(c.feeMensual);
-    if (c.roi !== -1) segData[s].roisAppr.push(c.roi);
-    // ROI cliente estimado como negativo cuando roi apprecio es negativo
-    segData[s].roisCliente.push(c.roi > 0 ? c.roi * 30 : c.roi * 30);
-  });
-
-  var labels = SEG_ORDER.filter(function(s){ return segData[s] && segData[s].fees.length > 0; });
-  var feeAvg = labels.map(function(s){
-    var f = segData[s].fees;
-    return f.length ? Math.round(f.reduce(function(a,b){return a+b;},0)/f.length) : 0;
-  });
-  var roiApprAvg = labels.map(function(s){
-    var r = segData[s].roisAppr;
-    return r.length ? (r.reduce(function(a,b){return a+b;},0)/r.length).toFixed(2) : 0;
-  });
-  var roiClientePct = labels.map(function(s){
-    var r = segData[s].roisAppr;
-    var avg = r.length ? r.reduce(function(a,b){return a+b;},0)/r.length : 0;
-    // ROI cliente % = (ROI apprecio - 1) * 100 como proxy
-    return ((avg - 1) * 100).toFixed(1);
-  });
-
-  // KPIs del gráfico
-  var allFees = view.filter(function(c){return c.feeMensual>0;}).map(function(c){return c.feeMensual;});
-  var feePromGlobal = allFees.length ? Math.round(allFees.reduce(function(a,b){return a+b;},0)/allFees.length) : 0;
-  var roisAll = view.filter(function(c){return c.roi!==-1;}).map(function(c){return c.roi;});
-  var roiCliProm = roisAll.length ? ((roisAll.reduce(function(a,b){return a+b;},0)/roisAll.length - 1)*100).toFixed(0) : 0;
-  var roiApprProm = roisAll.length ? (roisAll.reduce(function(a,b){return a+b;},0)/roisAll.length).toFixed(1) : 0;
-
-  // Header KPIs
-  var header = document.getElementById('impacto-kpis');
-  if (header) {
-    header.innerHTML = '<div class="imp-kpi"><div class="imp-kpi-val" style="color:var(--red)">$'+feePromGlobal.toLocaleString('es-CL')+'</div><div class="imp-kpi-lbl">IMP$ PROM.</div></div>'
-      +'<div class="imp-kpi"><div class="imp-kpi-val" style="color:var(--amber)">'+roiCliProm+'%</div><div class="imp-kpi-lbl">ROI CLIENTE PROM.</div></div>'
-      +'<div class="imp-kpi"><div class="imp-kpi-val" style="color:var(--green)">'+roiApprProm+'x</div><div class="imp-kpi-lbl">ROI APPRECIO PROM.</div></div>';
-  }
-
-  new Chart(document.getElementById('cImpacto'),{
-    type:'bar',
-    data:{
-      labels: labels,
-      datasets:[
-        {
-          type:'bar',
-          label:'Impacto $ prom.',
-          data: feeAvg,
-          backgroundColor:'#065F46',
-          borderRadius:6,
-          yAxisID:'y'
-        },
-        {
-          type:'line',
-          label:'ROI Cliente %',
-          data: roiClientePct,
-          borderColor:'#667eea',
-          backgroundColor:'#667eea',
-          pointRadius:5,
-          pointHoverRadius:7,
-          tension:0.3,
-          yAxisID:'y2'
-        },
-        {
-          type:'line',
-          label:'ROI Apprecio x',
-          data: roiApprAvg,
-          borderColor:'#FA345E',
-          backgroundColor:'#FA345E',
-          pointRadius:5,
-          pointHoverRadius:7,
-          tension:0.3,
-          yAxisID:'y2'
-        }
-      ]
-    },
-    options:{
-      responsive:true,maintainAspectRatio:false,
-      plugins:{
-        legend:{position:'bottom',labels:{font:{family:'Montserrat',size:11},usePointStyle:true,padding:16}},
-        tooltip:{mode:'index',intersect:false}
-      },
-      scales:{
-        y:{position:'left',title:{display:true,text:'Impacto $',font:{family:'Montserrat',size:11}},
-          ticks:{font:{family:'Montserrat',size:10},callback:function(v){return '$'+v.toLocaleString('es-CL');}}},
-        y2:{position:'right',title:{display:true,text:'ROI %',font:{family:'Montserrat',size:11}},
-          grid:{drawOnChartArea:false},
-          ticks:{font:{family:'Montserrat',size:10},callback:function(v){return v+'%';}}}
-      }
-    }
   });
 }
 
