@@ -25,11 +25,11 @@ button{cursor:pointer;font-family:inherit;}
 input,select,textarea{font-family:inherit;}
 
 /* ── LOGIN ── */
-#login-screen{
+#login-screen{display:none!important;/*
   display:flex;align-items:center;justify-content:center;
   min-height:100vh;padding:20px;
   background:linear-gradient(135deg,#fff5f7 0%,#fff 50%,#f0fff4 100%);
-}
+  */ }
 .login-card{
   background:var(--white);border-radius:20px;box-shadow:var(--shadow-lg);
   padding:48px 40px 40px;max-width:440px;width:100%;text-align:center;
@@ -51,7 +51,7 @@ input,select,textarea{font-family:inherit;}
 }
 
 /* ── APP ── */
-#app-screen{display:none;}
+#app-screen{display:block;}
 
 /* Topbar */
 #topbar{
@@ -387,12 +387,11 @@ tr:last-child td{border-bottom:none;}
     <div class="login-badge">🔒 Acceso restringido</div>
     <div class="login-title">Salud del Cliente</div>
     <div class="login-subtitle">Panel KAM · Monitoreo de Health Score,<br>Churn Prevention y Recomendaciones IA</div>
-<div class="google-btn-wrap">
+    <div class="google-btn-wrap">
       <div id="g_id_onload"
            data-client_id="980562257177-puv5d868eouoc68cfm14oub1ljdedf5d.apps.googleusercontent.com"
            data-callback="handleGoogleLogin"
-           data-auto_prompt="false"
-           data-use_fedcm_for_prompt="true">
+           data-auto_prompt="false">
       </div>
       <div class="g_id_signin"
            data-type="standard"
@@ -801,10 +800,6 @@ tr:last-child td{border-bottom:none;}
 
 <div id="toast"></div>
 
-<script src="https://accounts.google.com/gsi/client" async defer></script>
-
-<script>
-
 <!-- Google Sign-In SDK (se carga al final para no bloquear render) -->
 <!-- Google Auth desactivado temporalmente
 <script src="https://accounts.google.com/gsi/client" async defer></script>
@@ -914,41 +909,20 @@ function isSessionValid(loginTs) {
 
 function handleGoogleLogin(response) {
   try {
-    var base64Url = response.credential.split('.')[1];
-    var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-    
-    // ¡AQUÍ ESTÁ LA MAGIA! El relleno obligatorio para que el navegador no colapse
-    while (base64.length % 4) {
-      base64 += '=';
-    }
-    
-    var jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
-        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-    }).join(''));
-    
-    var payload = JSON.parse(jsonPayload);
-    var email = payload.email || '';
-    var domain = email.split('@')[1] || '';
-    
-    // Validar el dominio
+    const payload = JSON.parse(atob(response.credential.split('.')[1]));
+    const email = payload.email || '';
+    const domain = email.split('@')[1] || '';
     if (!ALLOWED_DOMAINS.includes(domain)) {
-      var errDiv = document.getElementById('login-error');
-      errDiv.innerHTML = '⛔ Acceso denegado para <strong>' + email + '</strong>.<br>Solo correos @apprecio.com o @dcanje.com';
-      errDiv.style.display = 'block';
+      document.getElementById('login-error').style.display = 'block';
       return;
     }
-    
-    // Guardar sesión y arrancar
     localStorage.setItem('appr_user', JSON.stringify({
       name: payload.name, email: payload.email, picture: payload.picture,
       loginTs: Date.now()
     }));
-    
     bootApp(payload);
   } catch(e) {
-    console.error("Error procesando el Login:", e);
-    // Si algo falla, ahora nos avisará en pantalla en lugar de ignorarnos
-    alert("Error interno al iniciar sesión. Revisa la consola (F12) o intenta de nuevo.\nDetalle: " + e.message);
+    document.getElementById('login-error').style.display = 'block';
   }
 }
 
@@ -957,15 +931,9 @@ function bootApp(user) {
   document.getElementById('app-screen').style.display = 'block';
   document.getElementById('fab-ia').style.display = 'flex';
   document.getElementById('user-name').textContent = (user.name || '').split(' ')[0];
-  
-  var avatar = document.getElementById('user-avatar');
-  if (avatar && user.picture) avatar.src = user.picture;
-  
-  var ctxCount = document.getElementById('ia-ctx-count');
-  if (ctxCount) ctxCount.textContent = ACTIVOS.length;
-  
+  document.getElementById('user-avatar').src = user.picture || '';
+  document.getElementById('ia-ctx-count').textContent = ACTIVOS.length;
   buildDashboard();
-  loadSheetData(); // ← Esto garantiza que cargue el Google Sheet al iniciar sesión
 }
 
 /* ════════════════════════════════════════
@@ -1062,24 +1030,42 @@ function doLogout() {
 /* ════════════════════════════════════════
    INIT — esperamos que el DOM esté listo
 ════════════════════════════════════════ */
+/* LOGIN COMENTADO — reactivar cuando se resuelva Google Auth
 document.addEventListener('DOMContentLoaded', function() {
+  const raw = localStorage.getItem('appr_user');
+  if (raw) {
+    try {
+      var u = JSON.parse(raw);
+      if (isSessionValid(u.loginTs)) { bootApp(u); return; }
+      else { localStorage.removeItem('appr_user'); }
+    } catch(e) { localStorage.removeItem('appr_user'); }
+  }
+});
+*/
+
+// Acceso directo sin login (login comentado — temporal)
+document.addEventListener('DOMContentLoaded', function() {
+  /* LOGIN COMENTADO — descomentar cuando se resuelva COOP
   var raw = localStorage.getItem('appr_user');
   if (raw) {
     try {
       var u = JSON.parse(raw);
-      if (isSessionValid(u.loginTs)) { 
-        bootApp(u); 
-        return; 
-      } else { 
-        localStorage.removeItem('appr_user'); 
-      }
-    } catch(e) { 
-      localStorage.removeItem('appr_user'); 
-    }
+      if (isSessionValid(u.loginTs)) { bootApp(u); return; }
+      else { localStorage.removeItem('appr_user'); }
+    } catch(e) { localStorage.removeItem('appr_user'); }
   }
-  // Si no hay sesión válida, mostramos explícitamente el login
-  document.getElementById('login-screen').style.display = 'flex';
-  document.getElementById('app-screen').style.display = 'none';
+  // Sin sesión válida → mostrar login
+  var loginScreen = document.getElementById('login-screen');
+  if (loginScreen) loginScreen.style.display = 'flex';
+  */
+
+  // Acceso directo (temporal)
+  document.getElementById('user-name').textContent = 'KAM';
+  document.getElementById('user-avatar').src = 'https://ui-avatars.com/api/?name=KAM&background=FA345E&color=fff&size=64';
+  var ctxCount = document.getElementById('ia-ctx-count');
+  if (ctxCount) ctxCount.textContent = ACTIVOS.length;
+  buildDashboard();
+  loadSheetData();
 });
 
 /* ════════════════════════════════════════
@@ -1243,24 +1229,62 @@ function buildResumenCharts() {
   });
   document.getElementById('cKam').style.cursor='pointer';
 
-  var sd=view.map(function(c){
-    return {x:+(c.adopcion*100).toFixed(1),y:+(c.adherencia*100).toFixed(1),
-      r:Math.max(4,Math.min(16,(c.usuarios||20)/60)),
-      label:c.empresa,
-      col:c.semaforo==="🟢"?"#065F46":c.semaforo==="🟠"?"#B45309":"#FA345E"};
+  // Un dataset por semáforo — evita bug de Chart.js con colores por punto en bubble
+  var semGroups = {
+    '🟢': {label:'🟢 Saludable', col:'#065F46', items:[]},
+    '🟠': {label:'🟠 En desarrollo', col:'#B45309', items:[]},
+    '🔴': {label:'🔴 En riesgo', col:'#FA345E', items:[]},
+  };
+  view.forEach(function(c){
+    var sem = c.semaforo || '🔴';
+    var grp = semGroups[sem] || semGroups['🔴'];
+    grp.items.push({
+      x: +(c.adopcion*100).toFixed(1),
+      y: +(c.adherencia*100).toFixed(1),
+      r: Math.max(5, Math.min(18, (c.usuarios||20)/50)),
+      label: c.empresa,
+      pais: c.pais
+    });
   });
+
+  var scatterDatasets = Object.values(semGroups)
+    .filter(function(g){ return g.items.length > 0; })
+    .map(function(g){
+      return {
+        label: g.label,
+        data: g.items.map(function(d){ return {x:d.x, y:d.y, r:d.r}; }),
+        backgroundColor: g.col + '88',
+        borderColor: g.col,
+        borderWidth: 2,
+        // guardar labels en mismo orden para tooltip
+        _labels: g.items.map(function(d){ return d.label + ' (' + d.pais + ')'; })
+      };
+    });
+
   new Chart(document.getElementById('cScatter'),{
     type:'bubble',
-    data:{datasets:[{label:'Clientes',
-      data:sd.map(function(d){return {x:d.x,y:d.y,r:d.r};}),
-      backgroundColor:sd.map(function(d){return d.col+'99';}),
-      borderColor:sd.map(function(d){return d.col;}),borderWidth:1.5}]},
-    options:{responsive:true,maintainAspectRatio:false,
-      plugins:{legend:{display:false},
-        tooltip:{callbacks:{label:function(ctx){var d=sd[ctx.dataIndex];return d.label+': Adop '+d.x+'% | Adh '+d.y+'%';}}}},
+    data:{datasets: scatterDatasets},
+    options:{
+      responsive:true,
+      maintainAspectRatio:false,
+      animation:{duration:0}, // sin animación — evita desincronización visual
+      plugins:{
+        legend:{
+          position:'bottom',
+          labels:{font:{family:'Montserrat',size:11},padding:14,usePointStyle:true}
+        },
+        tooltip:{callbacks:{
+          label:function(ctx){
+            var lbl = ctx.dataset._labels && ctx.dataset._labels[ctx.dataIndex];
+            return (lbl||'') + ': Adop ' + ctx.parsed.x + '% | Adh ' + ctx.parsed.y + '%';
+          }
+        }}
+      },
       scales:{
         x:{title:{display:true,text:'Adopción %',font:{family:'Montserrat',size:11}},min:0,max:110},
-        y:{title:{display:true,text:'Adherencia %',font:{family:'Montserrat',size:11}},min:0,max:50}}}
+        y:{title:{display:true,text:'Adherencia %',font:{family:'Montserrat',size:11}},min:0,max:50}
+      }
+    }
   });
 }
 
@@ -1469,7 +1493,7 @@ function buildDetailCharts() {
   destroyChart('cMetricaPais'); destroyChart('cLoginsPais');
   destroyChart('cROI'); destroyChart('cSeg'); destroyChart('cHealthBar');
   destroyChart('cAdop'); destroyChart('cAdher'); destroyChart('cPerf');
-  destroyChart('cRegistro');
+  destroyChart('cRegistro'); destroyChart('cImpacto');
   buildMetricaPais('adopcion');
   buildLoginsPais();
   buildROIChart();
@@ -1656,6 +1680,7 @@ function buildRegistroPais() {
       }}
   });
 }
+
 
 function buildTiempoTable() {
   var base = CLIENTES.filter(function(c){return c.estado==='Activo'||c.estado==='Activo por lanzar';});
