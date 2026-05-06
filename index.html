@@ -293,11 +293,8 @@ tr:last-child td{border-bottom:none;}
 
 </style>
 
+<script src="https://accounts.google.com/gsi/client" async defer></script>
 
-
-<!-- ══════════════════════════════════════════
-     PROTECCIÓN Y SEGURIDAD
-══════════════════════════════════════════ -->
 <script>
 (function(){
   // 1. DOMAIN LOCK — solo permite acceso desde dominios autorizados
@@ -377,23 +374,27 @@ tr:last-child td{border-bottom:none;}
 </head>
 <body>
 
-<!-- LOGIN -->
 <div id="login-screen">
   <div class="login-card">
     <img src="https://estudios.apprecio.com/hubfs/logos/Apprecio-logo-rojo.png" alt="Apprecio" class="login-logo"/>
     <div class="login-badge">🔒 Acceso restringido</div>
     <div class="login-title">Salud del Cliente</div>
     <div class="login-subtitle">Panel KAM · Monitoreo de Health Score,<br>Churn Prevention y Recomendaciones IA</div>
-    <div id="g_id_onload"
-         data-client_id="980562257177-puv5d868eouoc68cfm14oub1ljdedf5d.apps.googleusercontent.com"
-         data-callback="handleGoogleLogin"
-         data-auto_prompt="false">
-    </div>
     <div class="google-btn-wrap">
-      <button onclick="doGoogleLogin()" id="google-login-btn" style="display:flex;align-items:center;gap:12px;background:#fff;border:1px solid #dadce0;border-radius:4px;padding:12px 24px;font-size:14px;font-family:'Montserrat',sans-serif;cursor:pointer;color:#3c4043;font-weight:500;box-shadow:0 1px 3px rgba(0,0,0,0.12);width:100%;max-width:320px;justify-content:center;margin:0 auto;">
-        <svg width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg"><path fill="#4285f4" d="M16.51 8H8.98v3h4.3c-.18 1-.74 1.48-1.6 2.04v2.01h2.6a7.8 7.8 0 002.38-5.88c0-.57-.05-.66-.15-1.18z"/><path fill="#34a853" d="M8.98 17c2.16 0 3.97-.72 5.3-1.94l-2.6-2a4.8 4.8 0 01-7.18-2.54H1.83v2.07A8 8 0 008.98 17z"/><path fill="#fbbc05" d="M4.5 10.52a4.8 4.8 0 010-3.04V5.41H1.83a8 8 0 000 7.18l2.67-2.07z"/><path fill="#ea4335" d="M8.98 4.18c1.17 0 2.23.4 3.06 1.2l2.3-2.3A8 8 0 001.83 5.4L4.5 7.49a4.77 4.77 0 014.48-3.3z"/></svg>
-        Continuar con Google
-      </button>
+      <div id="g_id_onload"
+           data-client_id="980562257177-puv5d868eouoc68cfm14oub1ljdedf5d.apps.googleusercontent.com"
+           data-callback="handleGoogleLogin"
+           data-auto_prompt="false">
+      </div>
+      <div class="g_id_signin"
+           data-type="standard"
+           data-size="large"
+           data-theme="outline"
+           data-text="sign_in_with"
+           data-shape="rectangular"
+           data-logo_alignment="left"
+           data-locale="es">
+      </div>
     </div>
     <div id="login-error" class="login-error">
       ⛔ Solo se permite acceso con correos <strong>@apprecio.com</strong> o <strong>@dcanje.com</strong>
@@ -403,7 +404,6 @@ tr:last-child td{border-bottom:none;}
     </div>
   </div>
 </div>
-
 
 <div id="app-screen">
 
@@ -436,7 +436,6 @@ tr:last-child td{border-bottom:none;}
 
   <div id="main-content">
 
-    <!-- RESUMEN -->
     <div id="tab-resumen" class="section active">
       <div class="section-header">
         <div><h2>Resumen de Cartera</h2><p>Vista consolidada del estado de salud</p></div>
@@ -458,36 +457,12 @@ tr:last-child td{border-bottom:none;}
       <div class="charts-row">
         <div class="chart-card">
           <div class="chart-title">Health Score por KAM</div>
-          <div class="chart-sub">Promedio de la cartera — selecciona un KAM para ver sus clientes</div>
+          <div class="chart-sub">Promedio de la cartera</div>
           <div class="chart-wrap"><canvas id="cKam"></canvas></div>
-          <div id="kam-chart-detail" style="display:none;margin-top:14px;">
-            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
-              <div id="kam-chart-detail-title" style="font-size:13px;font-weight:700;color:var(--gray-800);"></div>
-              <button onclick="closeKamDetail()" style="background:none;border:none;color:var(--gray-400);font-size:18px;cursor:pointer;padding:0 4px;">✕</button>
-            </div>
-            <div class="table-scroll">
-              <table style="font-size:12px;width:100%;border-collapse:collapse;">
-                <thead><tr style="background:var(--gray-50);">
-                  <th style="padding:8px 10px;text-align:left;font-weight:700;color:var(--gray-400);font-size:10px;text-transform:uppercase;border-bottom:1px solid var(--gray-200);">Cliente</th>
-                  <th style="padding:8px 10px;text-align:left;font-weight:700;color:var(--gray-400);font-size:10px;text-transform:uppercase;border-bottom:1px solid var(--gray-200);">País</th>
-                  <th style="padding:8px 10px;font-weight:700;color:var(--gray-400);font-size:10px;text-transform:uppercase;border-bottom:1px solid var(--gray-200);">Health</th>
-                  <th style="padding:8px 10px;font-weight:700;color:var(--gray-400);font-size:10px;text-transform:uppercase;border-bottom:1px solid var(--gray-200);">Semáforo</th>
-                  <th style="padding:8px 10px;font-weight:700;color:var(--gray-400);font-size:10px;text-transform:uppercase;border-bottom:1px solid var(--gray-200);">ROI</th>
-                </tr></thead>
-                <tbody id="kam-chart-detail-body"></tbody>
-              </table>
-            </div>
-          </div>
         </div>
         <div class="chart-card">
           <div class="chart-title">Adopción vs Adherencia</div>
-          <div class="chart-sub">Tamaño = N° usuarios · Color = semáforo</div>
-          <div style="background:#f8f9fa;border-radius:8px;padding:10px 14px;margin-bottom:12px;font-size:11px;color:#4B5563;line-height:1.6;border-left:3px solid var(--red);">
-            <strong style="color:var(--red);">¿Qué muestra este gráfico?</strong><br>
-            Cruza dos métricas clave: <strong>Adopción</strong> (% de usuarios que han ingresado al menos una vez) vs <strong>Adherencia</strong> (frecuencia de uso recurrente). 
-            Un cliente ideal está en la esquina superior derecha (alta adopción + alta adherencia). 
-            Clientes en la izquierda no están activando usuarios; clientes abajo los usuarios entran pero no vuelven.
-          </div>
+          <div class="chart-sub">Tamaño = N° usuarios</div>
           <div class="chart-wrap"><canvas id="cScatter"></canvas></div>
         </div>
       </div>
@@ -504,7 +479,6 @@ tr:last-child td{border-bottom:none;}
       </div>
     </div>
 
-    <!-- CLIENTES -->
     <div id="tab-clientes" class="section">
       <div class="section-header">
         <div><h2>Todos los Clientes</h2><p>Haz clic en una fila para ver detalles</p></div>
@@ -586,7 +560,6 @@ tr:last-child td{border-bottom:none;}
       </div>
     </div>
 
-    <!-- KAMS -->
     <div id="tab-kams" class="section">
       <div class="section-header">
         <div><h2>Cartera por KAM</h2><p>Haz clic en un KAM para ver su cartera completa</p></div>
@@ -595,14 +568,12 @@ tr:last-child td{border-bottom:none;}
       <div id="kam-detail"></div>
     </div>
 
-    <!-- GRAFICOS -->
     <div id="tab-graficos" class="section">
       <div class="section-header">
         <div><h2>Análisis Visual</h2><p>Métricas detalladas — selecciona una opción para ver solo esa variable</p></div>
         <button class="btn-ia" onclick="openIA('Analiza todos los gráficos de la cartera y genera un informe ejecutivo con principales tendencias, oportunidades y riesgos.')">🤖 Interpretar con IA</button>
       </div>
 
-      <!-- Métricas por País con selector -->
       <div class="chart-card" style="margin-bottom:16px;">
         <div class="chart-title">Métricas por País</div>
         <div class="chart-sub">Selecciona la métrica a visualizar</div>
@@ -616,37 +587,32 @@ tr:last-child td{border-bottom:none;}
         <div style="position:relative;height:240px;"><canvas id="cMetricaPais"></canvas></div>
       </div>
 
-      <!-- Logins por País - línea de tiempo -->
       <div class="chart-card" style="margin-bottom:16px;">
         <div class="chart-title">Evolución de Logins por País</div>
         <div class="chart-sub">Promedio de logins M-2 → M-1 → M actual</div>
         <div style="position:relative;height:260px;"><canvas id="cLoginsPais"></canvas></div>
       </div>
 
-      <div class="charts-row">
-        <div class="chart-card"><div class="chart-title">Distribución ROI</div><div class="chart-sub">Rentabilidad de la cartera</div><div class="chart-wrap"><canvas id="cROI"></canvas></div></div>
-        <div class="chart-card">
-          <div class="chart-title">Clientes por Segmento y País</div>
-          <div class="chart-sub">Distribución A+, A, B, C por país — barras agrupadas</div>
-          <div class="chart-wrap"><canvas id="cSeg"></canvas></div>
+<div class="chart-card" style="margin-bottom:16px;">
+        <div class="chart-title">Distribución ROI</div>
+        <div class="chart-sub">Rentabilidad de la cartera. Haz clic en los botones para ver los clientes.</div>
+        <div style="display:flex; gap:24px; align-items:flex-start; flex-wrap:wrap; margin-top:16px;">
+          <div class="chart-wrap" style="flex:1; min-width:220px;"><canvas id="cROI"></canvas></div>
+          <div id="roi-lists" style="flex:1.5; min-width:280px; display:flex; flex-direction:column;"></div>
         </div>
       </div>
 
-      <!-- % Registro por País -->
-      <div class="chart-card" style="margin-bottom:16px;">
-        <div class="chart-title">% Registro por País</div>
-        <div class="chart-sub">Promedio de adopción/registro por país — clientes activos</div>
-        <div style="position:relative;height:220px;"><canvas id="cRegistro"></canvas></div>
+      <div class="charts-row">
+        <div class="chart-card"><div class="chart-title">Clientes por Segmento</div><div class="chart-sub">Distribución A+, A, B, C, S/D</div><div class="chart-wrap"><canvas id="cSeg"></canvas></div></div>
+        <div class="chart-card"><div class="chart-title">% Registro por País</div><div class="chart-sub">Promedio de adopción por país</div><div class="chart-wrap"><canvas id="cRegistro"></canvas></div></div>
       </div>
 
-      <!-- Health Score por cliente -->
       <div class="chart-card" style="margin-bottom:16px;">
         <div class="chart-title">Health Score por Cliente (Top 20 activos)</div>
         <div class="chart-sub">Coloreado por semáforo</div>
         <div style="position:relative;height:320px;"><canvas id="cHealthBar"></canvas></div>
       </div>
 
-      <!-- Tabla tiempo en el programa -->
       <div class="table-card">
         <div class="table-header">
           <div class="table-header-title">⏱ Clientes por Tiempo en el Programa</div>
@@ -658,7 +624,6 @@ tr:last-child td{border-bottom:none;}
       </div>
     </div>
 
-    <!-- IA -->
     <div id="tab-ia" class="section">
       <div class="section-header">
         <div><h2>🤖 Apprecio IA Health</h2><p>Consultas inteligentes sobre la cartera via Ollama</p></div>
@@ -691,21 +656,18 @@ tr:last-child td{border-bottom:none;}
       </div>
     </div>
 
-    <!-- ACCIONES -->
     <div id="tab-acciones" class="section">
       <div class="section-header">
         <div><h2>⚡ Acciones por Driver</h2><p>Acciones recomendadas según el driver y salud del cliente — input para el KAM</p></div>
         <button class="btn-ia" onclick="openIA('Basándote en los drivers de los clientes en riesgo, genera un plan de acciones priorizado por KAM para esta semana.')">🤖 Plan IA</button>
       </div>
 
-      <!-- Filtro por driver -->
       <div class="driver-filter-bar" id="driver-filter-bar">
         <span style="font-size:11px;font-weight:700;color:var(--gray-400);text-transform:uppercase;align-self:center;">Driver:</span>
       </div>
 
       <div class="acciones-grid" id="acciones-grid"></div>
 
-      <!-- Clientes por driver -->
       <div class="table-card">
         <div class="table-header">
           <div class="table-header-title" id="acciones-clientes-title">Clientes con este driver</div>
@@ -719,11 +681,7 @@ tr:last-child td{border-bottom:none;}
       </div>
     </div>
 
-  </div><!-- /main-content -->
-</div><!-- /app-screen -->
-
-<!-- IA Panel -->
-<div id="ia-overlay" onclick="closeIA()"></div>
+  </div></div><div id="ia-overlay" onclick="closeIA()"></div>
 <div id="ia-panel">
   <div class="ia-header">
     <div class="ia-icon">🤖</div>
@@ -750,7 +708,6 @@ tr:last-child td{border-bottom:none;}
 
 <button id="fab-ia" onclick="openIA('')" title="Abrir IA">🤖</button>
 
-<!-- Notif modal -->
 <div id="notif-modal">
   <div class="notif-card">
     <h3>📧 Notificación para KAM</h3>
@@ -764,11 +721,6 @@ tr:last-child td{border-bottom:none;}
 </div>
 
 <div id="toast"></div>
-
-<!-- Google Sign-In SDK (se carga al final para no bloquear render) -->
-<!-- Google Auth desactivado temporalmente
-<script src="https://accounts.google.com/gsi/client" async defer></script>
--->
 
 <script>
 /* ════════════════════════════════════════
@@ -808,7 +760,7 @@ var CLIENTES = [
   {id:297,empresa:"Botero Soto",programa:"Botero Soto",tipo:"Force Manager",admin:"In House",pais:"Colombia",estado:"Activo por lanzar",segmento:"A+",usuarios:0,kam:"Aura Avila",fee:0,feeMensual:0,driver:"Aumentar Engagement",adopcion:0.313,adherencia:0,performance:0,healthScore:0.094,semaforo:"🔴",roi:-1,desc:"Por lanzar.",link:null,fechaInicio:"—",tiempoProg:"—",loginsM2:null,loginsM1:null,loginsM:null},
 ];
 
-var ACTIVOS = CLIENTES.filter(function(c){ return c.estado === "Activo"; });
+var ACTIVOS = CLIENTES.filter(function(c){ return c.estado === "Activo" || c.estado === "Activo por lanzar"; });
 
 /* ════════════════════════════════════════
    ESTADO
@@ -830,7 +782,7 @@ function getViewData() {
       return c.estado !== 'Activo' && c.estado !== 'Activo por lanzar';
     });
   }
-  var base = CLIENTES.filter(function(c){ return c.estado === 'Activo'; });
+  var base = CLIENTES.filter(function(c){ return c.estado === 'Activo' || c.estado === 'Activo por lanzar'; });
   if (globalSemFilter) {
     base = base.filter(function(c){ return c.semaforo === globalSemFilter; });
   }
@@ -857,12 +809,9 @@ function setGlobalFilter(sem, estado) {
 /* ════════════════════════════════════════
    GOOGLE AUTH
 ════════════════════════════════════════ */
-// Devuelve timestamp del último lunes a 00:00:00 local
-// Devuelve timestamp del último lunes a 00:00:00 local
 function getLastMondayTs() {
   var now = new Date();
-  var day = now.getDay();
-  var diff = (day === 0) ? 6 : day - 1;
+  var diff = (now.getDay() === 0) ? 6 : now.getDay() - 1;
   var monday = new Date(now);
   monday.setHours(0,0,0,0);
   monday.setDate(now.getDate() - diff);
@@ -873,87 +822,38 @@ function isSessionValid(loginTs) {
   return loginTs && loginTs > getLastMondayTs();
 }
 
-// Flujo principal: OAuth2 Token — compatible con GitHub Pages (sin popup COOP)
-function doGoogleLogin() {
-  var btn = document.getElementById('google-login-btn');
-  if (btn) { btn.disabled = true; btn.textContent = 'Conectando...'; }
-  if (typeof google === 'undefined') {
-    setTimeout(function() {
-      if (btn) { btn.disabled = false; btn.innerHTML = '<svg width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg"><path fill="#4285f4" d="M16.51 8H8.98v3h4.3c-.18 1-.74 1.48-1.6 2.04v2.01h2.6a7.8 7.8 0 002.38-5.88c0-.57-.05-.66-.15-1.18z"/><path fill="#34a853" d="M8.98 17c2.16 0 3.97-.72 5.3-1.94l-2.6-2a4.8 4.8 0 01-7.18-2.54H1.83v2.07A8 8 0 008.98 17z"/><path fill="#fbbc05" d="M4.5 10.52a4.8 4.8 0 010-3.04V5.41H1.83a8 8 0 000 7.18l2.67-2.07z"/><path fill="#ea4335" d="M8.98 4.18c1.17 0 2.23.4 3.06 1.2l2.3-2.3A8 8 0 001.83 5.4L4.5 7.49a4.77 4.77 0 014.48-3.3z"/></svg> Continuar con Google'; }
-      document.getElementById('login-error').style.display = 'block';
-      document.getElementById('login-error').textContent = '⚠️ Google no cargó aún. Intenta de nuevo en unos segundos.';
-    }, 3000);
-    doGoogleLogin();
-    return;
-  }
-  google.accounts.oauth2.initTokenClient({
-    client_id: '980562257177-puv5d868eouoc68cfm14oub1ljdedf5d.apps.googleusercontent.com',
-    scope: 'email profile openid',
-    callback: function(tokenResponse) {
-      if (!tokenResponse || !tokenResponse.access_token) {
-        if (btn) { btn.disabled = false; btn.textContent = 'Continuar con Google'; }
-        return;
-      }
-      fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
-        headers: { Authorization: 'Bearer ' + tokenResponse.access_token }
-      })
-      .then(function(r) { return r.json(); })
-      .then(function(info) {
-        var domain = (info.email || '').split('@')[1] || '';
-        if (!ALLOWED_DOMAINS.includes(domain)) {
-          document.getElementById('login-error').style.display = 'block';
-          document.getElementById('login-error').textContent = '⛔ Solo se permite acceso con correos @apprecio.com o @dcanje.com';
-          if (btn) { btn.disabled = false; btn.textContent = 'Continuar con Google'; }
-          return;
-        }
-        localStorage.setItem('appr_user', JSON.stringify({
-          name: info.name, email: info.email,
-          picture: info.picture || '',
-          loginTs: Date.now()
-        }));
-        bootApp(info);
-      })
-      .catch(function() {
-        if (btn) { btn.disabled = false; btn.textContent = 'Continuar con Google'; }
-        document.getElementById('login-error').style.display = 'block';
-        document.getElementById('login-error').textContent = '❌ Error al verificar tu cuenta. Intenta de nuevo.';
-      });
-    }
-  }).requestAccessToken();
-}
-
-// Callback del g_id_onload (fallback si el SDK logra renderizar)
 function handleGoogleLogin(response) {
   try {
     var parts = response.credential.split('.');
     var b64 = parts[1].replace(/-/g, '+').replace(/_/g, '/');
     while (b64.length % 4) b64 += '=';
-    var payload = JSON.parse(decodeURIComponent(atob(b64).split('').map(function(c) {
+    var payload = JSON.parse(decodeURIComponent(atob(b64).split('').map(function(c){
       return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
     }).join('')));
     var domain = (payload.email || '').split('@')[1] || '';
     if (!ALLOWED_DOMAINS.includes(domain)) {
-      document.getElementById('login-error').style.display = 'block';
+      var errEl = document.getElementById('login-error');
+      if (errEl) errEl.style.display = 'block';
       return;
     }
     localStorage.setItem('appr_user', JSON.stringify({
-      name: payload.name, email: payload.email,
-      picture: payload.picture || '',
+      name: payload.name, email: payload.email, picture: payload.picture,
       loginTs: Date.now()
     }));
     bootApp(payload);
   } catch(e) {
-    doGoogleLogin();
+    document.getElementById('login-error').style.display = 'block';
   }
 }
 
 function bootApp(user) {
-  document.getElementById('login-screen').style.display = 'none';
+  var loginScreen = document.getElementById('login-screen');
+  if (loginScreen) loginScreen.style.display = 'none';
   document.getElementById('app-screen').style.display = 'block';
   document.getElementById('fab-ia').style.display = 'flex';
   document.getElementById('user-name').textContent = (user.name || '').split(' ')[0];
   var avatar = document.getElementById('user-avatar');
-  if (avatar) avatar.src = user.picture || user.avatar || '';
+  if (avatar && user.picture) avatar.src = user.picture;
   var ctxCount = document.getElementById('ia-ctx-count');
   if (ctxCount) ctxCount.textContent = ACTIVOS.length;
   buildDashboard();
@@ -968,27 +868,26 @@ function doLogout() {
 /* ════════════════════════════════════════
    INIT — esperamos que el DOM esté listo
 ════════════════════════════════════════ */
-// Verificar sesión al cargar
 document.addEventListener('DOMContentLoaded', function() {
   var raw = localStorage.getItem('appr_user');
   if (raw) {
     try {
       var u = JSON.parse(raw);
-      if (isSessionValid(u.loginTs)) {
-        bootApp(u);
-        return;
-      } else {
-        localStorage.removeItem('appr_user');
+      if (isSessionValid(u.loginTs)) { 
+        bootApp(u); 
+        return; 
+      } else { 
+        localStorage.removeItem('appr_user'); 
       }
-    } catch(e) { localStorage.removeItem('appr_user'); }
+    } catch(e) { 
+      localStorage.removeItem('appr_user'); 
+    }
   }
-  // Sin sesión válida — login-screen ya visible por CSS
 });
 
 /* ════════════════════════════════════════
    NAVEGACIÓN DE PESTAÑAS
 ════════════════════════════════════════ */
-
 function showTab(name, btn) {
   document.querySelectorAll('.section').forEach(function(s) {
     s.classList.remove('active');
@@ -1025,7 +924,7 @@ function buildDashboard() {
    KPIs
 ════════════════════════════════════════ */
 function buildKPIs() {
-  var totalActivos = CLIENTES.filter(function(c){ return c.estado==='Activo'; }).length;
+  var totalActivos = CLIENTES.filter(function(c){ return c.estado==='Activo' || c.estado==='Activo por lanzar'; }).length;
   var totalInactivos = CLIENTES.filter(function(c){ return c.estado!=='Activo' && c.estado!=='Activo por lanzar'; }).length;
   var view = getViewData();
   var n = view.length;
@@ -1037,9 +936,9 @@ function buildKPIs() {
   var mrr   = view.reduce(function(s,c){return s+c.feeMensual;},0);
 
   var kpis = [
-    {id:'kpi-total',    lbl:"Clientes Activos", val:totalActivos, sub:"Clic para ver todos", cls:"kpi-gray",    onclick:"setGlobalFilter(null,null)"},
+    {id:'kpi-total',    lbl:"Clientes Activos", val:totalActivos, sub:"Clic para ver todos", cls:"kpi-gray",   onclick:"setGlobalFilter(null,null)"},
     {id:'kpi-verde',    lbl:"Saludables 🟢",  val:verde, sub:pct(verde,n||1)+" del total", cls:"kpi-green", onclick:"setGlobalFilter('🟢',null)"},
-    {id:'kpi-rojo',     lbl:"En Riesgo 🔴",   val:rojo,  sub:pct(rojo,n||1)+" del total", cls:"kpi-red",   onclick:"setGlobalFilter('🔴',null)"},
+    {id:'kpi-rojo',     lbl:"En Riesgo 🔴",   val:rojo,  sub:pct(rojo,n||1)+" del total", cls:"kpi-red",  onclick:"setGlobalFilter('🔴',null)"},
     {id:'kpi-ambar',    lbl:"En Desarrollo 🟠",val:ambar, sub:pct(ambar,n||1)+" del total", cls:"kpi-amber", onclick:"setGlobalFilter('🟠',null)"},
     {id:'kpi-inactivos',lbl:"Inactivos", val:totalInactivos, sub:"Clic para ver inactivos", cls:"kpi-gray", onclick:"setGlobalFilter(null,'inactivo')"},
     {id:'kpi-hs',       lbl:"Health Score Avg", val:avgHS+"%", sub:"Promedio ponderado", cls:"kpi-gray",   onclick:""},
@@ -1098,110 +997,41 @@ function buildResumenCharts() {
       plugins:{legend:{position:'bottom',labels:{font:{family:'Montserrat',size:12},padding:14}}}}
   });
 
-  // KAM bar — ordenado alfabéticamente + click para ver detalle
+  // KAM bar — ordenado alfabéticamente
   var kd={};
   view.forEach(function(c){
-    if(!kd[c.kam]) kd[c.kam]={sum:0,n:0,clientes:[]};
+    if(!kd[c.kam]) kd[c.kam]={sum:0,n:0};
     kd[c.kam].sum+=c.healthScore*100; kd[c.kam].n++;
-    kd[c.kam].clientes.push(c);
   });
   var kamSort = Object.keys(kd).sort();
-  // Colorear barras por promedio HS
-  var kamColors = kamSort.map(function(k){
-    var avg = kd[k].sum/kd[k].n;
-    return avg >= 35 ? '#065F46' : avg >= 15 ? '#B45309' : '#FA345E';
-  });
-  var kamChartInstance = new Chart(document.getElementById('cKam'),{
+  new Chart(document.getElementById('cKam'),{
     type:'bar',
     data:{labels:kamSort.map(function(k){return k.split(' ')[0];}),
-      datasets:[{
-        label:'Health Score %',
-        data:kamSort.map(function(k){return (kd[k].sum/kd[k].n).toFixed(1);}),
-        backgroundColor:kamColors,
-        borderRadius:6
-      }]
-    },
-    options:{
-      responsive:true,maintainAspectRatio:false,
-      onClick:function(evt, elements){
-        if(!elements.length) return;
-        var idx = elements[0].index;
-        var kamName = kamSort[idx];
-        showKamChartDetail(kamName, kd[kamName].clientes, kd[kamName].sum/kd[kamName].n);
-      },
-      plugins:{
-        legend:{display:false},
-        tooltip:{callbacks:{
-          label:function(ctx){
-            var k=kamSort[ctx.dataIndex];
-            return 'HS: '+ctx.parsed.y+'% · '+kd[k].n+' clientes';
-          }
-        }}
-      },
-      scales:{
-        x:{ticks:{font:{family:'Montserrat',size:11}}},
-        y:{min:0,max:45,ticks:{font:{family:'Montserrat',size:11},callback:function(v){return v+'%';}}}
-      }
-    }
-  });
-  document.getElementById('cKam').style.cursor='pointer';
-
-  // Un dataset por semáforo — evita bug de Chart.js con colores por punto en bubble
-  var semGroups = {
-    '🟢': {label:'🟢 Saludable', col:'#065F46', items:[]},
-    '🟠': {label:'🟠 En desarrollo', col:'#B45309', items:[]},
-    '🔴': {label:'🔴 En riesgo', col:'#FA345E', items:[]},
-  };
-  view.forEach(function(c){
-    var sem = c.semaforo || '🔴';
-    var grp = semGroups[sem] || semGroups['🔴'];
-    grp.items.push({
-      x: +(c.adopcion*100).toFixed(1),
-      y: +(c.adherencia*100).toFixed(1),
-      r: Math.max(5, Math.min(18, (c.usuarios||20)/50)),
-      label: c.empresa,
-      pais: c.pais
-    });
+      datasets:[{label:'Health Score %',data:kamSort.map(function(k){return (kd[k].sum/kd[k].n).toFixed(1);}),backgroundColor:'#FA345E',borderRadius:6}]},
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false}},
+      scales:{x:{ticks:{font:{family:'Montserrat',size:11}}},
+        y:{min:0,max:45,ticks:{font:{family:'Montserrat',size:11},callback:function(v){return v+'%';}}}}}
   });
 
-  var scatterDatasets = Object.values(semGroups)
-    .filter(function(g){ return g.items.length > 0; })
-    .map(function(g){
-      return {
-        label: g.label,
-        data: g.items.map(function(d){ return {x:d.x, y:d.y, r:d.r}; }),
-        backgroundColor: g.col + '88',
-        borderColor: g.col,
-        borderWidth: 2,
-        // guardar labels en mismo orden para tooltip
-        _labels: g.items.map(function(d){ return d.label + ' (' + d.pais + ')'; })
-      };
-    });
-
+  var sd=view.map(function(c){
+    return {x:+(c.adopcion*100).toFixed(1),y:+(c.adherencia*100).toFixed(1),
+      r:Math.max(4,Math.min(16,(c.usuarios||20)/60)),
+      label:c.empresa,
+      col:c.semaforo==="🟢"?"#065F46":c.semaforo==="🟠"?"#B45309":"#FA345E"};
+  });
   new Chart(document.getElementById('cScatter'),{
     type:'bubble',
-    data:{datasets: scatterDatasets},
-    options:{
-      responsive:true,
-      maintainAspectRatio:false,
-      animation:{duration:0}, // sin animación — evita desincronización visual
-      plugins:{
-        legend:{
-          position:'bottom',
-          labels:{font:{family:'Montserrat',size:11},padding:14,usePointStyle:true}
-        },
-        tooltip:{callbacks:{
-          label:function(ctx){
-            var lbl = ctx.dataset._labels && ctx.dataset._labels[ctx.dataIndex];
-            return (lbl||'') + ': Adop ' + ctx.parsed.x + '% | Adh ' + ctx.parsed.y + '%';
-          }
-        }}
-      },
+    data:{datasets:[{label:'Clientes',
+      data:sd.map(function(d){return {x:d.x,y:d.y,r:d.r};}),
+      backgroundColor:sd.map(function(d){return d.col+'99';}),
+      borderColor:sd.map(function(d){return d.col;}),borderWidth:1.5}]},
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},
+        tooltip:{callbacks:{label:function(ctx){var d=sd[ctx.dataIndex];return d.label+': Adop '+d.x+'% | Adh '+d.y+'%';}}}},
       scales:{
         x:{title:{display:true,text:'Adopción %',font:{family:'Montserrat',size:11}},min:0,max:110},
-        y:{title:{display:true,text:'Adherencia %',font:{family:'Montserrat',size:11}},min:0,max:50}
-      }
-    }
+        y:{title:{display:true,text:'Adherencia %',font:{family:'Montserrat',size:11}},min:0,max:50}}}
   });
 }
 
@@ -1410,7 +1240,7 @@ function buildDetailCharts() {
   destroyChart('cMetricaPais'); destroyChart('cLoginsPais');
   destroyChart('cROI'); destroyChart('cSeg'); destroyChart('cHealthBar');
   destroyChart('cAdop'); destroyChart('cAdher'); destroyChart('cPerf');
-  destroyChart('cRegistro'); destroyChart('cImpacto');
+  destroyChart('cRegistro');
   buildMetricaPais('adopcion');
   buildLoginsPais();
   buildROIChart();
@@ -1497,62 +1327,89 @@ function buildLoginsPais() {
 }
 
 // ── ROI ────────────────────────────────────────────────────────────
+var roiListsData = { pos: '', neg: '', neu: '' };
+
 function buildROIChart() {
-  var view=getViewData();
-  var rp=view.filter(function(c){return c.roi>0;}).length;
-  var rn=view.filter(function(c){return c.roi<0;}).length;
-  var rz=view.filter(function(c){return c.roi===0;}).length;
+  var view = getViewData();
+  // Ordenamos de mayor a menor ROI, y filtramos los que no tienen datos (-1)
+  var pos = view.filter(function(c){return c.roi>0;}).sort(function(a,b){return b.roi-a.roi;});
+  var neg = view.filter(function(c){return c.roi<0 && c.roi!==-1;}).sort(function(a,b){return a.roi-b.roi;});
+  var neu = view.filter(function(c){return c.roi===0;});
+
+  destroyChart('cROI');
   new Chart(document.getElementById('cROI'),{
     type:'pie',
     data:{labels:['ROI Positivo','ROI Negativo','ROI Neutro'],
-      datasets:[{data:[rp,rn,rz],backgroundColor:['#065F46','#FA345E','#9CA3AF'],borderWidth:0}]},
+      datasets:[{data:[pos.length,neg.length,neu.length],backgroundColor:['#065F46','#FA345E','#9CA3AF'],borderWidth:0}]},
     options:{responsive:true,maintainAspectRatio:false,
       plugins:{legend:{position:'bottom',labels:{font:{family:'Montserrat',size:12}}}}}
   });
+
+  // Generamos los botones dinámicos
+  var tabsHtml = '<div style="display:flex; gap:6px; margin-bottom:12px;">'
+    + '<button onclick="switchRoiTab(\'pos\')" id="btn-roi-pos" style="flex:1; padding:8px 4px; border-radius:6px; font-size:11px; font-weight:700; border:1px solid #065F46; background:#F0FFF4; color:#065F46; cursor:pointer; transition:all 0.2s;">Positivo ('+pos.length+')</button>'
+    + '<button onclick="switchRoiTab(\'neg\')" id="btn-roi-neg" style="flex:1; padding:8px 4px; border-radius:6px; font-size:11px; font-weight:700; border:1px solid transparent; background:var(--gray-100); color:var(--gray-600); cursor:pointer; transition:all 0.2s;">Negativo ('+neg.length+')</button>'
+    + '<button onclick="switchRoiTab(\'neu\')" id="btn-roi-neu" style="flex:1; padding:8px 4px; border-radius:6px; font-size:11px; font-weight:700; border:1px solid transparent; background:var(--gray-100); color:var(--gray-600); cursor:pointer; transition:all 0.2s;">Neutro ('+neu.length+')</button>'
+    + '</div>';
+
+  // Función interna para dibujar las listas
+  function renderList(arr, color) {
+    if (!arr.length) return '<div style="padding:16px;text-align:center;color:var(--gray-400);">Sin clientes en esta categoría</div>';
+    return arr.map(function(c){
+      return '<div style="display:flex; justify-content:space-between; padding:8px 12px; border-bottom:1px solid var(--gray-100);"><span style="font-weight:600; color:var(--gray-800);">' + c.empresa + '</span><span style="font-weight:700; color:' + color + ';">' + (c.roi?c.roi.toFixed(2)+'x':'0.00x') + '</span></div>';
+    }).join('');
+  }
+
+  roiListsData.pos = renderList(pos, '#065F46');
+  roiListsData.neg = renderList(neg, '#FA345E');
+  roiListsData.neu = renderList(neu, '#9CA3AF');
+
+  var listContainer = document.getElementById('roi-lists');
+  if (listContainer) {
+    listContainer.innerHTML = tabsHtml + '<div id="roi-list-view" style="max-height:180px; overflow-y:auto; border:1px solid var(--gray-200); border-radius:6px; background:var(--white); font-size:12px;">' + roiListsData.pos + '</div>';
+  }
+}
+
+function switchRoiTab(type) {
+  var view = document.getElementById('roi-list-view');
+  if(view) view.innerHTML = roiListsData[type];
+  
+  var bPos = document.getElementById('btn-roi-pos');
+  var bNeg = document.getElementById('btn-roi-neg');
+  var bNeu = document.getElementById('btn-roi-neu');
+  
+  if(bPos && bNeg && bNeu) {
+    // Resetear estilos
+    [bPos, bNeg, bNeu].forEach(function(b){
+      b.style.borderColor = 'transparent';
+      b.style.background = 'var(--gray-100)';
+      b.style.color = 'var(--gray-600)';
+    });
+
+    // Activar el clickeado
+    var active = document.getElementById('btn-roi-' + type);
+    if (type === 'pos') { active.style.borderColor = '#065F46'; active.style.background = '#F0FFF4'; active.style.color = '#065F46'; }
+    if (type === 'neg') { active.style.borderColor = '#FA345E'; active.style.background = '#FDE8ED'; active.style.color = '#FA345E'; }
+    if (type === 'neu') { active.style.borderColor = '#9CA3AF'; active.style.background = '#F3F4F6'; active.style.color = '#4B5563'; }
+  }
 }
 
 // ── Segmentos ──────────────────────────────────────────────────────
 function buildSegChart() {
   var view=getViewData();
   var SEG_ORDER=['A+','A','B','C','S/D'];
-  var SEG_COLORS={'A+':'#FA345E','A':'#667eea','B':'#f59e0b','C':'#10b981','S/D':'#9CA3AF'};
-
-  // Obtener países únicos ordenados
-  var paises=[...new Set(view.map(function(c){return c.pais;}))].sort();
-
-  // Construir datasets: uno por segmento
-  var datasets = SEG_ORDER.map(function(seg){
-    return {
-      label: seg,
-      data: paises.map(function(p){
-        return view.filter(function(c){return c.pais===p && (c.segmento||'S/D')===seg;}).length;
-      }),
-      backgroundColor: SEG_COLORS[seg] || '#9CA3AF',
-      borderRadius: 4,
-      borderSkipped: false,
-    };
-  }).filter(function(ds){
-    // Solo incluir segmentos que tienen al menos 1 cliente
-    return ds.data.some(function(v){return v>0;});
-  });
-
-  // For compat with old code that uses segs var below - provide a fallback
   var segs={};
   view.forEach(function(c){var s=c.segmento||'S/D';segs[s]=(segs[s]||0)+1;});
+  // Ordenar A+, A, B, C, S/D
+  var segsOrd={};
+  SEG_ORDER.forEach(function(s){if(segs[s])segsOrd[s]=segs[s];});
+  Object.keys(segs).forEach(function(s){if(!segsOrd[s])segsOrd[s]=segs[s];});
+  segs=segsOrd;
   new Chart(document.getElementById('cSeg'),{
     type:'bar',
-    data:{labels:paises, datasets:datasets},
-    options:{
-      responsive:true,maintainAspectRatio:false,
-      plugins:{
-        legend:{position:'bottom',labels:{font:{family:'Montserrat',size:11},padding:12,usePointStyle:true}},
-        tooltip:{mode:'index',intersect:false}
-      },
-      scales:{
-        x:{ticks:{font:{family:'Montserrat',size:11}},stacked:false},
-        y:{ticks:{font:{family:'Montserrat',size:11},stepSize:1},stacked:false}
-      }
-    }
+    data:{labels:Object.keys(segs),datasets:[{data:Object.values(segs),backgroundColor:['#FA345E','#667eea','#f59e0b','#10b981','#9CA3AF'],borderRadius:6}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
+      scales:{x:{ticks:{font:{family:'Montserrat',size:12}}},y:{ticks:{font:{family:'Montserrat',size:11}}}}}
   });
 }
 
@@ -1597,7 +1454,6 @@ function buildRegistroPais() {
       }}
   });
 }
-
 
 function buildTiempoTable() {
   var base = CLIENTES.filter(function(c){return c.estado==='Activo'||c.estado==='Activo por lanzar';});
@@ -1741,35 +1597,6 @@ function openIACliente(id) {
       msgs.innerHTML += '<div class="msg msg-ai">❌ No se pudo conectar con n8n.</div>';
     }
   );
-}
-
-function showKamChartDetail(kamName, clientes, avgHS) {
-  var detail = document.getElementById('kam-chart-detail');
-  var title = document.getElementById('kam-chart-detail-title');
-  var body = document.getElementById('kam-chart-detail-body');
-  if (!detail || !title || !body) return;
-
-  title.innerHTML = kamName + ' &nbsp;·&nbsp; <span style="font-size:12px;color:var(--gray-400);font-weight:500;">'
-    + clientes.length + ' clientes · HS prom: ' + avgHS.toFixed(1) + '%</span>';
-
-  body.innerHTML = clientes
-    .sort(function(a,b){return a.healthScore-b.healthScore;})
-    .map(function(c){
-      return '<tr style="border-bottom:1px solid var(--gray-100);">'
-        +'<td style="padding:8px 10px;"><strong>'+c.empresa+'</strong></td>'
-        +'<td style="padding:8px 10px;">'+c.pais+'</td>'
-        +'<td style="padding:8px 10px;">'+hbar(c.healthScore)+'</td>'
-        +'<td style="padding:8px 10px;">'+semBadge(c.semaforo)+'</td>'
-        +'<td style="padding:8px 10px;">'+roiBadge(c.roi)+'</td>'
-        +'</tr>';
-    }).join('');
-
-  detail.style.display = 'block';
-}
-
-function closeKamDetail() {
-  var detail = document.getElementById('kam-chart-detail');
-  if (detail) detail.style.display = 'none';
 }
 
 function closeIA() {
@@ -1930,7 +1757,7 @@ var ACCIONES_DATA = {
         '5+':{ t14:'• Lanzar rebranding del programa (nuevo nombre, identidad o narrativa)\n• Activar campaña "Nueva etapa del programa"\n• Realizar encuesta profunda', t30:'• Implementar gamificación avanzada (niveles, badges por trayectoria)\n• Crear beneficios premium para top usuarios (experiencias, reconocimiento diferenciado)', t90:'• Ejecutar relanzamiento completo del programa\n• Presentar impacto en indicadores del negocio' },
       },
       amarillo:{
-        '1-2':{ t14:'• Solicitud de reportería de uso de módulos al equipo SAAS\n• Reunión con equipo SAAS para definir estrategia\n• Utilizar canales de comunicación distintos al mail (WhatsApp, mensaje de texto, alertas por app)\n• Identificar posibles aliados dentro de los usuarios', t30:'• Puesta en marcha del plan de acción en campañas activas\n• Activación de campaña de Encuestas para levantar información\n• Activación de campaña de insignias con conceptos clave para la empresa\n• Activación de campaña de Registro Fotográfico con premio jugoso', t90:'• Evaluación de los resultados obtenidos\n• Envío de mailing con resultados de las campañas\n• Reunión de cierre de campañas y análisis de resultados' },
+        '1-2':{ t14:'• Solicitud de reportería de uso de módulos al equipo SAAS\n• Reunión con equipo SAAS para definir estrategia\n• Utilizar canales de comunicación distintos al mail (WhatsApp, mensaje de texto, alertas por app)\n• Identificar posibles aliados dentro de los usuarios', t30:'• Puesta en marcha del plan de acción en campañas activas\n• Activación de campaña de Encuestas para levantar información\n• Activación de campaña de insignias con conceptos clave para la empresa\n• Activación de campaña de Registro Fotográfico con premio jugoso', t90:'• Evaluación de los resultados obtenidos\n• Envío de mailing con resultados de las campaigns\n• Reunión de cierre de campañas y análisis de resultados' },
         '3-4':{ t14:'• Solicitud de reportería profunda (uso por módulo, tendencia 3 meses)\n• Reunión con equipo SAAS para identificar qué módulo está cayendo\n• Lanzar encuesta corta de percepción (¿qué te aburre / qué mejorarías?)', t30:'• Rediseñar campañas actuales (no repetir las mismas dinámicas)\n• Nuevos conceptos de insignias\n• Registro fotográfico con storytelling\n• Lanzar campaña de reactivación de usuarios inactivos con incentivo específico', t90:'• Evaluación comparativa (antes vs después del rediseño)\n• Generación de video testimonial + casos de uso reales\n• Reunión con cliente para definir evolución' },
         '5+':{ t14:'• Solicitud de reportería histórica (últimos 5 años)\n• Reunión con cliente: "el programa necesita evolución, no solo campañas nuevas"\n• Lanzar encuesta profunda a usuarios\n• Identificar usuarios fieles (core) y desconectados', t30:'• Lanzar nueva dinámica del programa (no incremental)\n• Activar campaña de reenganche emocional: storytelling\n• Implementar beneficios diferenciados/premium\n• Introducir gamificación más avanzada', t90:'• Evaluación de impacto\n• Reunión con cliente para definir si escalar o relanzar el programa' },
       },
@@ -2011,7 +1838,6 @@ var ACCIONES_DATA = {
 
 var driverActivo = null;
 
-// Funciones de utilidad para acciones
 function getSemaforoKey(sem) {
   if (!sem) return 'rojo';
   if (sem.includes('Saludable') || sem === '🟢') return 'verde';
@@ -2032,9 +1858,7 @@ function getTiempoKey(fechaInicio) {
 function matchDriver(clienteDriver, accionKey) {
   var d = (clienteDriver || '').toLowerCase();
   var k = accionKey.toLowerCase();
-  // Match exacto primero
   if (d === k) return true;
-  // Match por palabras clave principales
   if (k.includes('performance') && d.includes('performance')) return true;
   if (k.includes('engagement') && (d.includes('engagement') || d.includes('sentido de pertenencia'))) return true;
   if (k.includes('capacitar') && d.includes('capacitar')) return true;
@@ -2050,7 +1874,6 @@ function matchDriver(clienteDriver, accionKey) {
 }
 
 function buildAccionesTab() {
-  // Obtener drivers únicos de los clientes activos que tengan entrada en ACCIONES_DATA
   var driversEnData = Object.keys(ACCIONES_DATA);
   var driversActivos = [...new Set(ACTIVOS.map(function(c){
     var d = c.driver || '';
@@ -2081,12 +1904,10 @@ function renderAcciones(driver) {
   var tbody = document.getElementById('tb-acciones-clientes');
   var title = document.getElementById('acciones-clientes-title');
 
-  // Clientes filtrados por driver
   var clientes = driver
     ? ACTIVOS.filter(function(c){ return matchDriver(c.driver||'', driver); })
     : ACTIVOS;
 
-  // Generar cards de acciones por cliente
   var html = '';
   clientes.slice(0,6).forEach(function(c){
     var driverKey = driver || Object.keys(ACCIONES_DATA).find(function(k){ return matchDriver(c.driver||'', k); });
@@ -2133,7 +1954,6 @@ function renderAcciones(driver) {
     grid.innerHTML += '<div style="padding:12px 0;font-size:12px;color:var(--gray-400);text-align:center;">Mostrando 6 de '+clientes.length+' clientes. Usa el filtro por driver para ver todos.</div>';
   }
 
-  // Tabla de todos los clientes con ese driver
   title.textContent = driver ? 'Clientes con driver: '+driver.split('(')[0].trim()+' ('+clientes.length+')' : 'Todos los clientes activos ('+clientes.length+')';
 
   tbody.innerHTML = clientes.sort(function(a,b){return a.healthScore-b.healthScore;}).map(function(c){
@@ -2151,7 +1971,6 @@ function renderAcciones(driver) {
 
 /* ════════════════════════════════════════
    GOOGLE SHEETS — LECTURA DIRECTA
-   Reemplaza TU_API_KEY con tu API Key de Google Cloud
 ════════════════════════════════════════ */
 const SHEET_ID = '18ApfTwL6T7wGotGDUUha3L08Oyak_NDn8rKztP_mGa8';
 const SHEET_GID = '513724513';
@@ -2163,12 +1982,11 @@ async function loadSheetData() {
     return;
   }
   try {
-    // Obtener nombre de pestaña por GID
     var metaUrl = 'https://sheets.googleapis.com/v4/spreadsheets/' + SHEET_ID
       + '?key=' + SHEETS_API_KEY + '&fields=sheets.properties';
     var metaRes = await fetch(metaUrl);
     var meta = await metaRes.json();
-    var sheetName = 'Salud del cliente'; // nombre por defecto
+    var sheetName = 'Salud del cliente'; 
     if (meta.sheets) {
       var found = meta.sheets.find(function(s) {
         return String(s.properties.sheetId) === SHEET_GID;
@@ -2176,7 +1994,6 @@ async function loadSheetData() {
       if (found) sheetName = found.properties.title;
     }
 
-    // Leer datos
     var url = 'https://sheets.googleapis.com/v4/spreadsheets/' + SHEET_ID
       + '/values/' + encodeURIComponent(sheetName)
       + '?key=' + SHEETS_API_KEY + '&valueRenderOption=FORMATTED_VALUE';
@@ -2191,7 +2008,6 @@ async function loadSheetData() {
     var headers = data.values[0];
     var rows = data.values.slice(1);
 
-    // Mapear columnas del sheet a campos del dashboard
     function col(row, name) {
       var idx = headers.indexOf(name);
       return idx >= 0 ? row[idx] || '' : '';
@@ -2244,19 +2060,16 @@ async function loadSheetData() {
 
     if (nuevos.length === 0) { console.warn('No se parsearon clientes'); return; }
 
-    // Actualizar datos globales
     CLIENTES.length = 0;
     nuevos.forEach(function(c) { CLIENTES.push(c); });
     ACTIVOS.length = 0;
-    CLIENTES.filter(function(c){ return c.estado === 'Activo'; })
+    CLIENTES.filter(function(c){ return c.estado === 'Activo' || c.estado === 'Activo por lanzar'; })
             .forEach(function(c){ ACTIVOS.push(c); });
 
-    // Refrescar solo las partes que usan datos (sin recrear charts)
     buildKPIs();
     buildUrgentes();
     buildClientesTable();
     buildKamCards();
-    // Resetear flag para que los gráficos se recarguen al entrar a esa pestaña
     chartsBuilt = false;
     accionesBuilt = false;
     console.log('✅ Sheet cargado: ' + nuevos.length + ' clientes');
