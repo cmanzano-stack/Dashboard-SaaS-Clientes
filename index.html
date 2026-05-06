@@ -913,9 +913,14 @@ function isSessionValid(loginTs) {
 
 function handleGoogleLogin(response) {
   try {
-    // Decodificación robusta del token de Google para evitar errores
     var base64Url = response.credential.split('.')[1];
     var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    
+    // ¡AQUÍ ESTÁ LA MAGIA! El relleno obligatorio para que el navegador no colapse
+    while (base64.length % 4) {
+      base64 += '=';
+    }
+    
     var jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
         return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
     }).join(''));
@@ -941,6 +946,8 @@ function handleGoogleLogin(response) {
     bootApp(payload);
   } catch(e) {
     console.error("Error procesando el Login:", e);
+    // Si algo falla, ahora nos avisará en pantalla en lugar de ignorarnos
+    alert("Error interno al iniciar sesión. Revisa la consola (F12) o intenta de nuevo.\nDetalle: " + e.message);
   }
 }
 
