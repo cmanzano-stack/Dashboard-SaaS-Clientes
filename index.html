@@ -390,15 +390,10 @@ tr:last-child td{border-bottom:none;}
          data-auto_prompt="false">
     </div>
     <div class="google-btn-wrap">
-      <div class="g_id_signin"
-           data-type="standard"
-           data-size="large"
-           data-theme="outline"
-           data-text="signin_with"
-           data-shape="rectangular"
-           data-logo_alignment="left"
-           data-width="320">
-      </div>
+      <button onclick="doGoogleLogin()" id="google-login-btn" style="display:flex;align-items:center;gap:12px;background:#fff;border:1px solid #dadce0;border-radius:4px;padding:12px 24px;font-size:14px;font-family:'Montserrat',sans-serif;cursor:pointer;color:#3c4043;font-weight:500;box-shadow:0 1px 3px rgba(0,0,0,0.12);width:100%;max-width:320px;justify-content:center;margin:0 auto;">
+        <svg width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg"><path fill="#4285f4" d="M16.51 8H8.98v3h4.3c-.18 1-.74 1.48-1.6 2.04v2.01h2.6a7.8 7.8 0 002.38-5.88c0-.57-.05-.66-.15-1.18z"/><path fill="#34a853" d="M8.98 17c2.16 0 3.97-.72 5.3-1.94l-2.6-2a4.8 4.8 0 01-7.18-2.54H1.83v2.07A8 8 0 008.98 17z"/><path fill="#fbbc05" d="M4.5 10.52a4.8 4.8 0 010-3.04V5.41H1.83a8 8 0 000 7.18l2.67-2.07z"/><path fill="#ea4335" d="M8.98 4.18c1.17 0 2.23.4 3.06 1.2l2.3-2.3A8 8 0 001.83 5.4L4.5 7.49a4.77 4.77 0 014.48-3.3z"/></svg>
+        Continuar con Google
+      </button>
     </div>
     <div id="login-error" class="login-error">
       ⛔ Solo se permite acceso con correos <strong>@apprecio.com</strong> o <strong>@dcanje.com</strong>
@@ -878,23 +873,77 @@ function isSessionValid(loginTs) {
   return loginTs && loginTs > getLastMondayTs();
 }
 
+// Flujo principal: OAuth2 Token — compatible con GitHub Pages (sin popup COOP)
+function doGoogleLogin() {
+  var btn = document.getElementById('google-login-btn');
+  if (btn) { btn.disabled = true; btn.textContent = 'Conectando...'; }
+  if (typeof google === 'undefined') {
+    setTimeout(function() {
+      if (btn) { btn.disabled = false; btn.innerHTML = '<svg width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg"><path fill="#4285f4" d="M16.51 8H8.98v3h4.3c-.18 1-.74 1.48-1.6 2.04v2.01h2.6a7.8 7.8 0 002.38-5.88c0-.57-.05-.66-.15-1.18z"/><path fill="#34a853" d="M8.98 17c2.16 0 3.97-.72 5.3-1.94l-2.6-2a4.8 4.8 0 01-7.18-2.54H1.83v2.07A8 8 0 008.98 17z"/><path fill="#fbbc05" d="M4.5 10.52a4.8 4.8 0 010-3.04V5.41H1.83a8 8 0 000 7.18l2.67-2.07z"/><path fill="#ea4335" d="M8.98 4.18c1.17 0 2.23.4 3.06 1.2l2.3-2.3A8 8 0 001.83 5.4L4.5 7.49a4.77 4.77 0 014.48-3.3z"/></svg> Continuar con Google'; }
+      document.getElementById('login-error').style.display = 'block';
+      document.getElementById('login-error').textContent = '⚠️ Google no cargó aún. Intenta de nuevo en unos segundos.';
+    }, 3000);
+    doGoogleLogin();
+    return;
+  }
+  google.accounts.oauth2.initTokenClient({
+    client_id: '980562257177-puv5d868eouoc68cfm14oub1ljdedf5d.apps.googleusercontent.com',
+    scope: 'email profile openid',
+    callback: function(tokenResponse) {
+      if (!tokenResponse || !tokenResponse.access_token) {
+        if (btn) { btn.disabled = false; btn.textContent = 'Continuar con Google'; }
+        return;
+      }
+      fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+        headers: { Authorization: 'Bearer ' + tokenResponse.access_token }
+      })
+      .then(function(r) { return r.json(); })
+      .then(function(info) {
+        var domain = (info.email || '').split('@')[1] || '';
+        if (!ALLOWED_DOMAINS.includes(domain)) {
+          document.getElementById('login-error').style.display = 'block';
+          document.getElementById('login-error').textContent = '⛔ Solo se permite acceso con correos @apprecio.com o @dcanje.com';
+          if (btn) { btn.disabled = false; btn.textContent = 'Continuar con Google'; }
+          return;
+        }
+        localStorage.setItem('appr_user', JSON.stringify({
+          name: info.name, email: info.email,
+          picture: info.picture || '',
+          loginTs: Date.now()
+        }));
+        bootApp(info);
+      })
+      .catch(function() {
+        if (btn) { btn.disabled = false; btn.textContent = 'Continuar con Google'; }
+        document.getElementById('login-error').style.display = 'block';
+        document.getElementById('login-error').textContent = '❌ Error al verificar tu cuenta. Intenta de nuevo.';
+      });
+    }
+  }).requestAccessToken();
+}
+
+// Callback del g_id_onload (fallback si el SDK logra renderizar)
 function handleGoogleLogin(response) {
   try {
-    const payload = JSON.parse(atob(response.credential.split('.')[1]));
-    const email = payload.email || '';
-    const domain = email.split('@')[1] || '';
+    var parts = response.credential.split('.');
+    var b64 = parts[1].replace(/-/g, '+').replace(/_/g, '/');
+    while (b64.length % 4) b64 += '=';
+    var payload = JSON.parse(decodeURIComponent(atob(b64).split('').map(function(c) {
+      return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+    }).join('')));
+    var domain = (payload.email || '').split('@')[1] || '';
     if (!ALLOWED_DOMAINS.includes(domain)) {
       document.getElementById('login-error').style.display = 'block';
       return;
     }
     localStorage.setItem('appr_user', JSON.stringify({
       name: payload.name, email: payload.email,
-      picture: payload.picture || payload.avatar || '',
+      picture: payload.picture || '',
       loginTs: Date.now()
     }));
     bootApp(payload);
   } catch(e) {
-    document.getElementById('login-error').style.display = 'block';
+    doGoogleLogin();
   }
 }
 
