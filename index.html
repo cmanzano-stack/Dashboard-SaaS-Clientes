@@ -1748,6 +1748,47 @@ async function sendFromPage() {
 /* ════════════════════════════════════════
    NOTIFICACIONES
 ════════════════════════════════════════ */
+  // 1. Abre el modal, guarda el correo y llama a la IA
+async function genNotif(id) {
+  var c = CLIENTES.find(function(x){ return x.id === id; });
+  if(!c) return;
+  
+  // Guardamos el correo temporalmente para el botón de enviar
+  activeNotifEmail = c.correoKam || ''; 
+  
+  document.getElementById('notif-sub').textContent = c.empresa + ' — KAM: ' + c.kam;
+  document.getElementById('notif-ta').value = '⏳ Generando texto con IA para ' + c.kam + '...';
+  document.getElementById('notif-modal').classList.add('open');
+  
+  var pregunta = 'Redacta la notificación semanal para el KAM ' + c.kam + ' sobre el cliente ' + c.empresa + '.';
+  var extra = { correoKam: c.correoKam || '', nombreKam: c.kam, empresa: c.empresa };
+  
+  await callIA(
+    'notif', pregunta, c.id,
+    function(text){
+      document.getElementById('notif-ta').value = text;
+      if(c.correoKam) showToast('✅ Texto generado');
+      else showToast('⚠️ Texto generado (Sin correo KAM en la base)');
+    },
+    function(){ document.getElementById('notif-ta').value = '❌ Error al conectar con n8n.'; },
+    extra
+  );
+}
+
+// 2. Cierra el modal
+function closeNotif(){
+  var modal = document.getElementById('notif-modal');
+  modal.classList.remove('open');
+  modal.style.display = 'none';
+  setTimeout(function(){ modal.style.display = ''; }, 100);
+}
+
+// 3. Copia el texto al portapapeles
+function copyNotif(){ 
+  navigator.clipboard.writeText(document.getElementById('notif-ta').value); 
+  showToast('Copiado ✓'); 
+}
+  
 async function sendNotifEmail() {
   var cuerpoBruto = document.getElementById('notif-ta').value;
   var empresa = document.getElementById('notif-sub').textContent.split(' —')[0];
