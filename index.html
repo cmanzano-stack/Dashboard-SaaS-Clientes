@@ -736,7 +736,7 @@ tr:last-child td{border-bottom:none;}
     <div class="notif-sub" id="notif-sub"></div>
     <textarea class="notif-ta" id="notif-ta"></textarea>
     <div class="notif-actions">
-      <button class="btn-secondary" onclick="closeNotif()">Cerrar</button>
+      <button class="btn-secondary" onclick="closeNotif()" style="cursor:pointer;">✕ Cerrar</button>
       <button class="btn-primary" onclick="copyNotif()">📋 Copiar mensaje</button>
     </div>
   </div>
@@ -965,7 +965,7 @@ function buildKPIs() {
     {id:'kpi-ambar',    lbl:"En Desarrollo 🟠",val:ambar, sub:pct(ambar,n||1)+" del total", cls:"kpi-amber", onclick:"setGlobalFilter('🟠',null)"},
     {id:'kpi-inactivos',lbl:"Inactivos", val:totalInactivos, sub:"Clic para ver inactivos", cls:"kpi-gray", onclick:"setGlobalFilter(null,'inactivo')"},
     {id:'kpi-hs',       lbl:"Health Score Avg", val:avgHS+"%", sub:"Promedio ponderado", cls:"kpi-gray",   onclick:""},
-    {id:'kpi-mrr', lbl:"MRR Activos", val:"$"+fmt(mrr), sub:"-$"+fmt(mrrInactivo)+" en inactivos", cls:"kpi-gray", onclick:"", subCls:"kpi-red"},
+    {id:'kpi-mrr',      lbl:"MRR Activos", val:"$"+fmt(mrr), sub:"Inactivos: $"+fmt(mrrInactivo), cls:"kpi-gray", onclick:""},
   ];
   document.getElementById('kpi-grid').innerHTML = kpis.map(function(k){
     var sel = (k.id==='kpi-verde'&&globalSemFilter==='🟢')||(k.id==='kpi-rojo'&&globalSemFilter==='🔴')||(k.id==='kpi-ambar'&&globalSemFilter==='🟠')||(k.id==='kpi-inactivos'&&globalEstadoFilter==='inactivo')||(k.id==='kpi-total'&&!globalSemFilter&&!globalEstadoFilter);
@@ -974,7 +974,7 @@ function buildKPIs() {
     return '<div id="'+k.id+'" class="kpi-card '+k.cls+'" style="'+pointer+border+'" '+(k.onclick?'onclick="'+k.onclick+'"':'')+'>'+
       '<div class="kpi-label">'+k.lbl+'</div>'+
       '<div class="kpi-value">'+k.val+'</div>'+
-      '<div class="kpi-sub" style="'+(k.subCls==='kpi-red'?'color:var(--red);font-weight:700;':'')+'">'+k.sub+'</div>'+
+      '<div class="kpi-sub">'+k.sub+'</div>'+
       '</div>';
   }).join('');
 }
@@ -1637,10 +1637,11 @@ function buildClienteDatos(c) {
     +'\n  Fecha inicio: '+c.fechaInicio+' | Tiempo: '+(c.tiempoProg!=='—'?c.tiempoProg+' meses':'—');
 }
 
-async function callIA(tipo, pregunta, clienteId, onSuccess, onError) {
+async function callIA(tipo, pregunta, clienteId, onSuccess, onError, extraPayload) {
   // Los datos los lee n8n directo desde Google Sheets
   var payload = { tipo: tipo, pregunta: pregunta };
   if (clienteId) payload.clienteId = clienteId;
+  if (extraPayload) Object.assign(payload, extraPayload);
   try {
     var res = await fetch(N8N_WEBHOOK, {
       method: 'POST',
@@ -1748,33 +1749,29 @@ async function genNotif(id) {
   var c=CLIENTES.find(function(x){return x.id===id;});
   if(!c) return;
   document.getElementById('notif-sub').textContent=c.empresa+' — KAM: '+c.kam;
-  document.getElementById('notif-ta').value='⏳ Generando con Apprecio IA Health 🤖...';
+  document.getElementById('notif-ta').value='⏳ Generando y enviando correo a '+c.kam+'...';
   document.getElementById('notif-modal').classList.add('open');
   var pregunta='Redacta la notificación semanal para el KAM '+c.kam+' sobre el cliente '+c.empresa+'.';
+  var extra = { correoKam: c.correoKam||'', nombreKam: c.kam, empresa: c.empresa };
   await callIA(
     'notif', pregunta, c.id,
-    async function(text){
+    function(text){
       document.getElementById('notif-ta').value=text;
-      // Enviar automáticamente por correo al terminar de generar
-      var email = c.correoKam || '';
-      if (!email) { showToast('⚠️ Sin correo KAM — carga el Sheet primero.'); return; }
-      try {
-        var res = await fetch('https://n8n.openip.cl/webhook/notif-kam-email', {
-          method:'POST',
-          headers:{'Content-Type':'application/json'},
-          body: JSON.stringify({
-            destinatario: email,
-            asunto: 'Reporte semanal: ' + c.empresa + ' — KAM: ' + c.kam,
-            cuerpo: text
-          })
-        });
-        if (res.ok) { showToast('📨 Correo enviado a ' + email); }
-        else { showToast('⚠️ Texto generado pero error al enviar correo.'); }
-      } catch(e) { showToast('⚠️ Texto generado pero no se pudo enviar el correo.'); }
+      if(c.correoKam) showToast('📨 Correo enviado a '+c.correoKam);
+      else showToast('⚠️ Texto generado — sin correo KAM en el Sheet');
     },
-    function(){ document.getElementById('notif-ta').value='❌ Error al conectar con n8n.'; }
+    function(){ document.getElementById('notif-ta').value='❌ Error al conectar con n8n.'; },
+    extra
   );
 }
+
+function closeNotif(){
+  var modal = document.getElementById('notif-modal');
+  modal.classList.remove('open');
+  modal.style.display = 'none';
+  setTimeout(function(){ modal.style.display = ''; }, 100);
+}
+function copyNotif(){ navigator.clipboard.writeText(document.getElementById('notif-ta').value); showToast('Copiado ✓'); }
 
 /* ════════════════════════════════════════
    EXPORT CSV
