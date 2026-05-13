@@ -738,6 +738,7 @@ tr:last-child td{border-bottom:none;}
     <div class="notif-actions">
       <button class="btn-secondary" onclick="closeNotif()" style="cursor:pointer;">✕ Cerrar</button>
       <button class="btn-primary" onclick="copyNotif()">📋 Copiar mensaje</button>
+      <button class="btn-primary" onclick="sendNotifEmail()" style="background:var(--green);">🚀 Enviar Email al KAM</button>
     </div>
   </div>
 </div>
@@ -749,6 +750,8 @@ tr:last-child td{border-bottom:none;}
    CONFIG
 ════════════════════════════════════════ */
 const N8N_WEBHOOK = "https://n8n.openip.cl/webhook/ia-salud-cliente";
+const N8N_EMAIL_WEBHOOK = "https://n8n.openip.cl/webhook/notif-kam-email";
+let activeNotifEmail = "";
 const ALLOWED_DOMAINS = ["apprecio.com", "dcanje.com"];
 
 /* ════════════════════════════════════════
@@ -1748,6 +1751,10 @@ async function sendFromPage() {
 async function genNotif(id) {
   var c=CLIENTES.find(function(x){return x.id===id;});
   if(!c) return;
+
+  // Guardamos el correo para usarlo al enviar
+  activeNotifEmail = c.correoKam || '';
+  
   document.getElementById('notif-sub').textContent=c.empresa+' — KAM: '+c.kam;
   document.getElementById('notif-ta').value='⏳ Generando y enviando correo a '+c.kam+'...';
   document.getElementById('notif-modal').classList.add('open');
@@ -1773,6 +1780,39 @@ function closeNotif(){
 }
 function copyNotif(){ navigator.clipboard.writeText(document.getElementById('notif-ta').value); showToast('Copiado ✓'); }
 
+  async function sendNotifEmail() {
+  var cuerpo = document.getElementById('notif-ta').value;
+  var empresa = document.getElementById('notif-sub').textContent.split(' —')[0];
+  
+  if (!activeNotifEmail) {
+    showToast('⚠️ No hay un correo de KAM asignado a este cliente.');
+    return;
+  }
+
+  showToast('⏳ Enviando correo...');
+  try {
+    var res = await fetch(N8N_EMAIL_WEBHOOK, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        destinatario: activeNotifEmail,
+        asunto: 'Acciones sugeridas - ' + empresa, // Puedes cambiar el asunto base aquí
+        cuerpo: cuerpo
+      })
+    });
+    
+    var data = await res.json();
+    if(data.ok) {
+        showToast('📨 Correo enviado con éxito');
+        closeNotif();
+    } else {
+        showToast('❌ Error en el envío del correo');
+    }
+  } catch (e) {
+    showToast('❌ Error de conexión al enviar el correo');
+  }
+}
+  
 /* ════════════════════════════════════════
    EXPORT CSV
 ════════════════════════════════════════ */
