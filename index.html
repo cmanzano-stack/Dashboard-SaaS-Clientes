@@ -965,7 +965,7 @@ function buildKPIs() {
     {id:'kpi-ambar',    lbl:"En Desarrollo 🟠",val:ambar, sub:pct(ambar,n||1)+" del total", cls:"kpi-amber", onclick:"setGlobalFilter('🟠',null)"},
     {id:'kpi-inactivos',lbl:"Inactivos", val:totalInactivos, sub:"Clic para ver inactivos", cls:"kpi-gray", onclick:"setGlobalFilter(null,'inactivo')"},
     {id:'kpi-hs',       lbl:"Health Score Avg", val:avgHS+"%", sub:"Promedio ponderado", cls:"kpi-gray",   onclick:""},
-    {id:'kpi-mrr',      lbl:"MRR Activos", val:"$"+fmt(mrr), sub:"Inactivos: $"+fmt(mrrInactivo), cls:"kpi-gray", onclick:""},
+    {id:'kpi-mrr', lbl:"MRR Activos", val:"$"+fmt(mrr), sub:"-$"+fmt(mrrInactivo)+" en inactivos", cls:"kpi-gray", onclick:"", subCls:"kpi-red"},
   ];
   document.getElementById('kpi-grid').innerHTML = kpis.map(function(k){
     var sel = (k.id==='kpi-verde'&&globalSemFilter==='🟢')||(k.id==='kpi-rojo'&&globalSemFilter==='🔴')||(k.id==='kpi-ambar'&&globalSemFilter==='🟠')||(k.id==='kpi-inactivos'&&globalEstadoFilter==='inactivo')||(k.id==='kpi-total'&&!globalSemFilter&&!globalEstadoFilter);
@@ -974,7 +974,7 @@ function buildKPIs() {
     return '<div id="'+k.id+'" class="kpi-card '+k.cls+'" style="'+pointer+border+'" '+(k.onclick?'onclick="'+k.onclick+'"':'')+'>'+
       '<div class="kpi-label">'+k.lbl+'</div>'+
       '<div class="kpi-value">'+k.val+'</div>'+
-      '<div class="kpi-sub">'+k.sub+'</div>'+
+      '<div class="kpi-sub" style="'+(k.subCls==='kpi-red'?'color:var(--red);font-weight:700;':'')+'">'+k.sub+'</div>'+
       '</div>';
   }).join('');
 }
