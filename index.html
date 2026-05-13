@@ -2110,7 +2110,37 @@ async function loadSheetData() {
       return isNaN(n) ? 0 : n > 1 ? n/100 : n;
     }
     function num(val) {
-      var n = parseFloat(String(val).replace(',','.'));
+      var s = String(val).trim();
+      // Limpiar símbolo $ y espacios
+      s = s.replace(/\$/g, '').trim();
+      // Formato chileno/español: punto=miles, coma=decimal → "1.068,50" → 1068.50
+      // Formato inglés: coma=miles, punto=decimal → "1,068.50" → 1068.50
+      if (s.indexOf('.') !== -1 && s.indexOf(',') !== -1) {
+        if (s.lastIndexOf('.') < s.lastIndexOf(',')) {
+          // Formato: 1.068,50 → punto es miles, coma es decimal
+          s = s.replace(/\./g, '').replace(',', '.');
+        } else {
+          // Formato: 1,068.50 → coma es miles, punto es decimal
+          s = s.replace(/,/g, '');
+        }
+      } else if (s.indexOf(',') !== -1) {
+        // Solo coma: puede ser decimal (1068,50) o miles (1,068)
+        // Si hay exactamente 3 dígitos después de la coma, es miles; si no, es decimal
+        var parts = s.split(',');
+        if (parts.length === 2 && parts[1].length === 3 && parts[0].length > 0) {
+          s = s.replace(/,/g, ''); // es separador de miles
+        } else {
+          s = s.replace(',', '.'); // es decimal
+        }
+      } else if (s.indexOf('.') !== -1) {
+        // Solo punto: puede ser decimal (1068.50) o miles (1.068)
+        var parts = s.split('.');
+        if (parts.length === 2 && parts[1].length === 3 && parts[0].length > 0) {
+          s = s.replace(/\./g, ''); // es separador de miles → "1.068" → 1068
+        }
+        // Si no, lo dejamos como está (es decimal)
+      }
+      var n = parseFloat(s);
       return isNaN(n) ? 0 : n;
     }
 
