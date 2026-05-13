@@ -1748,18 +1748,33 @@ async function genNotif(id) {
   var c=CLIENTES.find(function(x){return x.id===id;});
   if(!c) return;
   document.getElementById('notif-sub').textContent=c.empresa+' — KAM: '+c.kam;
-  document.getElementById('notif-ta').value='⏳ Generando con Ollama...';
+  document.getElementById('notif-ta').value='⏳ Generando con Apprecio IA Health 🤖...';
   document.getElementById('notif-modal').classList.add('open');
   var pregunta='Redacta la notificación semanal para el KAM '+c.kam+' sobre el cliente '+c.empresa+'.';
   await callIA(
     'notif', pregunta, c.id,
-    function(text){ document.getElementById('notif-ta').value=text; },
+    async function(text){
+      document.getElementById('notif-ta').value=text;
+      // Enviar automáticamente por correo al terminar de generar
+      var email = c.correoKam || '';
+      if (!email) { showToast('⚠️ Sin correo KAM — carga el Sheet primero.'); return; }
+      try {
+        var res = await fetch('https://n8n.openip.cl/webhook/notif-kam-email', {
+          method:'POST',
+          headers:{'Content-Type':'application/json'},
+          body: JSON.stringify({
+            destinatario: email,
+            asunto: 'Reporte semanal: ' + c.empresa + ' — KAM: ' + c.kam,
+            cuerpo: text
+          })
+        });
+        if (res.ok) { showToast('📨 Correo enviado a ' + email); }
+        else { showToast('⚠️ Texto generado pero error al enviar correo.'); }
+      } catch(e) { showToast('⚠️ Texto generado pero no se pudo enviar el correo.'); }
+    },
     function(){ document.getElementById('notif-ta').value='❌ Error al conectar con n8n.'; }
   );
 }
-
-function closeNotif(){ document.getElementById('notif-modal').classList.remove('open'); }
-function copyNotif(){ navigator.clipboard.writeText(document.getElementById('notif-ta').value); showToast('Copiado ✓'); }
 
 /* ════════════════════════════════════════
    EXPORT CSV
