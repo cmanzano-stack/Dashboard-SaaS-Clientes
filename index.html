@@ -2175,7 +2175,7 @@ async function loadSheetData() {
       + '?key=' + SHEETS_API_KEY + '&fields=sheets.properties';
     var metaRes = await fetch(metaUrl);
     var meta = await metaRes.json();
-    var sheetName = 'Salud del cliente'; 
+    var sheetName = 'Base'; 
     if (meta.sheets) {
       var found = meta.sheets.find(function(s) {
         return String(s.properties.sheetId) === SHEET_GID;
